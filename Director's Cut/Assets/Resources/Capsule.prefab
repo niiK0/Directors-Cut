@@ -152,6 +152,7 @@ MonoBehaviour:
   mouseSensitivity: 2
   jumpForce: 1
   gravity: -9.81
+  vCam: {fileID: 3020546345687352787}
   groundCheck: {fileID: 410814300}
   isGrounded: 0
   groundLayer:

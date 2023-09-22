@@ -118,6 +118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   mouseSensitivity: 2
+  jumpForce: 5
+  gravity: -9.81
+  groundCheck: {fileID: 2176655675125607799}
+  isGrounded: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!143 &2176655674552294550
 CharacterController:
   m_ObjectHideFlags: 0

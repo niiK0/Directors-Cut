@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     private float verticalRotation = 0f;
     private Vector3 playerVelocity;
     private CharacterController characterController;
+    public Transform vCam;
 
     public Transform groundCheck;
 
@@ -57,7 +58,7 @@ public class Movement : MonoBehaviour
             verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
             transform.Rotate(Vector3.up * mouseX);
-            Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            vCam.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
 
 
             // Player Jump
