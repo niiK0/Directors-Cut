@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
@@ -28,17 +29,21 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
         text.text = string.Format(text.text, PhotonNetwork.CurrentRoom.Name, playerNum);
     }
 
-    public override void OnJoinedRoom()
+    public override void OnPlayerEnteredRoom(Player player)
     {
-        print("player joined");
+        print(player.UserId + " joined");
         playerNum++;
+        text.text = "Connected to lobby {0}\nPlayers: {1}";
         text.text = string.Format(text.text, PhotonNetwork.CurrentRoom.Name, playerNum);
+        print(playerNum);
     }
 
-    public override void OnLeftRoom()
+    public override void OnPlayerLeftRoom(Player player)
     {
-        print("player left");
+        print(player.UserId + " left");
         playerNum--;
+        text.text = "Connected to lobby {0}\nPlayers: {1}";
         text.text = string.Format(text.text, PhotonNetwork.CurrentRoom.Name, playerNum);
+        print(playerNum);
     }
 }
