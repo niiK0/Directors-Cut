@@ -47,6 +47,8 @@ GameObject:
   - component: {fileID: 2176655674552294550}
   - component: {fileID: 8860548815225404715}
   - component: {fileID: 3489887354386841713}
+  - component: {fileID: 7891261958843903015}
+  - component: {fileID: 8618520941250012968}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -232,6 +234,32 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &7891261958843903015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2176655674552294540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab3120dc4877584988e70ae5c7392ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8618520941250012968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2176655674552294540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5088c7e395c9d874a98306f05265172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractorSource: {fileID: 2176655674552294551}
+  InteractRange: 0
 --- !u!1 &2176655675125607792
 GameObject:
   m_ObjectHideFlags: 0
