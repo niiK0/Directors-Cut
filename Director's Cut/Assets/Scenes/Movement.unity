@@ -845,6 +845,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoingToDyingDummy
       objectReference: {fileID: 0}
+    - target: {fileID: 2176655674552294540, guid: 0adfb979b37c2414ca52f711fe560208,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2176655674552294547, guid: 0adfb979b37c2414ca52f711fe560208,
         type: 3}
       propertyPath: m_Enabled

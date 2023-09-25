@@ -24,7 +24,7 @@ public class TaskBar : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
-        //Verify if its working
+        //Verify if its working 
         if (cooking)
             IncrementProgress(slider.value + increment);
 
@@ -35,7 +35,7 @@ public class TaskBar : MonoBehaviour, IInteractable
         //Verify if task is complete
         if (slider.value == 1){
             Debug.Log("Já acabou jéssicaaaaaaaaaa");
-            increment = 0;
+            cooking = false;
         }
     }
 
