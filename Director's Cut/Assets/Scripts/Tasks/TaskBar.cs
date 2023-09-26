@@ -33,7 +33,7 @@ public class TaskBar : MonoBehaviour, IInteractable
             slider.value += fillSpeed * Time.deltaTime;
 
         //Verify if task is complete
-        if (slider.value == 1){
+        if (slider.value == 1 && cooking){
             Debug.Log("Já acabou jéssicaaaaaaaaaa");
             cooking = false;
         }
