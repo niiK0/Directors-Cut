@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Steps : MonoBehaviour
 {
-    public string name;
+    public string stepName;
     public bool freezePlayer;
     public bool isAutomatic;
     public float stepTime;

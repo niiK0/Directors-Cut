@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Task : MonoBehaviour
 {
-    public string name;
+    public string taskName;
     public bool isDoing;
     public bool isComplete;
     public bool isDirector;
