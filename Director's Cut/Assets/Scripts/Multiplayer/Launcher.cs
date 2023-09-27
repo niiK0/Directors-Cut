@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
     [SerializeField] TMP_Text roomNameText;
+
+    [SerializeField] GameObject roomTemplate;
+    [SerializeField] GameObject roomHolder;
+
+    [SerializeField] List<GameObject> roomsList;
+    private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +35,66 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("title");
         Debug.Log("Joined Lobby");
+    }
+
+    private void RefreshRoomListCache(List<RoomInfo> roomList)
+    {
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            RoomInfo info = roomList[i];
+            if (info.RemovedFromList)
+            {
+                cachedRoomList.Remove(info.Name);
+            }
+            else
+            {
+                cachedRoomList[info.Name] = info;
+            }
+        }
+    }
+
+    public void RefreshRoomList()
+    {
+        foreach (GameObject room in roomsList)
+        {
+            Destroy(room);
+        }
+        roomsList.Clear();
+
+        foreach (KeyValuePair<string, RoomInfo> k in cachedRoomList)
+        {
+            print("Room: " + k.Value.Name + " ID: " + k.Value.masterClientId.ToString());
+            GameObject room = Instantiate(roomTemplate);
+            room.GetComponent<RectTransform>().SetParent(roomHolder.transform, false);
+            roomsList.Add(room);
+            room.GetComponent<RoomTemplate>().AddRoom(k.Value.Name, k.Value.PlayerCount, k.Value.MaxPlayers, k.Value.IsOpen);
+            room.SetActive(true);
+        }
+    }
+
+    public void ListRooms()
+    {
+        MenuManager.Instance.OpenMenu("showrooms");
+
+        foreach (GameObject room in roomsList)
+        {
+            Destroy(room);
+        }
+        roomsList.Clear();
+
+        foreach (KeyValuePair<string, RoomInfo> k in cachedRoomList)
+        {
+            GameObject room = Instantiate(roomTemplate);
+            room.GetComponent<RectTransform>().SetParent(roomHolder.transform, false);
+            roomsList.Add(room);
+            room.GetComponent<RoomTemplate>().AddRoom(k.Value.Name, k.Value.PlayerCount, k.Value.MaxPlayers, k.Value.IsOpen);
+            room.SetActive(true);
+        }
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        RefreshRoomListCache(roomList);
     }
 
     public void CreateRoom()
