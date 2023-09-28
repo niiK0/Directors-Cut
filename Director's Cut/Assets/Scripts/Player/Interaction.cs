@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 interface IInteractable
 {
-    public void Interact();
+    public void Interact(GameObject playerObj);
 }
 
 public class Interaction : MonoBehaviour
@@ -44,7 +45,7 @@ public class Interaction : MonoBehaviour
                 // Debug.Log("Hit object: " + hit.transform.name);
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactObj))
                 {
-                    interactObj.Interact();
+                    interactObj.Interact(gameObject);
                 }
             }
 

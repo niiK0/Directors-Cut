@@ -19,6 +19,8 @@ public class Movement : MonoBehaviour
     public bool isGrounded = false;
     public LayerMask groundLayer;
 
+    public bool freezePlayer = false;
+
     PhotonView view;
 
     private void Start()
@@ -34,7 +36,7 @@ public class Movement : MonoBehaviour
         // Apply gravity
         ApplyGravity();
 
-        if (view.IsMine)
+        if (view.IsMine && !freezePlayer)
         {
             // Player Movement
             float horizontalMovement = Input.GetAxis("Horizontal");
