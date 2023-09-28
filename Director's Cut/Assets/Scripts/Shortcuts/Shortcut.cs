@@ -7,7 +7,7 @@ public class Shortcut : MonoBehaviour, IInteractable
 {
     [SerializeField] private Shortcut[] connectedShortcuts;
 
-    public void Interact()
+    public void Interact(GameObject player)
     {
         Debug.Log("Shortcut!");
     }
