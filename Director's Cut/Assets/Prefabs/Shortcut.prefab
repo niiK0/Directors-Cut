@@ -338,6 +338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8671571748252853537}
   - component: {fileID: 8671571748252853538}
+  - component: {fileID: 24873098518595707}
   m_Layer: 0
   m_Name: Shortcut
   m_TagString: Untagged
@@ -375,9 +376,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebb5ea05e6b1be449733d5763578cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectedShortcutPositions: []
+  connectedShortcuts: []
   shortcutCamera: {fileID: 5086905787315542854}
   secretRoom: {fileID: 0}
+--- !u!65 &24873098518595707
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8671571748252853536}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.43879586, y: 2.9950604, z: 2.3332143}
+  m_Center: {x: -0.0016128793, y: 2.0172427, z: 0.001395464}
 --- !u!1 &8671571748659164727
 GameObject:
   m_ObjectHideFlags: 0

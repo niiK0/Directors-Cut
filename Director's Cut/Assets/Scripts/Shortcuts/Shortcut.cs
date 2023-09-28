@@ -42,6 +42,7 @@ public class Shortcut : MonoBehaviour, IInteractable
     {
         previousCamera.SetActive(false);
         newCamera.SetActive(true);
+        currentCamera = newCamera;
     }
 
     private void OnKeyPress(object sender, Movement.OnKeyPressedInShortcutModeEventArgs e)
@@ -59,6 +60,7 @@ public class Shortcut : MonoBehaviour, IInteractable
             case KeyCode.F:
                 e.playerMovement.EnableShortcutMode(false);
                 e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex));
+                e.playerMovement.OnKeyPressedInShortcutMode -= OnKeyPress;
                 break;
         }
     }
