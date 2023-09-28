@@ -14,7 +14,7 @@ public class RefreshEffects : MonoBehaviour, IPointerEnterHandler, IPointerClick
         Debug.Log("refreshed rooms");
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (hovering)
         {
@@ -22,7 +22,7 @@ public class RefreshEffects : MonoBehaviour, IPointerEnterHandler, IPointerClick
             {
                 transform.rotation = Quaternion.Euler(Vector3.zero);
             }
-            transform.Rotate(new Vector3(0f, 0f, -1f));
+            transform.Rotate(new Vector3(0f, 0f, -2f));
         }
     }
 
