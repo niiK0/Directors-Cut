@@ -5,10 +5,77 @@ using UnityEngine;
 
 public class Shortcut : MonoBehaviour, IInteractable
 {
-    [SerializeField] private Shortcut[] connectedShortcuts;
+    const int cameraChildIndex = 1;
+    const int playerPositionChildIndex = 2;
+
+    [SerializeField] private GameObject[] connectedShortcuts; //Indíce 0 deve ser a PlayerPosition da próprio Shortcut
+    [SerializeField] private GameObject shortcutCamera;
+    [SerializeField] private Transform secretRoom;
+    private int currentShortcut;
+    private GameObject currentCamera;
 
     public void Interact(GameObject player)
     {
-        Debug.Log("Shortcut!");
+        Debug.Log("Shortcut Interacted!");
+
+        Movement playerMovement = player.GetComponent<Movement>();
+
+        //Muda a câmera atual para a do shortcut
+        playerMovement.vCam.gameObject.SetActive(false);
+        shortcutCamera.SetActive(true);
+        currentCamera = shortcutCamera;
+
+        //Coloca o jogador no "modo shortcut"
+        playerMovement.EnableShortcutMode(true);
+
+        //Envia o jogador para outra localização
+        playerMovement.MovePlayer(secretRoom);
+
+        //Subscreve ao evento do jogador
+        playerMovement.OnKeyPressedInShortcutMode += OnKeyPress;
+
+        //Define a porta selecionada como o currentShortcut
+        currentShortcut = 0;
+    }
+
+    private void ChangeToShortcutCamera(GameObject previousCamera, GameObject newCamera)
+    {
+        previousCamera.SetActive(false);
+        newCamera.SetActive(true);
+    }
+
+    private void OnKeyPress(object sender, Movement.OnKeyPressedInShortcutModeEventArgs e)
+    {
+        switch (e.keyPress)
+        {
+            case KeyCode.A:
+                UpdateCurrentShortcut(-1);
+                ChangeToShortcutCamera(currentCamera, connectedShortcuts[currentShortcut].transform.GetChild(cameraChildIndex).gameObject);
+                break;
+            case KeyCode.D:
+                UpdateCurrentShortcut(1);
+                ChangeToShortcutCamera(currentCamera, connectedShortcuts[currentShortcut].transform.GetChild(cameraChildIndex).gameObject);
+                break;
+            case KeyCode.F:
+                e.playerMovement.EnableShortcutMode(false);
+                e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex));
+                break;
+        }
+    }
+
+    private void UpdateCurrentShortcut(int increment)
+    {
+        int newShortcutIndex = currentShortcut + increment;
+        if (newShortcutIndex > connectedShortcuts.Length - 1)
+        {
+            newShortcutIndex = 0;
+        }
+        else if (newShortcutIndex < 0)
+        {
+            newShortcutIndex = connectedShortcuts.Length - 1;
+        }
+
+        currentShortcut = newShortcutIndex;
     }
 }
+
