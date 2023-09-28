@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,23 +12,28 @@ public class TaskBar : MonoBehaviour, IInteractable
     //Placeholder Task que é só para andar
     Task thisTask = new Task(false, "Andar", false, false, false, 100f, 0f);
     TaskManager taskManager = new TaskManager();
-    
 
-    //Variaveis da barra
+    public int taskId;
+
+    //Variaveis do UI
+    public TMP_Text taskTxt;
     public Slider slider;
     private float increment = 0.01f;
     
     public float fillSpeed = 0.5f;
-    
+
+    public void Start()
+    {
+        
+    }
 
     public void Interact(GameObject player)
     {
         //playerObj = player;
-        thisTask = taskManager.GetTaskById(0);
+        thisTask = taskManager.GetTaskById(taskId);
         thisTask.isDoing = true;
 
-        //Making the bar appear with the values 
-        slider.interactable= true;
+        taskTxt.text =  thisTask.taskName;
     }
 
     // Update is called once per frame
@@ -35,6 +41,8 @@ public class TaskBar : MonoBehaviour, IInteractable
     {
         if (thisTask.isDoing)
         {
+            //Making the bar appear with the values 
+            
             //Verify if its frozen
             //if (thisTask.isFrozen)
             //playerObj.GetComponent<Movement>().freezePlayer = true;
