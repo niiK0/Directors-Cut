@@ -8,9 +8,13 @@ using UnityEngine.UI;
 
 public class TaskBar : MonoBehaviour, IInteractable
 {
+    //Canvas das tasks
+    public GameObject taskCanvas;
+
     GameObject playerObj = null;
+    
     //Placeholder Task que é só para andar
-    Task thisTask = new Task(false, "Andar", false, false, false, 100f, 0f);
+    Task thisTask = new Task(false, "Andar", false, false, false,new int[] { }, 100f, 0f);
     TaskManager taskManager = new TaskManager();
 
     public int taskId;
@@ -21,19 +25,16 @@ public class TaskBar : MonoBehaviour, IInteractable
     private float increment = 0.01f;
     
     public float fillSpeed = 0.5f;
-
-    public void Start()
-    {
-        
-    }
+    public int TaskPercent = 0;
 
     public void Interact(GameObject player)
     {
-        //playerObj = player;
+        playerObj = player;
         thisTask = taskManager.GetTaskById(taskId);
         thisTask.isDoing = true;
 
-        taskTxt.text =  thisTask.taskName;
+        taskCanvas.SetActive(true);
+        slider.value = thisTask.completePercentage;
     }
 
     // Update is called once per frame
@@ -44,8 +45,8 @@ public class TaskBar : MonoBehaviour, IInteractable
             //Making the bar appear with the values 
             
             //Verify if its frozen
-            //if (thisTask.isFrozen)
-            //playerObj.GetComponent<Movement>().freezePlayer = true;
+            if (thisTask.isFrozen)
+                playerObj.GetComponent<Movement>().freezePlayer = true;
 
             //Verify if its working
             IncrementProgress(slider.value + increment);
@@ -57,14 +58,17 @@ public class TaskBar : MonoBehaviour, IInteractable
             //Verify if task is complete
             if (slider.value == 1)
             {
-                Debug.Log("Já acabou jéssicaaaaaaaaaa");
                 thisTask.isDoing = false;
 
                 thisTask.isFrozen = false;
 
                 thisTask.isComplete = true;
 
-                slider.interactable = false;
+                slider.value = 0;
+
+                playerObj.GetComponent<Movement>().freezePlayer = false;
+                
+                taskCanvas.SetActive(false);
             }
 
             //Parar de fazer a task
@@ -72,8 +76,16 @@ public class TaskBar : MonoBehaviour, IInteractable
             {
                 thisTask.isDoing = false;
                 thisTask.isFrozen = false;
-                slider.interactable = false;
+
+                slider.value = 0;
+                playerObj.GetComponent<Movement>().freezePlayer = false;
+                thisTask.completePercentage = 0;
+
+                taskCanvas.SetActive(false);
             }
+
+            //output de percentagem da task
+            taskTxt.text = (thisTask.completePercentage * 100f).ToString("F0") + "%";
         }
     }
 
@@ -81,5 +93,6 @@ public class TaskBar : MonoBehaviour, IInteractable
     {
         thisTask.completePercentage = slider.value + newProgress;
     }
+
 
 }
