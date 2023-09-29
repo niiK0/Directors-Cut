@@ -3,6 +3,8 @@ using Photon.Pun;
 
 public class Movement : MonoBehaviour
 {
+    //fields
+
     public float moveSpeed = 5f;
     public float mouseSensitivity = 2f;
 
@@ -20,8 +22,20 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer;
 
     public bool freezePlayer = false;
+    public bool isInShortcut = false;
 
     PhotonView view;
+
+    //events
+
+    public event System.EventHandler<OnKeyPressedInShortcutModeEventArgs> OnKeyPressedInShortcutMode;
+    public class OnKeyPressedInShortcutModeEventArgs : System.EventArgs
+    {
+        public KeyCode keyPress;
+        public Movement playerMovement;
+    }
+
+    //
 
     private void Start()
     {
@@ -67,6 +81,34 @@ public class Movement : MonoBehaviour
             if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 Jump();
+            }
+        }
+
+        if (isInShortcut)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
+                {
+                    keyPress = KeyCode.A,
+                    playerMovement = this
+                });
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
+                {
+                    keyPress = KeyCode.D,
+                    playerMovement = this
+                });
+            }
+            else if (Input.GetKeyDown(KeyCode.F))
+            {
+                OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
+                {
+                    keyPress = KeyCode.F,
+                    playerMovement = this
+                });
             }
         }
 
@@ -120,5 +162,29 @@ public class Movement : MonoBehaviour
     private void Jump()
     {
         playerVelocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+    }
+
+    public void EnableShortcutMode(bool par)
+    {
+        switch (par)
+        {
+            case true:
+                isInShortcut = true;
+                freezePlayer = true;
+                break;
+            case false:
+                isInShortcut = false;
+                freezePlayer = false;
+                break;
+        }
+    }
+
+    public void MovePlayer(Transform playerPosition)
+    {
+        transform.forward = playerPosition.forward;
+        CharacterController playerController = GetComponent<CharacterController>();
+        playerController.enabled = false;
+        transform.position = playerPosition.transform.position;
+        playerController.enabled = true;
     }
 }
