@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Shortcut : MonoBehaviour, IInteractable
 {
     const int cameraChildIndex = 1;
     const int playerPositionChildIndex = 2;
 
-    [SerializeField] private GameObject[] connectedShortcuts; //Indíce 0 deve ser a PlayerPosition da próprio Shortcut
+    [SerializeField] private GameObject[] connectedShortcuts; //Indíce 0 deve ser a PlayerPosition do próprio Shortcut
     [SerializeField] private GameObject shortcutCamera;
     [SerializeField] private Transform secretRoom;
     private int currentShortcut;
@@ -21,8 +22,7 @@ public class Shortcut : MonoBehaviour, IInteractable
         Movement playerMovement = player.GetComponent<Movement>();
 
         //Muda a câmera atual para a do shortcut
-        playerMovement.vCam.gameObject.SetActive(false);
-        shortcutCamera.SetActive(true);
+        shortcutCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
         currentCamera = shortcutCamera;
 
         //Coloca o jogador no "modo shortcut"
@@ -40,8 +40,8 @@ public class Shortcut : MonoBehaviour, IInteractable
 
     private void ChangeToShortcutCamera(GameObject previousCamera, GameObject newCamera)
     {
-        previousCamera.SetActive(false);
-        newCamera.SetActive(true);
+        previousCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
+        newCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
         currentCamera = newCamera;
     }
 
