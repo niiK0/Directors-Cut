@@ -61,6 +61,7 @@ public class Shortcut : MonoBehaviour, IInteractable
                 e.playerMovement.EnableShortcutMode(false);
                 e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex));
                 e.playerMovement.OnKeyPressedInShortcutMode -= OnKeyPress;
+                currentCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
                 break;
         }
     }
