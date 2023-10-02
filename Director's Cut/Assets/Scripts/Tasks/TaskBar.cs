@@ -10,20 +10,26 @@ public class TaskBar : MonoBehaviour, IInteractable
 {
     //Canvas das tasks
     public GameObject taskCanvas;
-
+    
+    //Player
     GameObject playerObj = null;
     
     //Placeholder Task que é só para andar
     Task thisTask = new Task(false, "Andar", false, false, false,new int[] { }, 100f, 0f);
     TaskManager taskManager = new TaskManager();
-
     public int taskId;
+
+    //PlaceHolder Step
+    Steps thisStep = new Steps(false, "Andar", 100f, false, false);
+    int stepId = 0;
 
     //Variaveis do UI
     public TMP_Text taskTxt;
     public Slider slider;
     private float increment = 0.01f;
+
     
+
     public float fillSpeed = 0.5f;
     public int TaskPercent = 0;
 
@@ -32,7 +38,9 @@ public class TaskBar : MonoBehaviour, IInteractable
         playerObj = player;
         thisTask = taskManager.GetTaskById(taskId);
         thisTask.isDoing = true;
+        stepId = thisTask.taskSteps[0];
 
+        //On interact UI
         taskCanvas.SetActive(true);
         slider.value = thisTask.completePercentage;
     }
@@ -74,9 +82,9 @@ public class TaskBar : MonoBehaviour, IInteractable
             //Parar de fazer a task
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                //Resets
                 thisTask.isDoing = false;
                 thisTask.isFrozen = false;
-
                 slider.value = 0;
                 playerObj.GetComponent<Movement>().freezePlayer = false;
                 thisTask.completePercentage = 0;

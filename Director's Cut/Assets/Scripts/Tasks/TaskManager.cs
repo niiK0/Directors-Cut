@@ -12,13 +12,19 @@ public class TaskManager
  
     //Criar uma lista de tasks
     List<Task> tasks = new List<Task>() {
-        new Task(true, "Cozinhar", false, false, false, new int[] {}, 10f, 0),
-        new Task(true, "Beber", false, false, false, new int[] {}, 0, 0)
+        new Task(true, "Cozinhar", false, false, false, new int[] {1}, 10f, 0),
+        new Task(true, "Beber", false, false, false, new int[] {1}, 0, 0)
     };
 
     //Criar funçao que receba o id da task e devolva a informação dela
     public Task GetTaskById(int id)
     {
         return (tasks[id]);
+    }
+
+    //Função que vai buscar o step em questao
+    public Steps GetStepsById(int id)
+    {
+        return steps[id];
     }
 }
