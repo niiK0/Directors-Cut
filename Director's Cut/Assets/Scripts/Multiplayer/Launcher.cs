@@ -7,6 +7,14 @@ using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
+
+    public static Launcher Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     //Create Room
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_InputField roomPwdInputField;
@@ -15,7 +23,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     //Rooms List
     [SerializeField] GameObject roomTemplate;
-    [SerializeField] GameObject roomHolder;
+    [SerializeField] Transform roomHolder;
+
+    //Players List
+    [SerializeField] GameObject playerTemplate;
+    [SerializeField] Transform playerHolder;
 
     [SerializeField] List<GameObject> roomsList;
     private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
@@ -26,11 +38,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connecting to Server");
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.EnableCloseConnection = true;
     }
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Server");
+        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
         PhotonNetwork.JoinLobby();
     }
 
@@ -66,7 +80,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         foreach (KeyValuePair<string, RoomInfo> k in cachedRoomList)
         {
-            print("Room: " + k.Value.Name + " ID: " + k.Value.masterClientId.ToString());
+            Debug.Log("Room: " + k.Value.Name + " ID: " + k.Value.masterClientId.ToString());
             GameObject room = Instantiate(roomTemplate);
 
             bool isPrivate = false;
@@ -76,10 +90,9 @@ public class Launcher : MonoBehaviourPunCallbacks
                 isPrivate = true;
             }
 
-            room.GetComponent<RectTransform>().SetParent(roomHolder.transform, false);
+            room.GetComponent<RectTransform>().SetParent(roomHolder, false);
             roomsList.Add(room);
             room.GetComponent<RoomTemplate>().AddRoom(k.Value.Name, k.Value.PlayerCount, k.Value.MaxPlayers, isPrivate, k.Value);
-            room.SetActive(true);
         }
     }
 
@@ -117,10 +130,27 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("loading");
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Instantiate(playerTemplate, playerHolder.transform).GetComponent<PlayerTemplate>().AddPlayer(newPlayer);
+    }
+
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+        Player[] players = PhotonNetwork.PlayerList;
+
+        foreach (Transform child in playerHolder)
+        {
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            Instantiate(playerTemplate, playerHolder.transform).GetComponent<PlayerTemplate>().AddPlayer(players[i]);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

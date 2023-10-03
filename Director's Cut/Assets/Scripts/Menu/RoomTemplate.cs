@@ -13,11 +13,6 @@ public class RoomTemplate : MonoBehaviour
     [SerializeField] Image roomLockedObj;
     private RoomInfo roomInfo;
 
-    [SerializeField] Transform pwdPrompt;
-    [SerializeField] TMP_Text pwdPromptRoomName;
-    [SerializeField] TMP_InputField pwdInput;
-    [SerializeField] Button pwdPromptJoinButton;
-
     public void AddRoom(string roomName, int roomPlayers, int roomMaxPlayers, bool roomLocked, RoomInfo room)
     {
         roomNameText.text = roomName;
@@ -26,7 +21,7 @@ public class RoomTemplate : MonoBehaviour
         roomInfo = room;
     }
 
-    public void AttemptJoin()
+    public void SetupPrompt()
     {
         string roomPwd = (string)roomInfo.CustomProperties["pwd"];
         if (string.IsNullOrEmpty(roomPwd))
@@ -35,27 +30,7 @@ public class RoomTemplate : MonoBehaviour
         }
         else
         {
-            OpenPrompt();
+            PromptBehavior.Instance.OpenPrompt(roomInfo);
         }
-    }
-
-    private void TryPassword(string password)
-    {
-        string roomPwd = (string)roomInfo.CustomProperties["pwd"];
-        if(string.Compare(password, roomPwd) == 0)
-        {
-            PhotonNetwork.JoinRoom(roomInfo.Name);
-        }
-        else
-        {
-            Debug.Log("Wrong Password");
-        }
-    }
-
-    public void OpenPrompt()
-    {
-        pwdPrompt.gameObject.SetActive(true);
-        pwdPromptRoomName.text = roomInfo.Name;
-        pwdPromptJoinButton.onClick.AddListener(() => TryPassword(pwdInput.text));
     }
 }
