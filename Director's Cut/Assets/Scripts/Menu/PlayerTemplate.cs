@@ -23,6 +23,9 @@ public class PlayerTemplate : MonoBehaviourPunCallbacks
             kickBtn.gameObject.SetActive(PhotonNetwork.IsMasterClient);
             giveHostBtn.gameObject.SetActive(PhotonNetwork.IsMasterClient);
         }
+        Transform roomMenu = GameObject.Find("RoomMenu").transform;
+        roomMenu.GetChild(4).GetComponent<Button>().interactable = PhotonNetwork.IsMasterClient;
+        roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public Player GetPlayer()
@@ -42,6 +45,9 @@ public class PlayerTemplate : MonoBehaviourPunCallbacks
                 child.GetChild(2).gameObject.SetActive(PhotonNetwork.IsMasterClient);
             }
         }
+        Transform roomMenu = GameObject.Find("RoomMenu").transform;
+        roomMenu.GetChild(4).GetComponent<Button>().interactable = PhotonNetwork.IsMasterClient;
+        roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
