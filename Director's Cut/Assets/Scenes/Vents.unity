@@ -437,7 +437,7 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
+    m_Style: 0
     m_Time: 2
     m_CustomCurve:
       serializedVersion: 2
@@ -1268,16 +1268,6 @@ PrefabInstance:
       objectReference: {fileID: 2027018647}
     - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
         type: 3}
-      propertyPath: connectedShortcuts.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
-      propertyPath: connectedShortcuts.Array.data[0]
-      value: 
-      objectReference: {fileID: 1233246984}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
       propertyPath: connectedShortcuts.Array.data[1]
       value: 
       objectReference: {fileID: 486932821}
@@ -1286,25 +1276,5 @@ PrefabInstance:
       propertyPath: connectedShortcuts.Array.data[2]
       value: 
       objectReference: {fileID: 359879119}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
-      propertyPath: connectedShortcutPositions.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
-      propertyPath: connectedShortcutPositions.Array.data[0]
-      value: 
-      objectReference: {fileID: 1233246985}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
-      propertyPath: connectedShortcutPositions.Array.data[1]
-      value: 
-      objectReference: {fileID: 486932822}
-    - target: {fileID: 8671571748252853538, guid: 84e1955d9141b66499e9b1ba4cb3e4c0,
-        type: 3}
-      propertyPath: connectedShortcutPositions.Array.data[2]
-      value: 
-      objectReference: {fileID: 359879121}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84e1955d9141b66499e9b1ba4cb3e4c0, type: 3}

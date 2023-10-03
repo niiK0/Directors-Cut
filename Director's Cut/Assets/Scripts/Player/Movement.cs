@@ -26,6 +26,12 @@ public class Movement : MonoBehaviour
 
     PhotonView view;
 
+    //shortcut keys
+
+    private KeyCode shortcutLeftKey = KeyCode.A;
+    private KeyCode shortcutRightKey = KeyCode.D;
+    private KeyCode shortcutLeaveKey = KeyCode.F;
+
     //events
 
     public event System.EventHandler<OnKeyPressedInShortcutModeEventArgs> OnKeyPressedInShortcutMode;
@@ -86,27 +92,27 @@ public class Movement : MonoBehaviour
 
         if (isInShortcut)
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(shortcutLeftKey))
             {
                 OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
                 {
-                    keyPress = KeyCode.A,
+                    keyPress = shortcutLeftKey,
                     playerMovement = this
                 });
             }
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(shortcutRightKey))
             {
                 OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
                 {
-                    keyPress = KeyCode.D,
+                    keyPress = shortcutRightKey,
                     playerMovement = this
                 });
             }
-            else if (Input.GetKeyDown(KeyCode.F))
+            else if (Input.GetKeyDown(shortcutLeaveKey))
             {
                 OnKeyPressedInShortcutMode?.Invoke(this, new OnKeyPressedInShortcutModeEventArgs
                 {
-                    keyPress = KeyCode.F,
+                    keyPress = shortcutLeaveKey,
                     playerMovement = this
                 });
             }

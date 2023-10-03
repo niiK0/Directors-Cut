@@ -16,7 +16,7 @@ public class Item : MonoBehaviour
 
         if (inventoryManager != null)
         {
-            inventoryManager.AddItem(this.gameObject);
+            //inventoryManager.AddItem(this.gameObject);
             gameObject.SetActive(false);
         }
     }
