@@ -6,16 +6,16 @@ public class Steps
 {
     public bool freezePlayer;
     public string stepName;
-    public float stepTime;
+    public float fillSpeed;
     public bool isDoing;
     public bool isComplete;
     //public Player source;
 
-    public Steps(bool Frozen, string Name, float time, bool Doing, bool Complete)
+    public Steps(bool Frozen, string Name, float CompleteP, bool Doing, bool Complete)
     {
         freezePlayer = Frozen;
         stepName = Name;
-        stepTime = time;
+        fillSpeed = CompleteP;
         isDoing = Doing;
         isComplete = Complete;
         

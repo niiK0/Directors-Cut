@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Task 
 {
-    public bool isFrozen;
     public string taskName;
     public bool isDoing;
     public bool isComplete;
@@ -14,9 +13,9 @@ public class Task
     public float taskRange;
     public float completePercentage;
 
-    public Task(bool Frozen, string Name, bool Doing, bool Complete, bool Director, int[] steps, float Range, float Percentage)
+    public Task(string Name, bool Doing, bool Complete, bool Director, int[] steps, float Range, float Percentage)
     {
-        isFrozen= Frozen;
+
         taskName= Name;
         isDoing= Doing;
         isComplete= Complete;

@@ -8,41 +8,59 @@ using UnityEngine.UI;
 
 public class TaskBar : MonoBehaviour, IInteractable
 {
+    //Canvas dos steps
+    public GameObject stepsCanvas;
+    public Slider stepsSlider;
+    public TMP_Text stepTxt;
+
     //Canvas das tasks
     public GameObject taskCanvas;
-    
+    public Slider taskSlider;
+    public TMP_Text taskTxt;
+
+
     //Player
     GameObject playerObj = null;
     
     //Placeholder Task que é só para andar
-    Task thisTask = new Task(false, "Andar", false, false, false,new int[] { }, 100f, 0f);
+    Task thisTask = new Task("Andar", false, false, false,new int[1] { 0 }, 100f, 0f);
     TaskManager taskManager = new TaskManager();
     public int taskId;
 
     //PlaceHolder Step
-    Steps thisStep = new Steps(false, "Andar", 100f, false, false);
-    int stepId = 0;
+    Steps thisStep = new Steps(false, "Andar", 0, false, false);
+    public int stepId = 0;
 
-    //Variaveis do UI
-    public TMP_Text taskTxt;
-    public Slider slider;
+    //Verificaçoes de task
+    Steps stepVer = new Steps(false, "Andar", 0, false, false);
+    bool verifica = false;
+
     private float increment = 0.01f;
-
-    
 
     public float fillSpeed = 0.5f;
     public int TaskPercent = 0;
+    public float completePercentage = 0;
 
     public void Interact(GameObject player)
     {
         playerObj = player;
         thisTask = taskManager.GetTaskById(taskId);
         thisTask.isDoing = true;
-        stepId = thisTask.taskSteps[0];
+        thisStep = taskManager.GetStepsById(stepId);
 
-        //On interact UI
+        increment = thisStep.fillSpeed;
+
+        //On interact TaskUI
         taskCanvas.SetActive(true);
-        slider.value = thisTask.completePercentage;
+        taskSlider.value = thisTask.completePercentage;
+        taskTxt.text = thisTask.taskName;
+
+        //On interact StepUI
+        stepsCanvas.SetActive(true);
+        stepsSlider.value = completePercentage;
+        stepTxt.text = thisStep.stepName;
+
+        Debug.Log("Interact");
     }
 
     // Update is called once per frame
@@ -50,56 +68,83 @@ public class TaskBar : MonoBehaviour, IInteractable
     {
         if (thisTask.isDoing)
         {
-            //Making the bar appear with the values 
             
             //Verify if its frozen
-            if (thisTask.isFrozen)
+            if (thisStep.freezePlayer)
                 playerObj.GetComponent<Movement>().freezePlayer = true;
 
             //Verify if its working
-            IncrementProgress(slider.value + increment);
+            IncrementProgress(stepsSlider.value + increment);
 
             //slider grows gradually 
-            if (slider.value < thisTask.completePercentage)
-                slider.value += fillSpeed * Time.deltaTime;
+            if (stepsSlider.value < completePercentage)
+                stepsSlider.value += fillSpeed * Time.deltaTime;
 
-            //Verify if task is complete
-            if (slider.value == 1)
+            //Verify if step is complete
+            if (stepsSlider.value == 1)
+            {
+                thisStep.isDoing = false;
+
+                thisStep.freezePlayer = false;
+
+                thisStep.isComplete = true;
+
+                stepsSlider.value = 0;
+
+                playerObj.GetComponent<Movement>().freezePlayer = false;
+
+                stepsCanvas.SetActive(false);
+
+                //Output da task 
+                taskSlider.value += 1/thisTask.taskSteps.Length;
+
+                //Verifica se a task esta completa
+                for (int i = 0; i < thisTask.taskSteps.Length; i++)
+                {
+                    stepVer = taskManager.GetStepsById(thisTask.taskSteps[i]);
+                    if (stepVer.isComplete)
+                    {
+                        verifica = true;
+                        Debug.Log("BRO");
+                    }
+                    else
+                    {
+                        verifica = false;
+                    }
+                }
+            }
+
+            //Se a task estiver completa
+            if (verifica)
             {
                 thisTask.isDoing = false;
 
-                thisTask.isFrozen = false;
-
                 thisTask.isComplete = true;
 
-                slider.value = 0;
+                stepsSlider.value = 0;
 
-                playerObj.GetComponent<Movement>().freezePlayer = false;
-                
                 taskCanvas.SetActive(false);
             }
 
             //Parar de fazer a task
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.X))
             {
                 //Resets
-                thisTask.isDoing = false;
-                thisTask.isFrozen = false;
-                slider.value = 0;
+                thisStep.isDoing = false;
+                thisStep.freezePlayer = false;
+                stepsSlider.value = 0;
                 playerObj.GetComponent<Movement>().freezePlayer = false;
-                thisTask.completePercentage = 0;
+                completePercentage = 0;
 
-                taskCanvas.SetActive(false);
+                stepsCanvas.SetActive(false);
             }
 
-            //output de percentagem da task
-            taskTxt.text = (thisTask.completePercentage * 100f).ToString("F0") + "%";
         }
     }
 
     public void IncrementProgress(float newProgress)
     {
-        thisTask.completePercentage = slider.value + newProgress;
+        completePercentage = stepsSlider.value + newProgress;
     }
 
 
