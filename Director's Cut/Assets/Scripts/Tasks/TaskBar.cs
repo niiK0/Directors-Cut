@@ -26,6 +26,7 @@ public class TaskBar : MonoBehaviour, IInteractable
     Task thisTask = new Task("Andar", false, false, false,new int[1] { 0 }, 100f, 0f);
     TaskManager taskManager = new TaskManager();
     public int taskId;
+    public int currStep = 0;
 
     //PlaceHolder Step
     Steps thisStep = new Steps(false, "Andar", 0, false, false);
@@ -44,27 +45,32 @@ public class TaskBar : MonoBehaviour, IInteractable
     public void Interact(GameObject player)
     {
         playerObj = player;
+        Debug.Log("Interact");
+    }
+
+    public void Awake()
+    {
+        taskId = Random.Range(0, 2);
+
+        //On Start Task
         thisTask = taskManager.GetTaskById(taskId);
         thisTask.isDoing = true;
-        thisStep = taskManager.GetStepsById(stepId);
-
-        increment = thisStep.fillSpeed;
-
-        //On interact TaskUI
-        taskCanvas.SetActive(true);
+        //TaskUI
         taskSlider.value = thisTask.completePercentage;
         taskTxt.text = thisTask.taskName;
 
+        //On Start Steps
+        thisStep = taskManager.GetStepsById(thisTask.taskSteps[currStep]);
+        increment = thisStep.fillSpeed;
         //On interact StepUI
         stepsCanvas.SetActive(true);
         stepsSlider.value = completePercentage;
         stepTxt.text = thisStep.stepName;
-
-        Debug.Log("Interact");
     }
 
+
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (thisTask.isDoing)
         {
