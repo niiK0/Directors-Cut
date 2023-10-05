@@ -50,22 +50,7 @@ public class TaskBar : MonoBehaviour, IInteractable
 
     public void Awake()
     {
-        taskId = Random.Range(0, 2);
-
-        //On Start Task
-        thisTask = taskManager.GetTaskById(taskId);
-        thisTask.isDoing = true;
-        //TaskUI
-        taskSlider.value = thisTask.completePercentage;
-        taskTxt.text = thisTask.taskName;
-
-        //On Start Steps
-        thisStep = taskManager.GetStepsById(thisTask.taskSteps[currStep]);
-        increment = thisStep.fillSpeed;
-        //On interact StepUI
-        stepsCanvas.SetActive(true);
-        stepsSlider.value = completePercentage;
-        stepTxt.text = thisStep.stepName;
+        RandomTask();
     }
 
 
@@ -76,7 +61,7 @@ public class TaskBar : MonoBehaviour, IInteractable
         {
             
             //Verify if its frozen
-            if (thisStep.freezePlayer)
+            if (thisStep.freezePlayer && thisStep.isDoing)
                 playerObj.GetComponent<Movement>().freezePlayer = true;
 
             //Verify if its working
@@ -153,5 +138,24 @@ public class TaskBar : MonoBehaviour, IInteractable
         completePercentage = stepsSlider.value + newProgress;
     }
 
+    public void RandomTask()
+    {
+        taskId = Random.Range(0, 2);
+
+        //On Start Task
+        thisTask = taskManager.GetTaskById(taskId);
+        thisTask.isDoing = true;
+        //TaskUI
+        taskSlider.value = thisTask.completePercentage;
+        taskTxt.text = thisTask.taskName;
+
+        //On Start Steps
+        thisStep = taskManager.GetStepsById(thisTask.taskSteps[currStep]);
+        increment = thisStep.fillSpeed;
+        //On interact StepUI
+        stepsCanvas.SetActive(true);
+        stepsSlider.value = completePercentage;
+        stepTxt.text = thisStep.stepName;
+    }
 
 }
