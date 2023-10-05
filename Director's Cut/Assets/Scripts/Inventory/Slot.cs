@@ -5,10 +5,15 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
-    public Image iconImage;
+    private Image iconImage;
     //public Text itemNameText;
 
     private GameObject item;
+
+    private void Awake()
+    {
+        iconImage = GetComponentInChildren<Image>();
+    }
 
     // Initialize the slot with an item
     public void InitializeSlot(GameObject item)
