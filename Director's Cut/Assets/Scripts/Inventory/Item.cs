@@ -4,11 +4,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, IInteractable
 {
     public string name;
-    public ItemType type;
     public Image image;
+
+    public Vector3 handPosition;
+    public Vector3 handRotatiom;
+
+
+    public void Interact(GameObject player)
+    {
+        PickUp();
+    }
 
     public void PickUp()
     {
@@ -20,31 +28,21 @@ public class Item : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
-    public void Shoot()
-    {
-        //Write logic for shooting
-    }
-
+    
     public void Use()
     {
         //Write logic for using
     }
-
-    public Image GetImage()
-    {
-        return image;
-    }
-
+    
     public string GetName()
     {
         return name;
     }
-
+    
+    public Image GetImage()
+    {
+        return image;
+    }
 }
 
-public enum ItemType
-{
-    Weapon,
-    Task
-}
+

@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+
     public List<GameObject> slots = new List<GameObject>();
 
     public void AddItem(GameObject item)
     {
-        if(slots.Count > 3)
+        if(slots.Count < 3)
         {
             slots.Add(item);
             UpdateUI();
@@ -33,6 +34,8 @@ public class InventoryManager : MonoBehaviour
 
     void UpdateUI()
     {
+
+
         // Update your UI elements to display the current inventory contents
         // For example, you can update the slot icons and labels here.
     }

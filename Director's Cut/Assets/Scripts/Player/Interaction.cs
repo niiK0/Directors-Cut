@@ -48,7 +48,6 @@ public class Interaction : MonoBehaviour
                     interactObj.Interact(gameObject);
                 }
             }
-
         }
     }
 }
