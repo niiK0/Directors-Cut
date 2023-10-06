@@ -4,7 +4,6 @@ using Photon.Pun;
 public class Movement : MonoBehaviour
 {
     //fields
-
     public float moveSpeed = 5f;
     public float mouseSensitivity = 2f;
 

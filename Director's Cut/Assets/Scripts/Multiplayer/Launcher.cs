@@ -46,6 +46,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connected to Server");
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
         PhotonNetwork.JoinLobby();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinedLobby()
@@ -168,5 +169,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         MenuManager.Instance.OpenMenu("title");
+    }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("Main");
     }
 }
