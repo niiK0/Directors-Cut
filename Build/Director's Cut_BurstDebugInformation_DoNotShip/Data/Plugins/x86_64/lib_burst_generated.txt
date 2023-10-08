@@ -117,6 +117,7 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=PUN_2_0_OR_NEWER
 --compilation-defines=PUN_2_OR_NEWER
 --compilation-defines=PUN_2_19_OR_NEWER
+--compilation-defines=CROSS_PLATFORM_INPUT
 --compilation-defines=PACKAGE_PHYSICS
 --compilation-defines=PACKAGE_PHYSICS2D
 --compilation-defines=PACKAGE_TILEMAP
@@ -281,6 +282,7 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=PUN_2_0_OR_NEWER
 --compilation-defines=PUN_2_OR_NEWER
 --compilation-defines=PUN_2_19_OR_NEWER
+--compilation-defines=CROSS_PLATFORM_INPUT
 --compilation-defines=PACKAGE_PHYSICS
 --compilation-defines=PACKAGE_PHYSICS2D
 --compilation-defines=PACKAGE_TILEMAP
