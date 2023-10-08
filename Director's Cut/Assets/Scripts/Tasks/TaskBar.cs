@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class TaskBar : MonoBehaviour
 {
+    public static TaskBar Instance;
+
     //Canvas dos steps
     public GameObject stepsCanvas;
     public Slider stepsSlider;
@@ -48,9 +50,9 @@ public class TaskBar : MonoBehaviour
 
     public void Awake()
     {
+        Instance = this;
         RandomTask();
     }
-
 
     // Update is called once per frame
     public void Update()

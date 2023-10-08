@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
         }
+        else
+        {
+            TaskBar.Instance.playerObj = gameObject;
+        }
     }
 
     private void FixedUpdate()
