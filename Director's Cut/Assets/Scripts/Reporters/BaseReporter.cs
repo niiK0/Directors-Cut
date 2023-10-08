@@ -9,9 +9,11 @@ public abstract class BaseReporter : MonoBehaviour, IInteractable
 
     public void Interact(GameObject playerObj)
     {
+        Debug.Log("Interacted with button");
         StartCoroutine(warning.CallWarning());
-        Movement playerMovement = playerObj.GetComponent<Movement>();
+        PlayerController playerMovement = playerObj.GetComponent<PlayerController>();
         playerMovement.MovePlayer(meetingPlace);
+        playerMovement.freezePlayer = true;
         ReporterFunction();
     }
 

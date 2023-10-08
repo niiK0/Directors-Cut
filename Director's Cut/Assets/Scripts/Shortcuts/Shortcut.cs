@@ -19,7 +19,7 @@ public class Shortcut : MonoBehaviour, IInteractable
     {
         Debug.Log("Shortcut Interacted!");
 
-        Movement playerMovement = player.GetComponent<Movement>();
+        PlayerController playerMovement = player.GetComponent<PlayerController>();
 
         //Muda a câmera atual para a do shortcut
         shortcutCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
@@ -45,7 +45,7 @@ public class Shortcut : MonoBehaviour, IInteractable
         currentCamera = newCamera;
     }
 
-    private void OnKeyPress(object sender, Movement.OnKeyPressedInShortcutModeEventArgs e)
+    private void OnKeyPress(object sender, PlayerController.OnKeyPressedInShortcutModeEventArgs e)
     {
         switch (e.keyPress)
         {
@@ -59,7 +59,7 @@ public class Shortcut : MonoBehaviour, IInteractable
                 break;
             case KeyCode.F:
                 e.playerMovement.EnableShortcutMode(false);
-                e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex));
+                e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex).transform);
                 e.playerMovement.OnKeyPressedInShortcutMode -= OnKeyPress;
                 currentCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
                 break;

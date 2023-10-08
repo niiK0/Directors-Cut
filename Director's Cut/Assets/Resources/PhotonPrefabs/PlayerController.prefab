@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5088c7e395c9d874a98306f05265172b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractRange: 10
+  InteractRange: 25
 --- !u!143 &2176655674552294550
 CharacterController:
   m_ObjectHideFlags: 0
@@ -211,6 +211,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   freezePlayer: 0
+  inShortcut: 0
 --- !u!114 &7783212498707535123
 MonoBehaviour:
   m_ObjectHideFlags: 0

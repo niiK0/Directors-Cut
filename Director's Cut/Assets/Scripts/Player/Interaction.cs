@@ -11,11 +11,6 @@ interface IInteractable
 public class Interaction : MonoBehaviour
 {
     public float InteractRange;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     private void OnDrawGizmos()
     {
@@ -35,7 +30,6 @@ public class Interaction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-
             //Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, InteractRange));
             Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
             RaycastHit hit;
