@@ -1,48 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Item : MonoBehaviour, IInteractable
 {
-    public string name;
-    public Image image;
+    public ItemInfo itemInfo;
+    public GameObject itemGameObject;
 
-    public Vector3 handPosition;
-    public Vector3 handRotatiom;
+    public Rigidbody rb;
 
+    public string promptMessage;
 
-    public void Interact(GameObject player)
+    public GameObject handler;
+
+    private void Start()
     {
-        PickUp();
+        rb = GetComponent<Rigidbody>();
     }
 
-    public void PickUp()
+    public void Interact(GameObject playerObj)
     {
-        InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
-
-        if (inventoryManager != null)
+        Debug.Log("Interacted");
+        if (!this.itemInfo.isEquipped)
         {
-            //inventoryManager.AddItem(this.gameObject);
-            gameObject.SetActive(false);
+            
+            this.gameObject.transform.position = handler.transform.position;
+            this.transform.parent = handler.gameObject.transform;
+            
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+            Debug.Log(this.itemInfo.itemName + " is now a child of " + handler.gameObject.tag);
+            rb.detectCollisions = false;
+
+            this.itemInfo.isEquipped = true;
         }
+        else if (this.itemInfo.isEquipped && Input.GetKeyDown(KeyCode.G))
+        {
+            Unequip();
+        }
+        else return;
     }
-    
-    public void Use()
+
+    public void Unequip()
     {
-        //Write logic for using
-    }
-    
-    public string GetName()
-    {
-        return name;
-    }
-    
-    public Image GetImage()
-    {
-        return image;
+        rb.detectCollisions = true;
+        this.transform.parent = null;
+        Debug.Log("Item has been dropped");
+        rb.constraints = RigidbodyConstraints.None;
+
+        this.itemInfo.isEquipped = false;
     }
 }
-
-
