@@ -6,6 +6,7 @@ public class DeadBodyScript : BaseReporter
 {
     protected override void ReporterFunction()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, 3f);
+        //Destroy(gameObject);
     }
 }

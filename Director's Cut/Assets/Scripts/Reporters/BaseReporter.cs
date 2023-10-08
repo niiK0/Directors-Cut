@@ -9,7 +9,7 @@ public abstract class BaseReporter : MonoBehaviour, IInteractable
 
     public void Interact(GameObject playerObj)
     {
-        Debug.Log("Interacted with button");
+        Debug.Log("Interacted with btn");
         StartCoroutine(warning.CallWarning());
         PlayerController playerMovement = playerObj.GetComponent<PlayerController>();
         playerMovement.MovePlayer(meetingPlace);
