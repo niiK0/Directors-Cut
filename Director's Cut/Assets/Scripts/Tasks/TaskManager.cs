@@ -15,7 +15,7 @@ public class TaskManager
  
     //Criar uma lista de tasks
     List<Task> tasks = new List<Task>() {
-        new Task("Cozinhar", false, false, false,0f,0f, new Steps[1] {new Steps(true, "Wait", 0.01f, true, false)}),
+        new Task("Cozinhar", false, false, false,0f,0f, new Steps[1] {new Steps(true, "Wait", 0.01f, false, false)}),
         new Task("Beber", false, false, false, 0f, 0f, new Steps[2] {new Steps(true, "Wait", 0.01f, false, false), new Steps(true, "Wait", 0.01f, false, false)}),
     };
 

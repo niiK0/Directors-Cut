@@ -6,6 +6,7 @@ public class NumberGenerator : MonoBehaviour, IInteractable
 {
     public void Interact(GameObject player)
     {
-        Debug.Log(Random.Range(0,100));
+        GameObject taskObject = GameObject.Find("PlayerTaskBar");
+        taskObject.SendMessage("DoStep");   
     }
 }

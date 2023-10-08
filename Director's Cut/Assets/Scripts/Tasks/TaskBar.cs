@@ -57,9 +57,9 @@ public class TaskBar : MonoBehaviour
         if (thisTask.taskSteps[currStep].isDoing)
         {
             
-            //Verify if its frozen
-            if (thisTask.taskSteps[currStep].freezePlayer)
-                playerObj.GetComponent<Movement>().freezePlayer = true;
+            //Verify if its frozen ALGO SE PASSA COM O FREEZE
+            /*if (thisTask.taskSteps[currStep].freezePlayer)
+                playerObj.GetComponent<Movement>().freezePlayer = true;*/
 
             //Incremento seguido
             IncrementProgress(stepsSlider.value + increment);
@@ -79,21 +79,23 @@ public class TaskBar : MonoBehaviour
 
                 stepsSlider.value = 0;
 
-                playerObj.GetComponent<Movement>().freezePlayer = false;
+                //playerObj.GetComponent<Movement>().freezePlayer = false;
 
                 stepsCanvas.SetActive(false);
 
                 //Output da task 
                 taskSlider.value += 1 / thisTask.taskSteps.Length;
 
-                //Verifica se a task foi completa
-                if (currStep == stepsNumber - 1 && thisTask.taskSteps[currStep].isComplete == true)
+                //Verifica se todos os Steps foram completos
+                if (currStep == stepsNumber - 1)
                 {
+                    currStep= 0;
                     verificaStep = true;
                 }
                 else
                 {
                     currStep++;
+                    stepsCanvas.SetActive(true);
                 }
             }
 
@@ -117,7 +119,20 @@ public class TaskBar : MonoBehaviour
                 }
                 else
                 {
+                    //Começar a nova task
                     currTask++;
+                    thisTask = currTasks[currTask];
+                    thisTask.taskSteps[currStep].isDoing = false;
+
+                    //Reiniciar todas as variaveis do canvas task
+                    taskSlider.value = thisTask.completePercentage;
+                    taskTxt.text = thisTask.taskName;
+                    taskCanvas.SetActive(true);
+
+                    //Reiniciar todas as variaveis do canvas Step
+                    stepsSlider.value = 0;
+                    stepTxt.text = thisTask.taskSteps[currStep].stepName;
+                    stepsCanvas.SetActive(true);
                 }
             }
 
@@ -162,7 +177,6 @@ public class TaskBar : MonoBehaviour
 
         //On Start Task
         //THIS TASK VAI SER OUTRA CENA
-        
         thisTask.isDoing = true;
         stepsNumber = thisTask.taskSteps.Length;
         //TaskUI
@@ -176,6 +190,10 @@ public class TaskBar : MonoBehaviour
         stepTxt.text = thisTask.taskSteps[0].stepName;
     }
 
-
+    public void DoStep()
+    {
+        thisTask.taskSteps[currStep].isDoing = true;
+        Debug.Log("Chegou");
+    }
 
 }
