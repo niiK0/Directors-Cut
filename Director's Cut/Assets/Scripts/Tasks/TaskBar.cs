@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TaskBar : MonoBehaviour, IInteractable
+public class TaskBar : MonoBehaviour
 {
     //Canvas dos steps
     public GameObject stepsCanvas;
@@ -18,35 +18,32 @@ public class TaskBar : MonoBehaviour, IInteractable
     public Slider taskSlider;
     public TMP_Text taskTxt;
 
+    //Lista de tasks que ira receber as tasks aleatoriamente dependendo do numero de tasks permitidas
+    public int tasksNumber = 2; 
+    [SerializeField] List<Task> currTasks = new List<Task>() { };
+
 
     //Player
-    GameObject playerObj = null;
+    public GameObject playerObj = null;
     
     //Placeholder Task que é só para andar
-    Task thisTask = new Task("Andar", false, false, false,new int[1] { 0 }, 100f, 0f);
+    Task thisTask = new Task("Andar", false, false, false, 0f, 0f, new Steps[1] { new Steps(false, "Andar", 0, false, false) });
+    
+    //Instanciar o taskmanager de maneira a atribuir tasks ao jogador
     TaskManager taskManager = new TaskManager();
-    public int taskId;
+    public int currTask = 0;
     public int currStep = 0;
-
-    //PlaceHolder Step
-    Steps thisStep = new Steps(false, "Andar", 0, false, false);
-    public int stepId = 0;
+    public int stepsNumber = 0;
 
     //Verificaçoes de task
-    Steps stepVer = new Steps(false, "Andar", 0, false, false);
-    bool verifica = false;
+    bool verificaStep = false;
+    bool verificaTask = false;
 
     private float increment = 0.01f;
 
     public float fillSpeed = 0.5f;
     public int TaskPercent = 0;
     public float completePercentage = 0;
-
-    public void Interact(GameObject player)
-    {
-        playerObj = player;
-        Debug.Log("Interact");
-    }
 
     public void Awake()
     {
@@ -57,14 +54,14 @@ public class TaskBar : MonoBehaviour, IInteractable
     // Update is called once per frame
     public void Update()
     {
-        if (thisTask.isDoing)
+        if (thisTask.taskSteps[currStep].isDoing)
         {
             
             //Verify if its frozen
-            if (thisStep.freezePlayer && thisStep.isDoing)
+            if (thisTask.taskSteps[currStep].freezePlayer)
                 playerObj.GetComponent<Movement>().freezePlayer = true;
 
-            //Verify if its working
+            //Incremento seguido
             IncrementProgress(stepsSlider.value + increment);
 
             //slider grows gradually 
@@ -74,11 +71,11 @@ public class TaskBar : MonoBehaviour, IInteractable
             //Verify if step is complete
             if (stepsSlider.value == 1)
             {
-                thisStep.isDoing = false;
+                thisTask.taskSteps[currStep].isDoing = false;
 
-                thisStep.freezePlayer = false;
+                thisTask.taskSteps[currStep].freezePlayer = false;
 
-                thisStep.isComplete = true;
+                thisTask.taskSteps[currStep].isComplete = true;
 
                 stepsSlider.value = 0;
 
@@ -87,26 +84,21 @@ public class TaskBar : MonoBehaviour, IInteractable
                 stepsCanvas.SetActive(false);
 
                 //Output da task 
-                taskSlider.value += 1/thisTask.taskSteps.Length;
+                taskSlider.value += 1 / thisTask.taskSteps.Length;
 
-                //Verifica se a task esta completa
-                for (int i = 0; i < thisTask.taskSteps.Length; i++)
+                //Verifica se a task foi completa
+                if (currStep == stepsNumber - 1 && thisTask.taskSteps[currStep].isComplete == true)
                 {
-                    stepVer = taskManager.GetStepsById(thisTask.taskSteps[i]);
-                    if (stepVer.isComplete)
-                    {
-                        verifica = true;
-                        Debug.Log("BRO");
-                    }
-                    else
-                    {
-                        verifica = false;
-                    }
+                    verificaStep = true;
+                }
+                else
+                {
+                    currStep++;
                 }
             }
 
             //Se a task estiver completa
-            if (verifica)
+            if (verificaStep)
             {
                 thisTask.isDoing = false;
 
@@ -115,14 +107,31 @@ public class TaskBar : MonoBehaviour, IInteractable
                 stepsSlider.value = 0;
 
                 taskCanvas.SetActive(false);
+
+                verificaStep = false;
+
+                //Verifica se a task foi completa
+                if ( currTask == tasksNumber - 1 && thisTask.isComplete == true)
+                {
+                    verificaTask = true;
+                }
+                else
+                {
+                    currTask++;
+                }
+            }
+
+            if (verificaTask)
+            {
+                Debug.Log("Todas as tasks completas");
             }
 
             //Parar de fazer a task
             if (Input.GetKeyDown(KeyCode.X))
             {
                 //Resets
-                thisStep.isDoing = false;
-                thisStep.freezePlayer = false;
+                thisTask.taskSteps[currStep].isDoing = false;
+                thisTask.taskSteps[currStep].freezePlayer = false;
                 stepsSlider.value = 0;
                 playerObj.GetComponent<Movement>().freezePlayer = false;
                 completePercentage = 0;
@@ -140,22 +149,33 @@ public class TaskBar : MonoBehaviour, IInteractable
 
     public void RandomTask()
     {
-        taskId = Random.Range(0, 2);
+        //Loop que vai buscar tasks e preencher a lista de tasks do jogador
+        for(int i = 0; i < tasksNumber; i++)
+        {
+            currTask = Random.Range(0, 2);
+            thisTask = taskManager.GetTaskById(currTask);
+            currTasks.Add(thisTask);
+        }
+        //Reinicio as variaveis de forma a começar na primeira task da lista
+        currTask = 0;
+        thisTask = currTasks[currTask];
 
         //On Start Task
-        thisTask = taskManager.GetTaskById(taskId);
+        //THIS TASK VAI SER OUTRA CENA
+        
         thisTask.isDoing = true;
+        stepsNumber = thisTask.taskSteps.Length;
         //TaskUI
         taskSlider.value = thisTask.completePercentage;
         taskTxt.text = thisTask.taskName;
 
-        //On Start Steps
-        thisStep = taskManager.GetStepsById(thisTask.taskSteps[currStep]);
-        increment = thisStep.fillSpeed;
+        
         //On interact StepUI
         stepsCanvas.SetActive(true);
         stepsSlider.value = completePercentage;
-        stepTxt.text = thisStep.stepName;
+        stepTxt.text = thisTask.taskSteps[0].stepName;
     }
+
+
 
 }

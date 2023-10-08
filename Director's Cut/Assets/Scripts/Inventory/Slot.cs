@@ -39,7 +39,7 @@ public class Slot : MonoBehaviour
     {
         if (item != null) 
         {
-            iconImage = item.GetComponent<Item>().GetImage();
+            //iconImage = item.GetComponent<Item>().GetImage();
             //iconNameText= item.GetComponent<Item>().GetName();
 
         }
