@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using System;
 using System.IO;
 
 public class PlayerManager : MonoBehaviour
@@ -25,7 +22,8 @@ public class PlayerManager : MonoBehaviour
 
     private void CreateController()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), new Vector3(0,1.5f,0), Quaternion.identity);
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation);
     }
 
     // Update is called once per frame
