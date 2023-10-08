@@ -17,6 +17,7 @@ public class TaskBar : MonoBehaviour
     public GameObject taskCanvas;
     public Slider taskSlider;
     public TMP_Text taskTxt;
+    public float taskPercent = 0;
 
     //Lista de tasks que ira receber as tasks aleatoriamente dependendo do numero de tasks permitidas
     public int tasksNumber = 2; 
@@ -58,8 +59,8 @@ public class TaskBar : MonoBehaviour
         {
             
             //Verify if its frozen ALGO SE PASSA COM O FREEZE
-            /*if (thisTask.taskSteps[currStep].freezePlayer)
-                playerObj.GetComponent<Movement>().freezePlayer = true;*/
+            if (thisTask.taskSteps[currStep].freezePlayer)
+                playerObj.GetComponent<PlayerController>().freezePlayer = true;
 
             //Incremento seguido
             IncrementProgress(stepsSlider.value + increment);
@@ -79,12 +80,13 @@ public class TaskBar : MonoBehaviour
 
                 stepsSlider.value = 0;
 
-                //playerObj.GetComponent<Movement>().freezePlayer = false;
+                playerObj.GetComponent<PlayerController>().freezePlayer = false;
 
                 stepsCanvas.SetActive(false);
 
                 //Output da task 
-                taskSlider.value += 1 / thisTask.taskSteps.Length;
+                taskPercent += thisTask.taskSteps.Length;
+                taskSlider.value = taskPercent;
 
                 //Verifica se todos os Steps foram completos
                 if (currStep == stepsNumber - 1)
@@ -129,7 +131,9 @@ public class TaskBar : MonoBehaviour
                     taskTxt.text = thisTask.taskName;
                     taskCanvas.SetActive(true);
 
+
                     //Reiniciar todas as variaveis do canvas Step
+                    stepsNumber = thisTask.taskSteps.Length;
                     stepsSlider.value = 0;
                     stepTxt.text = thisTask.taskSteps[currStep].stepName;
                     stepsCanvas.SetActive(true);
@@ -148,7 +152,7 @@ public class TaskBar : MonoBehaviour
                 thisTask.taskSteps[currStep].isDoing = false;
                 thisTask.taskSteps[currStep].freezePlayer = false;
                 stepsSlider.value = 0;
-                playerObj.GetComponent<Movement>().freezePlayer = false;
+                playerObj.GetComponent<PlayerController>().freezePlayer = false;
                 completePercentage = 0;
 
                 stepsCanvas.SetActive(false);
