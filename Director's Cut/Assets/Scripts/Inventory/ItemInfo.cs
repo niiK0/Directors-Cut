@@ -11,6 +11,7 @@ public class ItemInfo : ScriptableObject
     public Image itemIcon;
 
     public bool isEquipped = false;
+    public bool inInventory = false;
 
     // Vectors for position/rotation in hand
     public Vector3 handPosition;
