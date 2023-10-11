@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Item : MonoBehaviour, IInteractable
 {
@@ -36,15 +35,15 @@ public class Item : MonoBehaviour, IInteractable
     {
         Debug.Log("Interacted");
         player = playerObj;
+        handler = player.transform.GetChild(0).GetChild(0).gameObject;
         Pickup();
     }
 
-
     public void Pickup()
     {
-        ItemManager inventory = player.GetComponent<ItemManager>();
+        ItemManager inventory = ItemManager.Instance;
 
-        if ( inventory.GetItemsCount() < 3 )
+        if (inventory.GetItemsCount() < 3 )
         {
             inInventory = true;
             Debug.Log(itemInfo.itemName + " is now in inventory.");
@@ -61,7 +60,7 @@ public class Item : MonoBehaviour, IInteractable
 
     public void Equip()
     {
-        ItemManager itemManager = player.GetComponent<ItemManager>();
+        ItemManager itemManager = ItemManager.Instance;
         int itemCount = itemManager.GetItemsCount();
 
         if (inInventory) 
@@ -113,7 +112,7 @@ public class Item : MonoBehaviour, IInteractable
 
     public void Drop()
     {
-        ItemManager itemManager = player.GetComponent<ItemManager>();
+        ItemManager itemManager = ItemManager.Instance;
 
         itemManager.RemoveItem(gameObject);
 

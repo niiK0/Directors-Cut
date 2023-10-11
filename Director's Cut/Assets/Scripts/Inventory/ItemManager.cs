@@ -11,7 +11,6 @@ public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance;
 
-    [SerializeField] GameObject handler;
     private List<GameObject> itemsInInventory = new List<GameObject>();
     bool[] slots = {false, false, false};
     public int currentSlot = -1;
