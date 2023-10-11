@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemGameObject: {fileID: 0}
   itemName: Item 1
-  itemIcon: {fileID: 0}
-  isEquipped: 0
+  itemIcon: {fileID: 21300000, guid: 056e8ca8b53d42e47b8cab87db75db0f, type: 3}
   handPosition: {x: 0, y: 0, z: 0}
   handRotation: {x: 0, y: 0, z: 0}

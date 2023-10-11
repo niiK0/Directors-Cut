@@ -2,40 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance;
 
-    public List<GameObject> slots = new List<GameObject>();
+    [SerializeField] List<GameObject> slots = new List<GameObject>();
+    [SerializeField] Color activeColor = new Color32(0, 0, 0, 200);
+    [SerializeField] Color inactiveColor = new Color32(0, 0, 0, 100);
 
-    public void AddItem(GameObject item)
+    private void Awake()
     {
-        if(slots.Count < 3)
-        {
-            slots.Add(item);
-            UpdateUI();
-        }
-        else
-        {
-            Debug.Log("Inventory is Full");
-        }
+        Instance = this;
     }
 
-    public void RemoveItem(GameObject item)
+    public void UpdateUI()
     {
-        if(slots.Contains(item))
+        int currentSlot = ItemManager.Instance.currentSlot;
+
+        foreach(GameObject slot in slots)
         {
-            slots.Remove(item);
+            slot.GetComponent<Image>().color = inactiveColor;
+            slot.transform.GetChild(0).gameObject.SetActive(false);
         }
 
-        UpdateUI();
-    }
+        if (currentSlot != -1)
+        {
+            slots[currentSlot].GetComponent<Image>().color = activeColor;
+        }
 
-    void UpdateUI()
-    {
+        for(int i = 0; i < 3; i++)
+        {
+            GameObject currentSlotGameObject = ItemManager.Instance.GetItemBySlot(i);
 
-
-        // Update your UI elements to display the current inventory contents
-        // For example, you can update the slot icons and labels here.
+            if (currentSlotGameObject != null)
+            {
+                slots[i].transform.GetChild(0).gameObject.SetActive(true);
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = currentSlotGameObject.GetComponent<Item>().GetItemIcon();
+            }
+        }
     }
 }
