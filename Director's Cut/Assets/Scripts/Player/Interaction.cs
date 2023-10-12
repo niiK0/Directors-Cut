@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,6 +12,7 @@ interface IInteractable
 public class Interaction : MonoBehaviour
 {
     public float InteractRange;
+    [SerializeField] CinemachineVirtualCamera cam;
 
     private void OnDrawGizmos()
     {
@@ -19,10 +21,13 @@ public class Interaction : MonoBehaviour
         Gizmos.color = gizmoColor;
 
         // Define the ray
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, InteractRange));
+        //Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, InteractRange));
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, InteractRange))
+            Gizmos.DrawRay(ray);
 
         // Draw the ray using Gizmos
-        Gizmos.DrawRay(ray);
     }
 
     // Update is called once per frame
@@ -30,8 +35,8 @@ public class Interaction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            //Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, InteractRange));
-            Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            //Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, InteractRange))
