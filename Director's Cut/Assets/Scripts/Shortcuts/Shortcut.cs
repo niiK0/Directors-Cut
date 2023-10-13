@@ -25,6 +25,8 @@ public class Shortcut : MonoBehaviour, IInteractable
         shortcutCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
         currentCamera = shortcutCamera;
 
+        currentCamera.transform.rotation = gameObject.transform.rotation;
+
         //Coloca o jogador no "modo shortcut"
         playerMovement.EnableShortcutMode(true);
 
@@ -36,10 +38,14 @@ public class Shortcut : MonoBehaviour, IInteractable
 
         //Define a porta selecionada como o currentShortcut
         currentShortcut = 0;
+
+        PostProcessManager.Instance.SetVolume(1);
     }
 
     private void ChangeToShortcutCamera(GameObject previousCamera, GameObject newCamera)
     {
+        previousCamera.transform.rotation = Quaternion.identity;
+        newCamera.transform.rotation = gameObject.transform.rotation;
         previousCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
         newCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
         currentCamera = newCamera;
@@ -61,7 +67,9 @@ public class Shortcut : MonoBehaviour, IInteractable
                 e.playerMovement.EnableShortcutMode(false);
                 e.playerMovement.MovePlayer(connectedShortcuts[currentShortcut].transform.GetChild(playerPositionChildIndex).transform);
                 e.playerMovement.OnKeyPressedInShortcutMode -= OnKeyPress;
+                e.playerMovement.transform.rotation = gameObject.transform.rotation;
                 currentCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
+                PostProcessManager.Instance.SetVolume(0);
                 break;
         }
     }
