@@ -1,11 +1,12 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseReporter : MonoBehaviour, IInteractable
+public abstract class BaseReporter : MonoBehaviourPunCallbacks, IInteractable
 {
-    [SerializeField] private Transform meetingPlace;
-    [SerializeField] private WarningScript warning;
+    public Transform meetingPlace;
+    [SerializeField] WarningScript warning;
 
     public void Interact(GameObject playerObj)
     {
@@ -14,8 +15,8 @@ public abstract class BaseReporter : MonoBehaviour, IInteractable
         PlayerController playerMovement = playerObj.GetComponent<PlayerController>();
         playerMovement.MovePlayer(meetingPlace);
         playerMovement.freezePlayer = true;
-        ReporterFunction();
+        ReporterFunction(playerObj);
     }
 
-    protected abstract void ReporterFunction();
+    protected abstract void ReporterFunction(GameObject playerObj);
 }

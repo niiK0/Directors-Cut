@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeadBodyScript : BaseReporter
 {
-    protected override void ReporterFunction()
+    protected override void ReporterFunction(GameObject playerObj)
     {
         Destroy(gameObject, 3f);
         //Destroy(gameObject);
