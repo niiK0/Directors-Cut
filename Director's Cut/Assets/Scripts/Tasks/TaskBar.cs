@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
@@ -8,6 +9,9 @@ using UnityEngine.UI;
 
 public class TaskBar : MonoBehaviour
 {
+    public GameObject itemPrefab;
+    public GameObject currItem;
+
     public static TaskBar Instance;
 
     //Canvas dos steps
@@ -30,7 +34,7 @@ public class TaskBar : MonoBehaviour
     public GameObject playerObj = null;
     
     //Placeholder Task que é só para andar
-    Task thisTask = new Task("Andar", false, false, false, 0f, 0f, new Steps[1] { new Steps(false, "Andar", 0, false, false) });
+    Task thisTask = new Task("Andar", false, false, false, 0f, 0f, new Steps[1] { new Steps(false, "Andar", 0, false, false,"Andar", true) });
     
     //Instanciar o taskmanager de maneira a atribuir tasks ao jogador
     TaskManager taskManager = new TaskManager();
@@ -57,10 +61,20 @@ public class TaskBar : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        //Verifica se ja tem um item instanciado
+        if (!thisTask.taskSteps[currStep].instatiatedItem)
+        {
+            //Instancia o item
+            InstantiateItem();
+            thisTask.taskSteps[currStep].instatiatedItem = true;
+        }
+
+
         if (thisTask.taskSteps[currStep].isDoing)
         {
             
-            //Verify if its frozen ALGO SE PASSA COM O FREEZE
+
+            //Verify if its frozen
             if (thisTask.taskSteps[currStep].freezePlayer)
                 playerObj.GetComponent<PlayerController>().freezePlayer = true;
 
@@ -85,6 +99,8 @@ public class TaskBar : MonoBehaviour
                 playerObj.GetComponent<PlayerController>().freezePlayer = false;
 
                 stepsCanvas.SetActive(false);
+
+                Destroy(currItem);
 
                 //Output da task 
                 taskPercent += thisTask.taskSteps.Length;
@@ -161,6 +177,16 @@ public class TaskBar : MonoBehaviour
             }
 
         }
+    }
+
+
+    public void InstantiateItem()
+    {
+        Debug.Log(thisTask.taskSteps[currStep].prefabName);
+        //string prefabFolderPath = "E:\\UnityProjects\\Directors-Cut\\Director's Cut\\Assets\\Prefabs";
+        //GameObject itemPrefab = Resources.Load<GameObject>(prefabFolderPath + thisTask.taskSteps[currStep].prefabName);
+
+        currItem = Instantiate(itemPrefab, new Vector3(0, 3, 11), Quaternion.identity);
     }
 
     public void IncrementProgress(float newProgress)
