@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class TaskBar : MonoBehaviour
 {
-    public GameObject itemPrefab;
     public GameObject currItem;
 
     public static TaskBar Instance;
@@ -183,8 +182,8 @@ public class TaskBar : MonoBehaviour
     public void InstantiateItem()
     {
         Debug.Log(thisTask.taskSteps[currStep].prefabName);
-        //string prefabFolderPath = "E:\\UnityProjects\\Directors-Cut\\Director's Cut\\Assets\\Prefabs";
-        //GameObject itemPrefab = Resources.Load<GameObject>(prefabFolderPath + thisTask.taskSteps[currStep].prefabName);
+        string prefabFolderPath = "Items/";
+        GameObject itemPrefab = Resources.Load<GameObject>(prefabFolderPath + thisTask.taskSteps[currStep].prefabName);
 
         currItem = Instantiate(itemPrefab, new Vector3(0, 3, 11), Quaternion.identity);
     }
