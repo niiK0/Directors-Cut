@@ -5,36 +5,65 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 using Photon.Pun;
+using Photon.Chat;
+using ExitGames.Client.Photon;
 
-public class ChatManager : MonoBehaviour
+public class ChatManager : MonoBehaviour, IChatClientListener
 {
+    public static ChatManager Instance;
+
+    ChatClient chatClient;
+
     [SerializeField] GameObject chatObj;
 
-    [SerializeField] GameObject messagesHolder;
-    [SerializeField] GameObject messagePrefab;
+    [SerializeField] TMP_Text messagesHolder;
 
     [SerializeField] TMP_InputField writeInput;
 
-    PhotonView photonView;
-
     private bool chatOpen = false;
+    private bool wasOpen = false;
+
+    private bool isConnected = false;
+
+    private string roomChat;
+
+    private PlayerController playerObj;
 
     private void Awake()
     {
-        photonView = GetComponent<PhotonView>();
+        Instance = this;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        chatObj.SetActive(chatOpen);
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("Doing connection to chat..");
+            chatObj.SetActive(chatOpen);
+            chatClient = new ChatClient(this);
+            chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+            roomChat = "Room" + PhotonNetwork.CurrentRoom.Name;
+            isConnected = true;
+            Debug.Log("Chat room name defined to " + roomChat);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        ToggleChat();
-        CheckSendMessage();
+        if (isConnected)
+        {
+            chatClient.Service();
+            ToggleChat();
+            CheckSendMessage();
+        }
+
+    }
+
+    public void SetPlayerObj(PlayerController player)
+    {
+        playerObj = player;
     }
 
     private void CheckSendMessage()
@@ -51,25 +80,17 @@ public class ChatManager : MonoBehaviour
         {
             string message = writeInput.text;
 
-            // Send the message using Photon PUN to all clients in the room
-            photonView.RPC("ReceiveChatMessage", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName, message);
             writeInput.text = string.Empty;
             EventSystem.current.SetSelectedGameObject(writeInput.gameObject);
             writeInput.OnPointerClick(new PointerEventData(EventSystem.current));
+            chatClient.PublishMessage(roomChat, message);
         }
         else
         {
             chatOpen = false;
             chatObj.SetActive(false);
+            playerObj.freezePlayer = false;
         }
-    }
-
-    [PunRPC]
-    private void ReceiveChatMessage(string sender, string message)
-    {
-        // Create a new message UI element and display it in the messagesHolder
-        GameObject newMessage = Instantiate(messagePrefab, messagesHolder.transform);
-        newMessage.GetComponent<ChatMessageScaler>().SetText(sender, message);
     }
 
     private void ToggleChat()
@@ -82,6 +103,14 @@ public class ChatManager : MonoBehaviour
                 chatObj.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(writeInput.gameObject);
                 writeInput.OnPointerClick(new PointerEventData(EventSystem.current));
+                playerObj.freezePlayer = true;
+            }
+            else if(!wasOpen && chatOpen)
+            {
+                StopAllCoroutines();
+                EventSystem.current.SetSelectedGameObject(writeInput.gameObject);
+                writeInput.OnPointerClick(new PointerEventData(EventSystem.current));
+                playerObj.freezePlayer = true;
             }
         }
 
@@ -91,7 +120,101 @@ public class ChatManager : MonoBehaviour
             {
                 chatOpen = false;
                 chatObj.SetActive(false);
+                playerObj.freezePlayer = false;
             }
         }
+    }
+
+    public void DebugReturn(DebugLevel level, string message)
+    {
+        Debug.Log("CHAT DEBUG: LVL " + level + " - " + message);
+    }
+
+    public void OnDisconnected()
+    {
+        isConnected = false;
+        Debug.Log("Disconnected from chat server");
+    }
+
+    public void OnConnected()
+    {
+        isConnected = true;
+        chatClient.Subscribe(new string[] { roomChat.ToString() });
+        Debug.Log("Connected to chat server");
+    }
+
+    public void OnChatStateChange(ChatState state)
+    {
+        Debug.Log("Chat state changed to " + state);
+    }
+
+    public void OnGetMessages(string channelName, string[] senders, object[] messages)
+    {
+        string msgs = "";
+
+        bool wasOpen = chatOpen;
+
+        if(!chatOpen)
+        {
+            chatOpen = true;
+            chatObj.SetActive(true);
+        }
+
+        for (int i = 0; i < senders.Length; i++)
+        {
+            msgs = string.Format("<color=green>{0}</color><color=white>: {1}</color>", senders[i], messages[i]);
+
+            messagesHolder.text += "\n "+ msgs;
+
+            Debug.Log(msgs);
+        }
+
+        if (!wasOpen)
+        {
+            StartCoroutine(closeChat());
+        }
+    }
+
+    IEnumerator closeChat()
+    {
+        yield return new WaitForSecondsRealtime(2);
+        chatOpen = false;
+        chatObj.SetActive(false);
+    }
+
+    public void OnPrivateMessage(string sender, object message, string channelName)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnSubscribed(string[] channels, bool[] results)
+    {
+        for (int i = 0; i < channels.Length; i++)
+        {
+            Debug.Log("Subscribed to " + channels[i] + " " + results[i]);
+        }
+    }
+
+    public void OnUnsubscribed(string[] channels)
+    {
+        for (int i = 0; i < channels.Length; i++)
+        {
+            Debug.Log("Unsubscribed to " + channels[i]);
+        }
+    }
+
+    public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
+    {
+        Debug.Log("chat status changed for " + user + " : " + status + " | " + gotMessage + " | " + message);
+    }
+
+    public void OnUserSubscribed(string channel, string user)
+    {
+        Debug.Log(user + " subscribed to " + channel);
+    }
+
+    public void OnUserUnsubscribed(string channel, string user)
+    {
+        Debug.Log(user + " unsubscribed to " + channel);
     }
 }

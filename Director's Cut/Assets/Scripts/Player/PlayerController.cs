@@ -51,11 +51,12 @@ public class PlayerController : MonoBehaviour
 
         if (!view.IsMine)
         {
-            Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
+            Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject); 
         }
         else
         {
             TaskBar.Instance.playerObj = gameObject;
+            ChatManager.Instance.SetPlayerObj(this);
         }
     }
 
@@ -63,6 +64,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!view.IsMine)
             return;
+
+        ApplyGravity();
 
         if (freezePlayer)
         {
@@ -73,7 +76,6 @@ public class PlayerController : MonoBehaviour
         if (inShortcut)
             return;
 
-        ApplyGravity();
         Move();
     }
 
