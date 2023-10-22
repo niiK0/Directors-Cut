@@ -5,13 +5,13 @@ using System.IO;
 public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
+    public bool IsDirector { get; set; } = false;
 
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (PV.IsMine)
@@ -27,9 +27,26 @@ public class PlayerManager : MonoBehaviour
         SpawnManager.Instance.SpawnPlayer(spawnPoint);
     }
 
-    // Update is called once per frame
-    void Update()
+    //Função de Debug criada para testar as funcionalidades do RoleManager
+    private void DebuggingRoles()
     {
-        
+
+        if (PV.IsMine)
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                RoleManager.Instance.SetUpRoles();
+                foreach (PlayerManager playerManager in RoleManager.Instance.GetPlayerList())
+                {
+                    Debug.Log(playerManager.IsDirector);
+                }
+            }
+        }
+       
+    }
+
+    private void Update()
+    {
+        //DebuggingRoles();
     }
 }
