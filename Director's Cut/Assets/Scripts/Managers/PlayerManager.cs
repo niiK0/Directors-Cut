@@ -24,7 +24,6 @@ public class PlayerManager : MonoBehaviour
     {
         Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation);
-        SpawnManager.Instance.SpawnPlayer(spawnPoint);
     }
 
     //Função de Debug criada para testar as funcionalidades do RoleManager

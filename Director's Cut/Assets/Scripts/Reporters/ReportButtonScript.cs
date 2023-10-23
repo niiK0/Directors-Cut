@@ -7,7 +7,6 @@ using UnityEngine;
 public class ReportButtonScript : BaseReporter
 {
     [SerializeField] List<Transform> meetingPoints = new List<Transform>();
-    private const string UsedMeetingPointProperty = "UsedMeetingPoint";
 
     protected override void ReporterFunction(GameObject playerObj)
     {
@@ -33,21 +32,9 @@ public class ReportButtonScript : BaseReporter
             return;
         }
 
-        int randomMeetingPointIndex = Random.Range(0, meetingPoints.Count);
+        int meetingPointIndex = PhotonNetwork.LocalPlayer.ActorNumber-1;
 
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { UsedMeetingPointProperty, randomMeetingPointIndex } });
-
-        player.transform.position = meetingPoints[randomMeetingPointIndex].position;
-        player.transform.rotation = meetingPoints[randomMeetingPointIndex].rotation;
-    }
-
-    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-    {
-        if (propertiesThatChanged.ContainsKey(UsedMeetingPointProperty))
-        {
-            // Adjust the available spawn points list based on the updated property.
-            int usedSpawnIndex = (int)propertiesThatChanged[UsedMeetingPointProperty];
-            meetingPoints.RemoveAt(usedSpawnIndex);
-        }
+        player.transform.position = meetingPoints[meetingPointIndex].position;
+        player.transform.rotation = meetingPoints[meetingPointIndex].rotation;
     }
 }
