@@ -106,9 +106,39 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
         InventoryManager.Instance.UpdateUI();
     }
 
+    public void SetPlayer(GameObject playerObj)
+    {
+        player = playerObj;
+        handler = player.transform.GetChild(0).GetChild(0).gameObject;
+    }
+
+    public void EquipVisual()
+    {
+        gameObject.SetActive(true);
+
+        gameObject.transform.position = itemInfo.handPosition;
+        gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation);
+        transform.parent = handler.gameObject.transform;
+
+        //recheck rb for some reason lol
+        rb = gameObject.GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        rb.detectCollisions = false;
+    }
+
     public Sprite GetItemIcon()
     {
         return itemInfo.itemIcon;
+    }
+
+    public Vector3 GetItemHandPosition()
+    {
+        return itemInfo.handPosition;
+    }
+    
+    public Vector3 GetItemHandRotation()
+    {
+        return itemInfo.handRotation;
     }
 
     public void Unequip()

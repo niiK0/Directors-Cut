@@ -4,6 +4,7 @@ using Cinemachine;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using System;
+using System.IO;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -111,8 +112,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void EquipItem(int id)
     {
-        GameObject item = ItemManager.Instance.gameObject.GetComponent<ItemList>().items[id];
-        item.GetComponent<Item>().Equip();
+        GameObject itemObj = ItemManager.Instance.gameObject.GetComponent<ItemList>().items[id];
+        Item item = itemObj.GetComponent<Item>();
+        GameObject instantiatedObj = Instantiate(itemObj, item.GetItemHandPosition(), Quaternion.Euler(item.GetItemHandRotation()));
+        instantiatedObj.GetComponent<Item>().SetPlayer(gameObject);
+        instantiatedObj.GetComponent<Item>().EquipVisual();
     }
 
     void ShortcutKeys()

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ca1ebde6e96234a868acf046bcd947, type: 3}
   m_Name: Ak
   m_EditorClassIdentifier: 
-  itemGameObject: {fileID: 0}
+  itemId: 0
   itemName: Ak
   itemIcon: {fileID: 21300000, guid: d7849f85b772ae74aaef6afb4de24b86, type: 3}
-  handPosition: {x: 0, y: 0, z: 0}
+  handPosition: {x: -0.013, y: -0.073, z: 0.674}
   handRotation: {x: 0, y: 0, z: 0}
