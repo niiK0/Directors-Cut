@@ -1,4 +1,4 @@
-Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+Library: D:\Unity\Projects\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --platform=Windows
 --backend=burst-llvm-14
 --target=X64_SSE2
@@ -99,11 +99,6 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=NET_STANDARD_2_1
 --compilation-defines=NETSTANDARD
 --compilation-defines=NETSTANDARD2_1
---compilation-defines=DEVELOPMENT_BUILD
---compilation-defines=ENABLE_PROFILER
---compilation-defines=DEBUG
---compilation-defines=TRACE
---compilation-defines=UNITY_ASSERTIONS
 --compilation-defines=ENABLE_CUSTOM_RENDER_TEXTURE
 --compilation-defines=ENABLE_DIRECTOR
 --compilation-defines=ENABLE_LOCALIZATION
@@ -148,9 +143,8 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=TIMELINE_FRAMEACCURATE
 --linker-options=PdbAltPath="Director's Cut_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=D:\UnityGames\Directors-Cut\Director's Cut\Temp\Burst
---debug=Full
---output=D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=D:\Unity\Projects\Directors-Cut\Director's Cut\Temp\Burst
+--output=D:\Unity\Projects\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 --pdb-search-paths=Temp/ManagedSymbols/
 
@@ -267,11 +261,6 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=NET_STANDARD_2_1
 --compilation-defines=NETSTANDARD
 --compilation-defines=NETSTANDARD2_1
---compilation-defines=DEVELOPMENT_BUILD
---compilation-defines=ENABLE_PROFILER
---compilation-defines=DEBUG
---compilation-defines=TRACE
---compilation-defines=UNITY_ASSERTIONS
 --compilation-defines=ENABLE_CUSTOM_RENDER_TEXTURE
 --compilation-defines=ENABLE_DIRECTOR
 --compilation-defines=ENABLE_LOCALIZATION
@@ -316,9 +305,8 @@ Library: D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugin
 --compilation-defines=TIMELINE_FRAMEACCURATE
 --linker-options=PdbAltPath="Director's Cut_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=D:\UnityGames\Directors-Cut\Director's Cut\Temp\Burst
---debug=Full
---output=D:\UnityGames\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=D:\Unity\Projects\Directors-Cut\Director's Cut\Temp\Burst
+--output=D:\Unity\Projects\Directors-Cut\Director's Cut\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 --pdb-search-paths=Temp/ManagedSymbols/
 

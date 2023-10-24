@@ -22,13 +22,6 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            foreach(GameObject item in itemsInInventory)
-            {
-                Debug.Log(item.name);
-            }
-        }
         if (Input.GetKeyDown(KeyCode.Alpha1)) Manager(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) Manager(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) Manager(2);

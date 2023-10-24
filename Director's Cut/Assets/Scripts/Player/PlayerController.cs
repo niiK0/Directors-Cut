@@ -1,8 +1,11 @@
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using System;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
     //fields
     [SerializeField] float moveSpeed = 5f;
@@ -96,6 +99,20 @@ public class PlayerController : MonoBehaviour
         GetMove();
         Rotate();
         Jump();
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!view.IsMine && targetPlayer == view.Owner)
+        {
+            EquipItem((int)changedProps["itemIndex"]);
+        }
+    }
+
+    private void EquipItem(int id)
+    {
+        GameObject item = ItemManager.Instance.gameObject.GetComponent<ItemList>().items[id];
+        item.GetComponent<Item>().Equip();
     }
 
     void ShortcutKeys()

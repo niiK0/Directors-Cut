@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IInteractable
+public class Item : MonoBehaviourPunCallbacks, IInteractable
 {
     [SerializeField] ItemInfo itemInfo;
     private GameObject player;
@@ -91,11 +92,19 @@ public class Item : MonoBehaviour, IInteractable
 
             itemManager.currentSlot = slotNumber;
             isEquipped = true;
+
+            PhotonView view = player.GetComponent<PlayerController>().photonView;
+
+            if (view.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemIndex", itemInfo.itemId);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            }
         }
 
         InventoryManager.Instance.UpdateUI();
     }
-
 
     public Sprite GetItemIcon()
     {
