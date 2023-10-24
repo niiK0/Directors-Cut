@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public bool freezePlayer = false;
     public bool inShortcut = false;
 
-    PhotonView view;
+    public PhotonView view;
 
     //events
 

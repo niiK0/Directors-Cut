@@ -93,7 +93,7 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
             itemManager.currentSlot = slotNumber;
             isEquipped = true;
 
-            PhotonView view = player.GetComponent<PlayerController>().photonView;
+            PhotonView view = player.GetComponent<PlayerController>().view;
 
             if (view.IsMine)
             {
@@ -124,6 +124,11 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
         rb = gameObject.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.detectCollisions = false;
+    }
+
+    public void UnequipVisual()
+    {
+        gameObject.SetActive(false);
     }
 
     public Sprite GetItemIcon()

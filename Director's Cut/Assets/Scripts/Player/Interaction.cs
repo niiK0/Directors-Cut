@@ -12,6 +12,7 @@ interface IInteractable
 public class Interaction : MonoBehaviour
 {
     public float InteractRange;
+    private Transform highlight;
     [SerializeField] CinemachineVirtualCamera cam;
 
     private void OnDrawGizmos()
@@ -33,13 +34,41 @@ public class Interaction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            //Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, InteractRange))
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        //Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
+        RaycastHit hit;
+
+        if (highlight != null)
+        {
+            highlight.gameObject.GetComponent<Outline>().enabled = false;
+            highlight = null;
+        }
+
+        if (Physics.Raycast(ray, out hit, InteractRange))
+        {
+            highlight = hit.transform;
+
+            if (highlight.CompareTag("Item"))
+            {
+                if (highlight.gameObject.GetComponent<Outline>() != null)
+                {
+                    highlight.gameObject.GetComponent<Outline>().enabled = true;
+                }
+                else
+                {
+                    Outline outline = highlight.gameObject.AddComponent<Outline>();
+                    outline.enabled = true;
+                    highlight.gameObject.GetComponent<Outline>().OutlineColor = new Color32(222, 102, 107, 255);
+                    highlight.gameObject.GetComponent<Outline>().OutlineWidth = 5.0f;
+                }
+            }
+            else
+            {
+                highlight = null;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 // Debug.Log("Hit object: " + hit.transform.name);
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactObj))
