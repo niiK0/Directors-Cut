@@ -20,7 +20,6 @@ public class TaskBar : MonoBehaviour
 
     //Canvas das tasks
     public GameObject taskCanvas;
-    public Slider taskSlider;
     public TMP_Text taskTxt;
     public float taskPercent = 0;
 
@@ -103,7 +102,6 @@ public class TaskBar : MonoBehaviour
 
                 //Output da task 
                 taskPercent += thisTask.taskSteps.Length;
-                taskSlider.value = taskPercent;
 
                 //Verifica se todos os Steps foram completos
                 if (currStep == stepsNumber - 1)
@@ -144,7 +142,6 @@ public class TaskBar : MonoBehaviour
                     thisTask.taskSteps[currStep].isDoing = false;
 
                     //Reiniciar todas as variaveis do canvas task
-                    taskSlider.value = thisTask.completePercentage;
                     taskTxt.text = thisTask.taskName;
                     taskCanvas.SetActive(true);
 
@@ -210,8 +207,7 @@ public class TaskBar : MonoBehaviour
         //THIS TASK VAI SER OUTRA CENA
         thisTask.isDoing = true;
         stepsNumber = thisTask.taskSteps.Length;
-        //TaskUI
-        taskSlider.value = thisTask.completePercentage;
+        //TaskUIe
         taskTxt.text = thisTask.taskName;
 
         
