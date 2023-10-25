@@ -213,6 +213,7 @@ MonoBehaviour:
     m_Bits: 8
   freezePlayer: 0
   inShortcut: 0
+  view: {fileID: 0}
 --- !u!114 &7783212498707535123
 MonoBehaviour:
   m_ObjectHideFlags: 0
