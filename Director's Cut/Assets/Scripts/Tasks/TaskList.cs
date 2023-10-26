@@ -5,48 +5,76 @@ using UnityEngine;
 
 public class TaskList : MonoBehaviour
 {
-    //Canvas das tasks
-    public GameObject taskCanvas;
-    public TMP_Text taskTxt;
-    public int taskNumber;
-
-    //PlaceHolder task de modo a ter uma task inicializada para uso
-    Task thisTask = new Task("Andar", false, false, false, 0f, 0f, new Steps[1] { new Steps(false, "Andar", 0, false, false, "Andar", true) });
-
-    //Lista de tasks que vai conter as tasks deste jogador
-    [SerializeField] List<Task> currTasks = new List<Task>() { };
-
-    //Instanciar o taskmanager de maneira a atribuir tasks ao jogador
-    TaskManager taskManager = new TaskManager();
-    public int currTask = 0;
-
-
-    public void Awake()
+    public enum TaskType
     {
+        Task1,
+        Task2,
+        // Add more task types as needed
+    }
+
+    public TaskType[] availableTaskTypes; // Assign these in the Inspector
+
+    private static TaskList _instance;
+
+    public static TaskList Instance
+    {
+        get { return _instance; }
+    }
+
+    public Dictionary<TaskType, TaskData> taskTypeToData = new Dictionary<TaskType, TaskData>();
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        // Initialize the dictionary with the corresponding TaskData ScriptableObjects
+        foreach (TaskType taskType in availableTaskTypes)
+        {
+            TaskData taskData = GetTaskDataFromEnum(taskType);
+            if (taskData != null)
+            {
+                taskTypeToData[taskType] = taskData;
+            }
+        }
+
         RandomTask();
     }
 
-    
+
+    private TaskData GetTaskDataFromEnum(TaskType taskType)
+    {
+        switch (taskType)
+        {
+            case TaskType.Task1:
+                return taskData1; // Assign your TaskData ScriptableObjects here
+            case TaskType.Task2:
+                return taskData2;
+            // Add more cases for other task types
+            default:
+                return null;
+        }
+    }
 
     public void RandomTask()
     {
-        //Loop que vai buscar tasks e preencher a lista de tasks do jogador
-        int i = 0;
-        while(i < taskNumber)
-        {
-            int randomTaskID = Random.Range(0, 2);
+        TaskType randomTaskType = availableTaskTypes[Random.Range(0, availableTaskTypes.Length)];
+        TaskData selectedTaskData = taskTypeToData[randomTaskType];
 
-            thisTask = taskManager.GetTaskById(currTask);
-            
-            // Check if the task is already in the list.
-            if (!currTasks.Contains(thisTask))
-            {
-                // If the task is not in the list, add it.
-                currTasks.Add(thisTask);
-                i++;
-            }
-            
-        }
-        taskTxt.text = thisTask.taskName;
+        // Now you have the randomly selected TaskData to work with
+        Debug.Log("Selected Task: " + selectedTaskData.taskName);
     }
+
+    // Add your existing fields and methods as needed
+
+    // For example, if you have TaskData ScriptableObjects, you can assign them here:
+    public TaskData taskData1;
+    public TaskData taskData2;
+    // Add more TaskData fields as needed
 }

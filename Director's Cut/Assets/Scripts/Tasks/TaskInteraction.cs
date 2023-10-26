@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class TaskInteraction : MonoBehaviour, IInteractable
 {
-    public int taskID;
+    public TaskList.TaskType taskType; // Assign the corresponding task type in the Inspector
 
     public void Interact(GameObject player)
     {
-        switch (taskID)
+        TaskList taskList = TaskList.Instance;
+        if (taskList != null)
         {
-            case 1:
-                Debug.Log("Cozinhar");
-                //Vamos usar o metodo sendMessage para spawnar os steps
-                break;
-        }
+            Debug.Log("Task Interaction - Task Type: " + taskType);
 
-        //GameObject taskObject = GameObject.Find("PlayerTaskBar");
-        //taskObject.SendMessage("DoStep");   
+            if (taskList.taskTypeToData.ContainsKey(taskType))
+            {
+                TaskData selectedTaskData = taskList.taskTypeToData[taskType];
+                Debug.Log("Current Task Name: " + selectedTaskData.taskName);
+                Debug.Log("Is Task Completed: " + selectedTaskData.isComplete);
+                // Debug other properties of the 'selectedTaskData' here.
+            }
+            else
+            {
+                Debug.Log("Task type not found in TaskList.");
+            }
+        }
+        else
+        {
+            Debug.LogError("TaskList singleton not found.");
+        }
     }
 }
