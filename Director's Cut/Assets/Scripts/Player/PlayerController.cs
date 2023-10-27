@@ -59,7 +59,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         else
         {
-            TaskBar.Instance.playerObj = gameObject;
             ChatManager.Instance.SetPlayerObj(this);
         }
     }

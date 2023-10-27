@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 3015c2963f30f83479b2a0ff34532047, type: 3}
   m_Name: Cozinhar
-  m_EditorClassIdentifier: Assembly-CSharp::TaskData
-  taskName: 
+  m_EditorClassIdentifier: 
+  taskName: Cozinhar
   isComplete: 0
-  taskRange: 0
-  completePercentage: 0
+  taskRange: 2

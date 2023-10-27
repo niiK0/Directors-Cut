@@ -7,8 +7,8 @@ public class TaskList : MonoBehaviour
 {
     public enum TaskType
     {
-        Task1,
-        Task2,
+        Beber,
+        Cozinhar,
         // Add more task types as needed
     }
 
@@ -52,10 +52,10 @@ public class TaskList : MonoBehaviour
     {
         switch (taskType)
         {
-            case TaskType.Task1:
-                return taskData1; // Assign your TaskData ScriptableObjects here
-            case TaskType.Task2:
-                return taskData2;
+            case TaskType.Beber:
+                return Beber; // Assign your TaskData ScriptableObjects here
+            case TaskType.Cozinhar:
+                return Cozinhar;
             // Add more cases for other task types
             default:
                 return null;
@@ -74,7 +74,7 @@ public class TaskList : MonoBehaviour
     // Add your existing fields and methods as needed
 
     // For example, if you have TaskData ScriptableObjects, you can assign them here:
-    public TaskData taskData1;
-    public TaskData taskData2;
+    public TaskData Beber;
+    public TaskData Cozinhar;
     // Add more TaskData fields as needed
 }

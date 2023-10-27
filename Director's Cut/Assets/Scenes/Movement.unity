@@ -573,21 +573,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b1ebb7b30ed574db7d1dc78f6bee0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currItem: {fileID: 0}
-  stepsCanvas: {fileID: 1188878690}
-  stepsSlider: {fileID: 1083712050}
-  stepTxt: {fileID: 832539192}
   taskCanvas: {fileID: 1600189695}
   taskTxt: {fileID: 95943042}
-  taskPercent: 0
-  tasksNumber: 2
   playerObj: {fileID: 0}
-  currTask: 0
-  currStep: 0
-  stepsNumber: 0
-  fillSpeed: 0.5
-  TaskPercent: 0
-  completePercentage: 0
+--- !u!1 &182648051 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3805218257522170188, guid: 0024be2dfe682b74ab6bd166414e4f25,
+    type: 3}
+  m_PrefabInstance: {fileID: 1472758542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &182648052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182648051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c3bc15f030c2440ae2413d0f1b93ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskType: 1
 --- !u!1 &219924383
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +671,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219924383}
   m_CullTransparentMesh: 1
+--- !u!1001 &599517186
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 862793943945217480, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5e148de6cdf2d164aa3e3f90ce8c852c, type: 2}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391618300440032736, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805218257522170188, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_Name
+      value: Cubo (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805218257522170188, guid: 0024be2dfe682b74ab6bd166414e4f25,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 695377622690291820, guid: 0024be2dfe682b74ab6bd166414e4f25, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 0024be2dfe682b74ab6bd166414e4f25, type: 3}
 --- !u!1 &757861521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,21 +1418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b1ebb7b30ed574db7d1dc78f6bee0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currItem: {fileID: 0}
-  stepsCanvas: {fileID: 1188878690}
-  stepsSlider: {fileID: 1083712050}
-  stepTxt: {fileID: 832539192}
   taskCanvas: {fileID: 1600189695}
   taskTxt: {fileID: 95943042}
-  taskPercent: 0
-  tasksNumber: 2
   playerObj: {fileID: 1425574788}
-  currTask: 0
-  currStep: 0
-  stepsNumber: 0
-  fillSpeed: 0.5
-  TaskPercent: 0
-  completePercentage: 0
 --- !u!4 &1172668614
 Transform:
   m_ObjectHideFlags: 0
@@ -1749,7 +1824,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cubo
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 695377622690291820, guid: 0024be2dfe682b74ab6bd166414e4f25, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0024be2dfe682b74ab6bd166414e4f25, type: 3}
 --- !u!1 &1534857859
 GameObject:
@@ -1941,10 +2017,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b5e784f935cdb448a431b5a3032a77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskCanvas: {fileID: 1600189695}
-  taskTxt: {fileID: 95943042}
-  taskNumber: 1
-  currTask: 0
+  availableTaskTypes: 0000000001000000
+  taskData1: {fileID: 11400000, guid: d259b606fbb1d114795a626499424081, type: 2}
+  taskData2: {fileID: 11400000, guid: 0719e6b9b391cd24cb683393f1c70066, type: 2}
 --- !u!1 &1972867443 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4424966521571604770, guid: 2bee538bd984db449b67941aa70689d1,
@@ -1963,21 +2038,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b1ebb7b30ed574db7d1dc78f6bee0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currItem: {fileID: 0}
-  stepsCanvas: {fileID: 1188878690}
-  stepsSlider: {fileID: 1083712050}
-  stepTxt: {fileID: 832539192}
   taskCanvas: {fileID: 1600189695}
   taskTxt: {fileID: 95943042}
-  taskPercent: 0
-  tasksNumber: 2
   playerObj: {fileID: 0}
-  currTask: 0
-  currStep: 0
-  stepsNumber: 0
-  fillSpeed: 0.5
-  TaskPercent: 0
-  completePercentage: 0
 --- !u!1001 &6336426089891604710
 PrefabInstance:
   m_ObjectHideFlags: 0
