@@ -2,10 +2,11 @@ using UnityEngine;
 using Photon.Pun;
 using System.IO;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
     PhotonView PV;
-    public bool IsDirector { get; set; } = false;
+    public bool isDirector { get; set; } = false;
+    public int cachedActorNumber { get; set; }
 
     private void Awake()
     {
@@ -14,6 +15,9 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
+        RoleManager.Instance.AddPlayer(this);
+        cachedActorNumber = PV.Owner.ActorNumber;
+
         if (PV.IsMine)
         {
             CreateController();
@@ -22,30 +26,17 @@ public class PlayerManager : MonoBehaviour
 
     private void CreateController()
     {
+        Debug.Log("MY ACTOR = " + cachedActorNumber);
         Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation);
     }
 
-    //Função de Debug criada para testar as funcionalidades do RoleManager
-    private void DebuggingRoles()
+    public void SyncPlayerTypeUI()
     {
-
         if (PV.IsMine)
         {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                RoleManager.Instance.SetUpRoles();
-                foreach (PlayerManager playerManager in RoleManager.Instance.GetPlayerList())
-                {
-                    Debug.Log(playerManager.IsDirector);
-                }
-            }
+            RoleManager.Instance.SetPlayerTypeUI(isDirector);
+            Debug.Log("checking if my player is director: " + isDirector);
         }
-       
-    }
-
-    private void Update()
-    {
-        //DebuggingRoles();
     }
 }
