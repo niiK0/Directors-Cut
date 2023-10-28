@@ -4,7 +4,7 @@ using System.IO;
 
 public class PlayerManager : MonoBehaviour
 {
-    PhotonView PV;
+    public PhotonView PV { get; set; }
     public bool IsDirector { get; set; } = false;
 
     private void Awake()
