@@ -51,6 +51,8 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
 
             inventory.AddItem(gameObject);
 
+            gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation.x, itemInfo.handRotation.y, itemInfo.handRotation.z);
+
             Equip();
         }
         else
@@ -84,6 +86,7 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
 
             gameObject.SetActive(true);
 
+            
             gameObject.transform.position = handler.transform.position;
             transform.parent = handler.gameObject.transform;
 
