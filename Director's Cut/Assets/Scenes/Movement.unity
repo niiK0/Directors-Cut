@@ -594,7 +594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c3bc15f030c2440ae2413d0f1b93ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskType: 1
+  isComplete: 0
 --- !u!1 &219924383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,6 +1719,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0adfb979b37c2414ca52f711fe560208, type: 3}
+--- !u!1 &1373731195 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3805218257522170188, guid: 0024be2dfe682b74ab6bd166414e4f25,
+    type: 3}
+  m_PrefabInstance: {fileID: 599517186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1373731200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373731195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee5ee0d99f60864084f433be6b4113e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isComplete: 0
 --- !u!1 &1425574788 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2176655674552294540, guid: 0adfb979b37c2414ca52f711fe560208,
@@ -2017,9 +2036,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b5e784f935cdb448a431b5a3032a77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableTaskTypes: 0000000001000000
-  taskData1: {fileID: 11400000, guid: d259b606fbb1d114795a626499424081, type: 2}
-  taskData2: {fileID: 11400000, guid: 0719e6b9b391cd24cb683393f1c70066, type: 2}
+  tasks:
+  - Cozinhar
+  - Beber
 --- !u!1 &1972867443 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4424966521571604770, guid: 2bee538bd984db449b67941aa70689d1,

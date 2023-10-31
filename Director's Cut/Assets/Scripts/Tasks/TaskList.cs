@@ -5,76 +5,37 @@ using UnityEngine;
 
 public class TaskList : MonoBehaviour
 {
-    public enum TaskType
-    {
-        Beber,
-        Cozinhar,
-        // Add more task types as needed
-    }
+    //Array que guarda todas as tasks no inspector
+    public string[] tasks;
 
-    public TaskType[] availableTaskTypes; // Assign these in the Inspector
-
-    private static TaskList _instance;
-
-    public static TaskList Instance
-    {
-        get { return _instance; }
-    }
-
-    public Dictionary<TaskType, TaskData> taskTypeToData = new Dictionary<TaskType, TaskData>();
+    //Tornar este script um Singleton
+    public static TaskList Instance;
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        //Verificaçao de singleton
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
             return;
         }
 
-        _instance = this;
+        Instance = this;
         DontDestroyOnLoad(this.gameObject);
-
-        // Initialize the dictionary with the corresponding TaskData ScriptableObjects
-        foreach (TaskType taskType in availableTaskTypes)
-        {
-            TaskData taskData = GetTaskDataFromEnum(taskType);
-            if (taskData != null)
-            {
-                taskTypeToData[taskType] = taskData;
-            }
-        }
 
         RandomTask();
     }
 
-
-    private TaskData GetTaskDataFromEnum(TaskType taskType)
-    {
-        switch (taskType)
-        {
-            case TaskType.Beber:
-                return Beber; // Assign your TaskData ScriptableObjects here
-            case TaskType.Cozinhar:
-                return Cozinhar;
-            // Add more cases for other task types
-            default:
-                return null;
-        }
-    }
-
     public void RandomTask()
     {
-        TaskType randomTaskType = availableTaskTypes[Random.Range(0, availableTaskTypes.Length)];
-        TaskData selectedTaskData = taskTypeToData[randomTaskType];
+        if (tasks.Length == 0)
+        {
+            Debug.LogWarning("No tasks assigned to the task list.");
+            return;
+        }
 
-        // Now you have the randomly selected TaskData to work with
-        Debug.Log("Selected Task: " + selectedTaskData.taskName);
+        int randomIndex = Random.Range(0, tasks.Length);
+        
+        Debug.Log("Selected Task: " + tasks[randomIndex]);
     }
-
-    // Add your existing fields and methods as needed
-
-    // For example, if you have TaskData ScriptableObjects, you can assign them here:
-    public TaskData Beber;
-    public TaskData Cozinhar;
-    // Add more TaskData fields as needed
 }
