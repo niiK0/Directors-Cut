@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Beber : MonoBehaviour, IInteractable
+public class Bathroom : MonoBehaviour, IInteractable
 {
-    static string taskName = "Beber";
-    static float taskRange = 3f;
+    static string taskName = "Cagar";
+    static float taskRange = 2f;
     public bool isComplete = false;
 
     public void Interact(GameObject player)
@@ -18,12 +18,12 @@ public class Beber : MonoBehaviour, IInteractable
 
             if (taskList.tasks.Contains(taskName) && !isComplete)
             {
-                
-                
+
+
                 //Outputs so para ver o que se passa
                 Debug.Log("Current Task Name: " + taskName);
                 Debug.Log("Is Task Completed: " + isComplete);
-                
+
                 // Fazer a corrotina que trata da task
                 StartCoroutine(DoTask(taskList));
 
@@ -46,11 +46,9 @@ public class Beber : MonoBehaviour, IInteractable
         isComplete = true;
         //FREEZE PLAYER
         // Wait for 5 seconds.
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(15.0f);
 
-        // This code will be executed after waiting for 5 seconds.
-        Debug.Log("5 seconds have passed!");
+        // This code will be executed after waiting for 15 seconds.
+        Debug.Log("15 seconds have passed!");
     }
 }
-    
-
