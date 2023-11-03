@@ -18,6 +18,7 @@ public class TasksUI : MonoBehaviour
             GameObject taskUI = Instantiate(taskPrefab, taskListPanel);
             TextMeshProUGUI taskText = taskUI.GetComponent<TextMeshProUGUI>();
             taskText.text = taskList.currTasks[i];
+            taskUI.name = taskList.currTasks[i];
 
             // Ajusta a posiçao de forma a nao dar overlap
             float yOffset = i * taskText.preferredHeight; 

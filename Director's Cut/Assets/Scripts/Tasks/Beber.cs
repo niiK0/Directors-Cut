@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Beber : MonoBehaviour, IInteractable
@@ -8,6 +9,14 @@ public class Beber : MonoBehaviour, IInteractable
     static string taskName = "Beber";
     static float taskRange = 3f;
     public bool isComplete = false;
+
+    GameObject taskUI;
+
+    public void Start()
+    {
+        // Find the GameObject with the specified name
+        taskUI = GameObject.Find("TasksListUI");
+    }
 
     public void Interact(GameObject player)
     {
@@ -44,6 +53,26 @@ public class Beber : MonoBehaviour, IInteractable
     IEnumerator DoTask(TaskList task)
     {
         isComplete = true;
+
+        if (taskUI != null)
+        {
+            Transform childTransform = taskUI.transform.Find(taskName);
+
+            if (childTransform != null)
+            {
+                TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
+                childText.color = Color.green;
+            }
+            else
+            {
+                Debug.LogWarning("Child not found with name: " + taskName);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("TaskUI not found with name: TaskUI");
+        }
+
         //FREEZE PLAYER
         // Wait for 5 seconds.
         yield return new WaitForSeconds(5.0f);
