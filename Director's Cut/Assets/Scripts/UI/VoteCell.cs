@@ -26,6 +26,7 @@ public class VoteCell : MonoBehaviour
 
     private void OnVotePressed()
     {
+        UpdateStatus(true);
         voteManager.CastVote(actorNumber);
     }
 

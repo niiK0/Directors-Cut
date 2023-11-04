@@ -8,32 +8,46 @@ using Photon.Realtime;
 
 public class VoteManager : MonoBehaviourPun
 {
+    #region Fields
+    //Referências in-code
     public static VoteManager Instance;
+    PhotonView view;
 
+    //Referências na interface
     [SerializeField] private GameObject votingWindow;
-
     [SerializeField] private VoteCell voteCellPrefab;
     [SerializeField] private Transform voteCellContainer;
 
+    //Listas
     private List<VoteCell> voteCellList = new List<VoteCell>();
-
-    [HideInInspector] private bool hasAlreadyVoted;
-
     private List<int> playersThatVotedList = new List<int>();
     private List<int> playersThatHaveBeenVotedList = new List<int>();
 
+    //Outros fields
+    [HideInInspector] private bool hasAlreadyVoted;
+    private int skipped;
+
+    //Consts
+    public const int skipped_vote_value = 0;
+    #endregion
+
+    #region Unity Callbacks
     private void Awake()
     {
         Instance = this;
+        view = GetComponent<PhotonView>();
     }
+    #endregion
 
+    #region Class Methods
     [PunRPC]
-    public void StartMeeting() //Deve ser chamado para todos os jogadores
+    public void StartMeeting()
     {
         PopulatePlayerList();
         playersThatVotedList.Clear();
         playersThatHaveBeenVotedList.Clear();
         hasAlreadyVoted = false;
+        skipped = 0;
         ToggleAllButtons(true);
         votingWindow.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
@@ -84,22 +98,29 @@ public class VoteManager : MonoBehaviourPun
     {
         int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount; //Ainda não desconta os jogadores mortos
 
-        foreach (VoteCell voteCell in voteCellList)
-        {
-            if (voteCell.ActorNumber == actorNumber)
-            {
-                voteCell.UpdateStatus(true);
-            }
-        }
-
-        //Dá log ao player que votou e ao que foi votado
-
         if (!playersThatVotedList.Contains(actorNumber))
         {
             playersThatVotedList.Add(actorNumber);
-            playersThatHaveBeenVotedList.Add(targetActorNumber);
+
+            if(targetActorNumber == skipped_vote_value)
+            {
+                skipped++;
+            }
+            else
+            {
+                playersThatHaveBeenVotedList.Add(targetActorNumber);
+            }
         }
 
+        if (playersThatVotedList.Count == remainingPlayers)
+        {
+            view.RPC("FinishVote", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    private void FinishVote()
+    {
         if (!PhotonNetwork.IsMasterClient) { return; }
         //Aqui também haverá um check relacionado ao desconto de jogadores mortos
 
@@ -120,7 +141,7 @@ public class VoteManager : MonoBehaviourPun
         int mostVotedPlayer = -1;
         int mostVotes = int.MinValue;
 
-        foreach (KeyValuePair<int,int> playerVote in playerVoteCount)
+        foreach (KeyValuePair<int, int> playerVote in playerVoteCount)
         {
             if (playerVote.Value > mostVotes)
             {
@@ -129,19 +150,33 @@ public class VoteManager : MonoBehaviourPun
             }
         }
 
-        //Encerra a sessão de votação]
-        if (mostVotes >= remainingPlayers / 2) //Aqui também será implementada a funcionalidade "remaining players"
+        if (mostVotes < skipped / 2)
         {
-            //Aqui deve-se implementar o código de expulsar o jogador:
-            Debug.Log("Foi eliminado o jogador de chave " + mostVotedPlayer + " com " + mostVotes + " votos.");
+            //Caso a maioria deseje pular o voto:
+            Debug.Log("Nenhum jogador foi eliminado");
         }
+        else
+        {
+            //Caso um jogador seja eliminado:
+            Debug.Log("Foi eliminado o jogador de chave " + mostVotedPlayer + " com " + mostVotes + " votos.");
+            //Implementar aqui o que ocorre quando um jogador é eliminado.
+        }
+
+        votingWindow.SetActive(false);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            StartMeeting();
+            view.RPC("StartMeeting", RpcTarget.All);
         }
     }
+    #endregion
 }
+
+//A fazer:
+//-> Funcionalidade skip vote (Feito)
+//-> Fechar a janela do voto uma vez que esteja completo (Feito)
+//-> Não contar jogadores mortos
+//-> Indicadores visuais de quem foi eliminado
