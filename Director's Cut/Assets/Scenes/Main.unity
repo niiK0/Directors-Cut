@@ -3271,7 +3271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3429b933ff4cc34baeaf868fe4c01c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskType: 0
 --- !u!136 &665137884
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4099,9 +4098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
-<<<<<<< Updated upstream
-  playerTypeText: {fileID: 1206712930}
-=======
+  playerTypeText: {fileID: 0}
 --- !u!114 &813157966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4201,7 +4198,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828098896}
   m_CullTransparentMesh: 1
->>>>>>> Stashed changes
 --- !u!1 &832539190
 GameObject:
   m_ObjectHideFlags: 0
@@ -5845,9 +5841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b1ebb7b30ed574db7d1dc78f6bee0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskCanvas: {fileID: 1600189695}
-  taskTxt: {fileID: 95943042}
-  playerObj: {fileID: 0}
 --- !u!4 &1172668614
 Transform:
   m_ObjectHideFlags: 0
@@ -7307,6 +7300,7 @@ GameObject:
   - component: {fileID: 1600796134}
   - component: {fileID: 1600796136}
   - component: {fileID: 1600796135}
+  - component: {fileID: 1600796137}
   m_Layer: 0
   m_Name: VoteButtonsBackground
   m_TagString: Untagged
@@ -7372,6 +7366,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600796133}
   m_CullTransparentMesh: 1
+--- !u!114 &1600796137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600796133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 1
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1609972381
 GameObject:
   m_ObjectHideFlags: 0
