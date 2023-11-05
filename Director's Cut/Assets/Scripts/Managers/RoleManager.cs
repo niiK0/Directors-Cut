@@ -18,10 +18,17 @@ public class RoleManager : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_Text playerTypeText;
 
+    [SerializeField] private GameObject endScreen;
+    [SerializeField] private TextMeshProUGUI winnerTeamText;
+    [SerializeField] private Transform winnersContainer;
+
     private bool loaded = false;
     private int nOfDirectors = 2;
 
     private const string directors_property_key = "Directors";
+
+    private const string directors_team_name = "DIRETORES";
+    private const string actors_team_name = "ATORES";
     #endregion
 
     #region Unity Callbacks
@@ -171,7 +178,39 @@ public class RoleManager : MonoBehaviourPunCallbacks
 
     private void EndScreen(bool actorsWon)
     {
+        endScreen.SetActive(true);
+        if (actorsWon)
+        {
+            winnerTeamText.text = actors_team_name;
+            winnerTeamText.color = Color.green;
 
+            foreach (PlayerManager player in players)
+            {
+                if (!player.isDirector)
+                {
+                    TextMeshProUGUI actorName = new TextMeshProUGUI();
+                    actorName.text = player.GetComponent<PhotonView>().Owner.NickName;
+                    actorName.color = Color.green;
+                    Object.Instantiate(actorName, winnersContainer);
+                }
+            }
+        }
+        else
+        {
+            winnerTeamText.text = directors_team_name;
+            winnerTeamText.color = Color.red;
+
+            foreach (PlayerManager player in players)
+            {
+                if (player.isDirector)
+                {
+                    TextMeshProUGUI directorName = new TextMeshProUGUI();
+                    directorName.text = player.GetComponent<PhotonView>().Owner.NickName;
+                    directorName.color = Color.red;
+                    Object.Instantiate(directorName, winnersContainer);
+                }
+            }
+        }
     }
     #endregion
 
