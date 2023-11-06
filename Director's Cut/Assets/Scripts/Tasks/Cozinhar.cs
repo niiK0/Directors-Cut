@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class Cozinhar : MonoBehaviour, IInteractable
 {
-    public TaskList.TaskType taskType; // Assign the corresponding task type in the Inspector
-    
+    static string taskName = "Cozinhar";
+    static float taskRange = 1f;
+    public bool isComplete = false;
+
+
     public void Interact(GameObject player)
     {
         TaskList taskList = TaskList.Instance;
         if (taskList != null)
         {
-            Debug.Log("Task Interaction - Task Type: " + taskType);
+            Debug.Log("Task Interaction - Task Type: " + taskName);
 
-            if (taskList.availableTaskTypes.Contains(taskType))
+            if (taskList.tasks.Contains(taskName))
             {
-                TaskData selectedTaskData = taskList.taskTypeToData[taskType];
-                Debug.Log("Current Task Name: " + selectedTaskData.taskName);
-                Debug.Log("Is Task Completed: " + selectedTaskData.isComplete);
+                Debug.Log("Current Task Name: " + taskName);
+                Debug.Log("Is Task Completed: " + isComplete);
                 // Debug other properties of the 'selectedTaskData' here.
             }
             else

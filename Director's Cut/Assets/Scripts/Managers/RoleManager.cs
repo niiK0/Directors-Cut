@@ -6,8 +6,10 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 
+
 public class RoleManager : MonoBehaviourPunCallbacks
 {
+    #region Fields
     //Padrão singleton
     public static RoleManager Instance;
 
@@ -16,39 +18,46 @@ public class RoleManager : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_Text playerTypeText;
 
+    [SerializeField] private GameObject endScreen;
+    [SerializeField] private TextMeshProUGUI winnerTeamText;
+    [SerializeField] private Transform winnersContainer;
+
     private bool loaded = false;
     private int nOfDirectors = 2;
 
-    private const string DirectorsPropertyKey = "Directors";
+    private const string directors_property_key = "Directors";
 
-    public List<PlayerManager> GetPlayerList()
+    private const string directors_team_name = "DIRETORES";
+    private const string actors_team_name = "ATORES";
+    #endregion
+
+    #region Unity Callbacks
+    private void Awake()
     {
-        return players;
+        Instance = this;
+        players = new List<PlayerManager>();
     }
 
     private void Update()
     {
         if (!loaded)
         {
-            if(players.Count() == PhotonNetwork.CurrentRoom.PlayerCount)
+            if (players.Count() == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 loaded = true;
-                if(PhotonNetwork.IsMasterClient)
-                    SetUpRoles();
+                if (PhotonNetwork.IsMasterClient)
+                    AssignRoles();
 
                 return;
             }
         }
     }
+    #endregion
 
-    private void Awake()
+    #region Class Methods
+    public List<PlayerManager> GetPlayerList()
     {
-        Instance = this;
-    }
-
-    public void SetPlayerTypeUI(bool isDirector)
-    {
-        playerTypeText.text = isDirector ? "Director" : "Actor";
+        return players;
     }
 
     public void AddPlayer(PlayerManager player)
@@ -56,12 +65,19 @@ public class RoleManager : MonoBehaviourPunCallbacks
         players.Add(player);
     }
 
+    #region Roles Methods
+
+    public void SetPlayerTypeUI(bool isDirector)
+    {
+        playerTypeText.text = isDirector ? "Director" : "Actor";
+    }
+
     //Atribui aos PlayerManagers na lista de players a role de Diretor, se tiverem sido sorteados
     private void AssignRoles()
     {
         int nOfPlayers = players.Count;
 
-        HashSet<int> aux = new HashSet<int>();
+        HashSet<int> aux = new HashSet<int>(); //HashSet que contém os DIRETORES
         bool canProceed = true;
 
         //Sorteia <nº de Diretores> números aleatórios de 0 a <nº de Jogadores>. Esses serão os diretores
@@ -72,8 +88,10 @@ public class RoleManager : MonoBehaviourPunCallbacks
             {
                 n = Random.Range(0, nOfPlayers);
                 Debug.Log("Generated " + n + " to try as director");
-                if(aux.Contains(n))
+                if (aux.Contains(n))
+                {
                     canProceed = false;
+                }
 
                 Debug.Log("Trying " + aux.Contains(n) + " for contains in aux var, can proceed = " + canProceed);
             } while (!canProceed);
@@ -83,16 +101,16 @@ public class RoleManager : MonoBehaviourPunCallbacks
         }
 
         Hashtable directorsRoomProperties = new Hashtable();
-        directorsRoomProperties[DirectorsPropertyKey] = aux.ToArray();
+        directorsRoomProperties[directors_property_key] = aux.ToArray();
         PhotonNetwork.CurrentRoom.SetCustomProperties(directorsRoomProperties);
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
-        if (propertiesThatChanged.ContainsKey(DirectorsPropertyKey))
+        if (propertiesThatChanged.ContainsKey(directors_property_key))
         {
             // Update the list of director actor numbers when the room property changes
-            int[] directorUpdatedList = (int[])propertiesThatChanged[DirectorsPropertyKey];
+            int[] directorUpdatedList = (int[])propertiesThatChanged[directors_property_key];
 
             foreach(PlayerManager player in players)
             {
@@ -109,11 +127,92 @@ public class RoleManager : MonoBehaviourPunCallbacks
             }
         }
     }
+    #endregion
 
-    //Função a ser chamada ao iniciar do jogo. Define as roles. Ainda não é chamada por ninguém, mas já está pronta para utilização.
-    private void SetUpRoles()
+    #region GameEnd Methods
+    //Deve ser chamado sempre que um jogador morrer.
+    public void TryEndGame()
     {
-        AssignRoles();
-        Debug.Log("Roles setup finished!");
+        int directorsRemaining = DirectorsAlive();
+        int actorsRemaining = ActorsAlive();
+
+        if (directorsRemaining >= actorsRemaining)
+        {
+            //Vitória dos diretores
+            Debug.Log("Vencem os diretores!");
+            EndScreen(false);
+        }
+        else if (directorsRemaining == 0) //Adicionar também a vitória por tasks!
+        {
+            //Vitória dos atores
+            Debug.Log("Vencem os atores!");
+            EndScreen(true);
+        }
     }
+
+    private int DirectorsAlive()
+    {
+        int nOfDirectorsAlive = 0;
+        for (int i = 0; i < players.Count(); i++)
+        {
+            if (players[i].isDirector) //&& isAlive -> Ainda não foi adicionada essa variável ao PlayerManager. Ver com o Tiago.
+            {
+                nOfDirectorsAlive++;
+            }
+        }
+        return nOfDirectorsAlive;
+    }
+
+    private int ActorsAlive()
+    {
+        int nOfActorsAlive = 0;
+        for (int i = 0; i < players.Count(); i++)
+        {
+            if (!players[i].isDirector) //&& isAlive -> Ainda não foi adicionada essa variável ao PlayerManager. Ver com o Tiago.
+            {
+                nOfActorsAlive++;
+            }
+        }
+        return nOfActorsAlive;
+    }
+
+    private void EndScreen(bool actorsWon)
+    {
+        endScreen.SetActive(true);
+        if (actorsWon)
+        {
+            winnerTeamText.text = actors_team_name;
+            winnerTeamText.color = Color.green;
+
+            foreach (PlayerManager player in players)
+            {
+                if (!player.isDirector)
+                {
+                    TextMeshProUGUI actorName = new TextMeshProUGUI();
+                    actorName.text = player.GetComponent<PhotonView>().Owner.NickName;
+                    actorName.color = Color.green;
+                    Object.Instantiate(actorName, winnersContainer);
+                }
+            }
+        }
+        else
+        {
+            winnerTeamText.text = directors_team_name;
+            winnerTeamText.color = Color.red;
+
+            foreach (PlayerManager player in players)
+            {
+                if (player.isDirector)
+                {
+                    TextMeshProUGUI directorName = new TextMeshProUGUI();
+                    directorName.text = player.GetComponent<PhotonView>().Owner.NickName;
+                    directorName.color = Color.red;
+                    Object.Instantiate(directorName, winnersContainer);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #endregion
 }

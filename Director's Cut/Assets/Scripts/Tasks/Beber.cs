@@ -1,29 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Beber : MonoBehaviour, IInteractable
 {
-    public TaskList.TaskType taskType; // Assign the corresponding task type in the Inspector
-    
+    static string taskName = "Beber";
+    static float taskRange = 3f;
+    public bool isComplete = false;
+
+    GameObject taskUI;
+
+    public void Start()
+    {
+        // Find the GameObject with the specified name
+        taskUI = GameObject.Find("TasksListUI");
+    }
+
     public void Interact(GameObject player)
     {
         TaskList taskList = TaskList.Instance;
         if (taskList != null)
         {
-            Debug.Log("Task Interaction - Task Type: " + taskType);
+            Debug.Log("Task Interaction - Task Type: " + taskName);
 
-            if (taskList.availableTaskTypes.Contains(taskType) && !taskList.Beber.isComplete)
+            if (taskList.tasks.Contains(taskName) && !isComplete)
             {
-                TaskData selectedTaskData = taskList.taskTypeToData[taskType];
+                
                 
                 //Outputs so para ver o que se passa
-                Debug.Log("Current Task Name: " + selectedTaskData.taskName);
-                Debug.Log("Is Task Completed: " + selectedTaskData.isComplete);
+                Debug.Log("Current Task Name: " + taskName);
+                Debug.Log("Is Task Completed: " + isComplete);
                 
                 // Fazer a corrotina que trata da task
                 StartCoroutine(DoTask(taskList));
+
+                //UNFREZE PLAYER
             }
             else
             {
@@ -39,7 +52,28 @@ public class Beber : MonoBehaviour, IInteractable
     //NAO ESQUECER DE FREEZAR O JOGADOR
     IEnumerator DoTask(TaskList task)
     {
-        task.Beber.isComplete = true;
+        isComplete = true;
+
+        if (taskUI != null)
+        {
+            Transform childTransform = taskUI.transform.Find(taskName);
+
+            if (childTransform != null)
+            {
+                TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
+                childText.color = Color.green;
+            }
+            else
+            {
+                Debug.LogWarning("Child not found with name: " + taskName);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("TaskUI not found with name: TaskUI");
+        }
+
+        //FREEZE PLAYER
         // Wait for 5 seconds.
         yield return new WaitForSeconds(5.0f);
 

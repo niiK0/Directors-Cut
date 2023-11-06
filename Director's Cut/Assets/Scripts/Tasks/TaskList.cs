@@ -5,76 +5,74 @@ using UnityEngine;
 
 public class TaskList : MonoBehaviour
 {
-    public enum TaskType
-    {
-        Beber,
-        Cozinhar,
-        // Add more task types as needed
-    }
+    //Numero de tasks RELACIONAR COM O SV
+    public int tasksNumber = 2;
 
-    public TaskType[] availableTaskTypes; // Assign these in the Inspector
+    //Array que guarda todas as tasks no inspector
+    public string[] tasks;
 
-    private static TaskList _instance;
+    //Array que guarda as tasks que o player vai ter acesso
+    public string[] currTasks;
 
-    public static TaskList Instance
-    {
-        get { return _instance; }
-    }
-
-    public Dictionary<TaskType, TaskData> taskTypeToData = new Dictionary<TaskType, TaskData>();
+    //Tornar este script um Singleton
+    public static TaskList Instance;
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        //Tenho de instanciar o seu tamanho aqui?
+        currTasks = new string[tasksNumber];
+        
+        //Verificaçao de singleton
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
             return;
         }
 
-        _instance = this;
+        Instance = this;
         DontDestroyOnLoad(this.gameObject);
-
-        // Initialize the dictionary with the corresponding TaskData ScriptableObjects
-        foreach (TaskType taskType in availableTaskTypes)
-        {
-            TaskData taskData = GetTaskDataFromEnum(taskType);
-            if (taskData != null)
-            {
-                taskTypeToData[taskType] = taskData;
-            }
-        }
 
         RandomTask();
     }
 
-
-    private TaskData GetTaskDataFromEnum(TaskType taskType)
-    {
-        switch (taskType)
-        {
-            case TaskType.Beber:
-                return Beber; // Assign your TaskData ScriptableObjects here
-            case TaskType.Cozinhar:
-                return Cozinhar;
-            // Add more cases for other task types
-            default:
-                return null;
-        }
-    }
-
     public void RandomTask()
     {
-        TaskType randomTaskType = availableTaskTypes[Random.Range(0, availableTaskTypes.Length)];
-        TaskData selectedTaskData = taskTypeToData[randomTaskType];
+        if (tasks.Length == 0)
+        {
+            Debug.LogWarning("No tasks assigned to the task list.");
+            return;
+        }
 
-        // Now you have the randomly selected TaskData to work with
-        Debug.Log("Selected Task: " + selectedTaskData.taskName);
+        if (tasksNumber > tasks.Length)
+        {
+            Debug.LogWarning("Not enough tasks to generate the requested number.");
+            return;
+        }
+
+        // Lista que recolhe os indices ja escolhidos para as tasks
+        List<int> availableTaskIndices = new List<int>();
+        for (int i = 0; i < tasks.Length; i++)
+        {
+            availableTaskIndices.Add(i);
+        }
+
+        //Loop de randomizaçao
+        for (int i = 0; i < tasksNumber; i++)
+        {
+            // Seleciona a task aleatoriamente
+            int randomIndex = Random.Range(0, availableTaskIndices.Count);
+            int selectedTaskIndex = availableTaskIndices[randomIndex];
+
+            currTasks[i] = tasks[selectedTaskIndex];
+
+            // Remove-se o indice da lista de modo a nao have repetiçoes
+            availableTaskIndices.RemoveAt(randomIndex);
+        }
+
+        // Log the selected tasks.
+        foreach (string task in currTasks)
+        {
+            Debug.Log("Selected Task: " + task);
+        }
     }
-
-    // Add your existing fields and methods as needed
-
-    // For example, if you have TaskData ScriptableObjects, you can assign them here:
-    public TaskData Beber;
-    public TaskData Cozinhar;
-    // Add more TaskData fields as needed
 }

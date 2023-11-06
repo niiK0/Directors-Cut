@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 {
     PhotonView PV;
     public bool isDirector { get; set; } = false;
+    public bool isAlive { get; set; } = true;
     public int cachedActorNumber { get; set; }
 
     private void Awake()

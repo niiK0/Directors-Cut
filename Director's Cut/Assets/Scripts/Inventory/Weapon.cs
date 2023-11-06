@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,31 +6,43 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public int cooldownDuration = 10;
+    [SerializeField][Range(10.0f, 60.0f)] private int cooldownDuration = 10;
+    [SerializeField][Range(1.0f, 15.0f)] private float maxRange = 3.0f;
 
-    public bool isEquipped = false;
-    public bool isActive = false;
+    private float attackRate = 1.0f;
 
-    // Update is called once per frame
+    private GameObject playerInRange;
+
+    private bool isEquipped = false;
+    private bool isActive = false;
+    private float nextAttackTime = 0.0f;
+
+    private void Start()
+    {
+        if (isActive == false) StartCooldown();
+    }
+
     void Update()
     {
         GetInput();
     }
 
 
-    // Called in Update() , just checking for inputs and handling them
     public void GetInput()
     {
         // Equip / Unequip
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            LittleDebug();
             Equip();
+            
         }
 
         // Kill / Attack
         if (Input.GetMouseButtonDown(0))
         {
             Kill();
+            LittleDebug();
         }
     }
 
@@ -45,10 +58,10 @@ public class Weapon : MonoBehaviour
         {
             // Unequip
             isEquipped = false;
+
         }
     }
 
-    // Kill method
     private void Kill()
     {
         // Kill player
@@ -68,11 +81,55 @@ public class Weapon : MonoBehaviour
         // KILL HERE
         if(isEquipped && isActive)
         {
+            WeaponManager weaponManager = WeaponManager.Instance;
+
+            // ATTACK ANIMATION
+
             // Kill logic HERE
-
-
-            StartCoroutine(StartCooldown());
+            if(nextAttackTime <= 0.0f) 
+            {
+                if (IsEnemyInRange())
+                {
+                    weaponManager.KillPlayer(playerInRange.GetComponent<PlayerManager>());
+                    StartCoroutine(StartCooldown());
+                }
+            
+                nextAttackTime = Time.time + 1.0f/attackRate;
+            }
         }
+    }
+
+
+    public bool isOnCooldown()
+    {
+        return isActive;
+    }
+
+
+    bool IsEnemyInRange()
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, maxRange))
+        {
+            // Check if the object hit by the raycast is a player
+            if (hit.collider.CompareTag("Player"))
+            {
+                playerInRange = hit.collider.gameObject;
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public void LittleDebug()
+    {
+        Console.WriteLine("Is Equipped = " + isEquipped + 
+                          " Is Active = " + isActive +
+                          " cooldownDuration = " + cooldownDuration +
+                          " nextAttackTime = " + nextAttackTime);
     }
 
 

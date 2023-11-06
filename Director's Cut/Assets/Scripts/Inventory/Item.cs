@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using UnityEngine;
 
 public class Item : MonoBehaviourPunCallbacks, IInteractable
@@ -36,8 +37,24 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         Debug.Log("Interacted");
         player = playerObj;
-        handler = player.transform.GetChild(0).GetChild(0).gameObject;
+        handler = FindChildWithTag(player, "Handler");
         Pickup();
+    }
+
+    GameObject FindChildWithTag(GameObject parent, string tag)
+    {
+        GameObject child = null;
+
+        foreach (Transform transform in parent.transform)
+        {
+            if (transform.CompareTag(tag))
+            {
+                child = transform.gameObject;
+                break;
+            }
+        }
+        Console.WriteLine("Handler detected.");
+        return child;
     }
 
     public void Pickup()
