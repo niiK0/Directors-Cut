@@ -361,6 +361,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &132282365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132282363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8280c1bbc764e54dbc8f61243a0ba7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pianoGamePrefab: {fileID: 7568791952370356775, guid: ea50c6c8354998848bb1a4bcc9cc7c39,
+    type: 3}
+  isComplete: 0
 --- !u!1 &230180128 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1867776253640158, guid: 1afb25db0451e89489570189a14a7ade,
@@ -389,7 +404,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1520906716535380, guid: 22495e59226d2aa4b9ee3d313a65d6bb, type: 3}
       propertyPath: m_Name
-      value: SM_Prop_Piano_01
+      value: Piano
       objectReference: {fileID: 0}
     - target: {fileID: 4380221987171708, guid: 22495e59226d2aa4b9ee3d313a65d6bb, type: 3}
       propertyPath: m_RootOrder
@@ -767,15 +782,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4274578145257496, guid: 39ddd817d5ce4a34ab805d64691ad420, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.804
+      value: -7.54
       objectReference: {fileID: 0}
     - target: {fileID: 4274578145257496, guid: 39ddd817d5ce4a34ab805d64691ad420, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.63
+      value: 2.477
       objectReference: {fileID: 0}
     - target: {fileID: 4274578145257496, guid: 39ddd817d5ce4a34ab805d64691ad420, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.735
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 4274578145257496, guid: 39ddd817d5ce4a34ab805d64691ad420, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1099,6 +1114,9 @@ MonoBehaviour:
   - Cozinhar
   - Beber
   - Cagar
+  - Piano
+  taskCompleteness: 
+  tasksCompleted: 0
   currTasks: []
 --- !u!114 &1600189701
 MonoBehaviour:

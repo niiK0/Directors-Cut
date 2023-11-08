@@ -11,6 +11,10 @@ public class TaskList : MonoBehaviour
     //Array que guarda todas as tasks no inspector
     public string[] tasks;
 
+    //Array que guarda a 
+    public bool[] taskCompleteness;
+    public bool tasksCompleted = false;
+
     //Array que guarda as tasks que o player vai ter acesso
     public string[] currTasks;
 
@@ -19,8 +23,12 @@ public class TaskList : MonoBehaviour
 
     private void Awake()
     {
+        //Instanciar o taskcompletness com o tamanho das tasks
+        taskCompleteness = new bool[tasksNumber];
+
         //Tenho de instanciar o seu tamanho aqui?
         currTasks = new string[tasksNumber];
+        
         
         //Verificaçao de singleton
         if (Instance != null && Instance != this)
@@ -74,5 +82,34 @@ public class TaskList : MonoBehaviour
         {
             Debug.Log("Selected Task: " + task);
         }
+    }
+
+    //Funçao que usamos para marcar como completa as tarefas no array
+    public void MarkTaskComplete(int taskIndex)
+    {
+        if (taskIndex >= 0 && taskIndex < currTasks.Length)
+        {
+            taskCompleteness[taskIndex] = true;
+        }
+
+        tasksCompleted = AreAllTasksComplete();
+        if (tasksCompleted)
+        {
+            Debug.Log("TODAS AS TASKS FEITAS");
+        }
+    }
+
+    //Verifica se completamos todas as missoes
+    public bool AreAllTasksComplete()
+    {
+        foreach (bool taskComplete in taskCompleteness)
+        {
+            if (!taskComplete)
+            {
+                return false;            
+            }
+        }
+        //VARIAVEL DO SERVER PARA SABER QUE ESTA TUDO FEITOS
+        return true;
     }
 }

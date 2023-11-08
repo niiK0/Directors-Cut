@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Cozinhar : MonoBehaviour, IInteractable
 {
+    static int taskIndex = 0;
     static string taskName = "Cozinhar";
     static float taskRange = 1f;
     public bool isComplete = false;
