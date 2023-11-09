@@ -2,13 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class Cameras : MonoBehaviour
 {
+    public static Cameras Instance;
+
+    [SerializeField] CinemachineVirtualCamera RoomlistToLobby;
+    [SerializeField] CinemachineVirtualCamera LobbyToRoomlist;
+    [SerializeField] CinemachineVirtualCamera LobbyCam;
+    [SerializeField] CinemachineVirtualCamera RoomListCam;
+    [SerializeField] Menu LobbyMenu;
+    [SerializeField] Menu RoomlistMenu;
+
     [SerializeField] CinemachineVirtualCamera currentMovingCamera;
     [SerializeField] CinemachineVirtualCamera currentTargetCamera;
+    [SerializeField] CinemachineVirtualCamera currentCamera;
     [SerializeField] CinemachineDollyCart currentDolly;
-    [SerializeField] Menu currentTargetMenu;
+    [SerializeField] Volume postProcess;
+    private Bloom bloom;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Update is called once per frame
     void Update()
@@ -20,9 +38,24 @@ public class Cameras : MonoBehaviour
         {
             currentMovingCamera.enabled = false;
             currentTargetCamera.enabled = true;
-            //MenuManager.Instance.OpenMenu(currentTargetMenu);
             currentDolly = null;
         }
+    }
+
+    public void JoinLobbyCamera()
+    {
+        SetTargetCam(LobbyCam);
+        SetCurrentCam(RoomListCam);
+        MoveCamera(RoomlistToLobby);
+        MenuManager.Instance.CloseMenu(RoomlistMenu);
+    }
+
+    public void GetKicked()
+    {
+        SetTargetCam(RoomListCam);
+        SetCurrentCam(LobbyCam);
+        MoveCamera(LobbyToRoomlist);
+        MenuManager.Instance.CloseMenu(LobbyMenu);
     }
 
     public void MoveCamera(CinemachineVirtualCamera camToMove)
@@ -32,6 +65,7 @@ public class Cameras : MonoBehaviour
         currentDolly.m_Position = 0;
         currentMovingCamera.enabled = true;
         currentDolly.enabled = true;
+        currentCamera.enabled = false;
     }
 
     public void SetTargetCam(CinemachineVirtualCamera targetCam)
@@ -39,8 +73,14 @@ public class Cameras : MonoBehaviour
         currentTargetCamera = targetCam;
     }
 
-    public void SetTargetMenu(Menu menu)
+    public void SetCurrentCam(CinemachineVirtualCamera targetCam)
     {
-        currentTargetMenu = menu;
+        currentCamera = targetCam;
+    }
+
+    public void SetBloom(float quantity)
+    {
+        postProcess.profile.TryGet(out bloom);
+        bloom.threshold.value = quantity;
     }
 }

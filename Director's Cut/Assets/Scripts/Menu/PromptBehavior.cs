@@ -27,6 +27,7 @@ public class PromptBehavior : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.JoinRoom(room.Name);
             pwdPrompt.gameObject.SetActive(false);
+            Cameras.Instance.JoinLobbyCamera();
         }
         else
         {

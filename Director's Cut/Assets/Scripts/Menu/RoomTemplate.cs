@@ -27,6 +27,7 @@ public class RoomTemplate : MonoBehaviour
         if (string.IsNullOrEmpty(roomPwd))
         {
             PhotonNetwork.JoinRoom(roomInfo.Name);
+            Cameras.Instance.JoinLobbyCamera();
         }
         else
         {

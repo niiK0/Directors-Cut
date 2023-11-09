@@ -23,9 +23,9 @@ public class PlayerTemplate : MonoBehaviourPunCallbacks
             kickBtn.gameObject.SetActive(PhotonNetwork.IsMasterClient);
             giveHostBtn.gameObject.SetActive(PhotonNetwork.IsMasterClient);
         }
-        Transform roomMenu = GameObject.Find("RoomMenu").transform;
+        Transform roomMenu = GameObject.Find("LobbyMenu").transform;
         roomMenu.GetChild(4).GetComponent<Button>().interactable = PhotonNetwork.IsMasterClient;
-        roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
+        //roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public Player GetPlayer()
@@ -45,9 +45,12 @@ public class PlayerTemplate : MonoBehaviourPunCallbacks
                 child.GetChild(2).gameObject.SetActive(PhotonNetwork.IsMasterClient);
             }
         }
-        Transform roomMenu = GameObject.Find("RoomMenu").transform;
+        Transform roomMenu = GameObject.Find("LobbyMenu").transform;
+        //Start button
         roomMenu.GetChild(4).GetComponent<Button>().interactable = PhotonNetwork.IsMasterClient;
-        roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
+        roomMenu.GetChild(4).GetChild(0).GetComponent<TextEffects>().enabled = roomMenu.GetChild(4).GetComponent<Button>().interactable;
+        //Settings Button, not being used
+        //roomMenu.GetChild(5).gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -61,6 +64,7 @@ public class PlayerTemplate : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         Destroy(gameObject);
+        Cameras.Instance.GetKicked();
     }
 
     public void KickPlayer()
