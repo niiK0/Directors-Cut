@@ -65,6 +65,19 @@ public class RoleManager : MonoBehaviourPunCallbacks
         players.Add(player);
     }
 
+    public PlayerManager FindPMByActorNumber(int actorNumber)
+    {
+        foreach (PlayerManager playerManager in players)
+        {
+            if (playerManager.cachedActorNumber == actorNumber)
+            {
+                return playerManager;
+            }
+        }
+
+        return null;
+    }
+
     #region Roles Methods
 
     public void SetPlayerTypeUI(bool isDirector)
@@ -150,7 +163,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private int DirectorsAlive()
+    public int DirectorsAlive()
     {
         int nOfDirectorsAlive = 0;
         for (int i = 0; i < players.Count(); i++)
@@ -163,7 +176,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
         return nOfDirectorsAlive;
     }
 
-    private int ActorsAlive()
+    public int ActorsAlive()
     {
         int nOfActorsAlive = 0;
         for (int i = 0; i < players.Count(); i++)

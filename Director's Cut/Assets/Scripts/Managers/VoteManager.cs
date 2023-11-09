@@ -12,6 +12,7 @@ public class VoteManager : MonoBehaviourPun
     //Referências in-code
     public static VoteManager Instance;
     PhotonView view;
+    RoleManager roleManager;
 
     //Referências na interface
     [SerializeField] private GameObject votingWindow;
@@ -36,6 +37,7 @@ public class VoteManager : MonoBehaviourPun
     {
         Instance = this;
         view = GetComponent<PhotonView>();
+        roleManager = RoleManager.Instance;
     }
     #endregion
 
@@ -67,6 +69,11 @@ public class VoteManager : MonoBehaviourPun
         //Cria uma nova lista de jogadores
         foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
         {
+            if (!roleManager.FindPMByActorNumber(player.Value.ActorNumber).isAlive)
+            {
+                continue;
+            }
+
             VoteCell newVoteCell = Instantiate(voteCellPrefab, voteCellContainer);
             newVoteCell.Initialize(player.Value, this);
             voteCellList.Add(newVoteCell);
@@ -75,10 +82,21 @@ public class VoteManager : MonoBehaviourPun
 
     private void ToggleAllButtons(bool areOn)
     {
-        foreach (VoteCell voteCell in voteCellList)
+        if (roleManager.FindPMByActorNumber(PhotonNetwork.LocalPlayer.ActorNumber).isAlive)
         {
-            voteCell.ToggleButton(areOn);
+            foreach (VoteCell voteCell in voteCellList)
+            {
+                voteCell.ToggleButton(areOn);
+            }
         }
+        else
+        {
+            foreach (VoteCell voteCell in voteCellList)
+            {
+                voteCell.ToggleButton(false);
+            }
+        }
+
     }
 
     public void CastVote(int targetActorNumber)
@@ -96,7 +114,7 @@ public class VoteManager : MonoBehaviourPun
     [PunRPC]
     public void CastPlayerVoteRPC(int actorNumber, int targetActorNumber)
     {
-        int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount; //Ainda não desconta os jogadores mortos
+        int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount;// - (roleManager.ActorsAlive() + roleManager.DirectorsAlive());
 
         if (!playersThatVotedList.Contains(actorNumber))
         {
@@ -174,9 +192,3 @@ public class VoteManager : MonoBehaviourPun
     }
     #endregion
 }
-
-//A fazer:
-//-> Funcionalidade skip vote (Feito)
-//-> Fechar a janela do voto uma vez que esteja completo (Feito)
-//-> Não contar jogadores mortos
-//-> Indicadores visuais de quem foi eliminado
