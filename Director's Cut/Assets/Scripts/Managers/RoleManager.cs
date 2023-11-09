@@ -155,7 +155,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
         int nOfDirectorsAlive = 0;
         for (int i = 0; i < players.Count(); i++)
         {
-            if (players[i].isDirector) //&& isAlive -> Ainda não foi adicionada essa variável ao PlayerManager. Ver com o Tiago.
+            if (players[i].isDirector && players[i].isAlive)
             {
                 nOfDirectorsAlive++;
             }
@@ -168,7 +168,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
         int nOfActorsAlive = 0;
         for (int i = 0; i < players.Count(); i++)
         {
-            if (!players[i].isDirector) //&& isAlive -> Ainda não foi adicionada essa variável ao PlayerManager. Ver com o Tiago.
+            if (!players[i].isDirector && players[i].isAlive)
             {
                 nOfActorsAlive++;
             }
