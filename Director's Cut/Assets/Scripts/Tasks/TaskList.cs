@@ -5,111 +5,123 @@ using UnityEngine;
 
 public class TaskList : MonoBehaviour
 {
-    //Numero de tasks RELACIONAR COM O SV
+    //Singleton
+    public static TaskList Instance;
+
+    //Tasks Number RELACIONAR COM O SV
     public int tasksNumber = 2;
 
-    //Array que guarda todas as tasks no inspector
+    //Array that saves every task (In inspector)
     public string[] tasks;
 
-    //Array que guarda a 
+    //Array that saves the completness of tasks 
     public bool[] taskCompleteness;
     public bool tasksCompleted = false;
 
-    //Array que guarda as tasks que o player vai ter acesso
+    //Array that saves the tasks selected for the player
     public string[] currTasks;
 
-    //Tornar este script um Singleton
-    public static TaskList Instance;
+    
 
     private void Awake()
     {
-        //Instanciar o taskcompletness com o tamanho das tasks
-        taskCompleteness = new bool[tasksNumber];
-
-        //Tenho de instanciar o seu tamanho aqui?
-        currTasks = new string[tasksNumber];
-        
-        
-        //Verificaçao de singleton
-        if (Instance != null && Instance != this)
+        //Singleton Verification
+        if (Instance == null)
         {
-            Destroy(this.gameObject);
-            return;
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
-        Instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        //Instantiate currTasks with the desired number of tasks
+        currTasks = new string[tasksNumber];
 
-        RandomTask();
+        //Instantiate taskCompleteness with the size of the currTask
+        taskCompleteness = new bool[tasksNumber];
+
+        //This function gets all tasks at random for the currTasks array
+        RandomTasks();
     }
 
-    public void RandomTask()
+    public void RandomTasks()
     {
+        //Checks if there are tasks to be randomized
         if (tasks.Length == 0)
         {
             Debug.LogWarning("No tasks assigned to the task list.");
             return;
         }
 
+        //Since we cant repeat tasks checks if there are enough tasks
         if (tasksNumber > tasks.Length)
         {
             Debug.LogWarning("Not enough tasks to generate the requested number.");
             return;
         }
 
-        // Lista que recolhe os indices ja escolhidos para as tasks
+        //This list saves every task index so that we can remove them to check if they were already selected
         List<int> availableTaskIndices = new List<int>();
         for (int i = 0; i < tasks.Length; i++)
         {
             availableTaskIndices.Add(i);
         }
 
-        //Loop de randomizaçao
+        //Randomization Loop
         for (int i = 0; i < tasksNumber; i++)
         {
-            // Seleciona a task aleatoriamente
+            //Selects a random index from the list 
             int randomIndex = Random.Range(0, availableTaskIndices.Count);
             int selectedTaskIndex = availableTaskIndices[randomIndex];
 
+            //Selects the new task 
             currTasks[i] = tasks[selectedTaskIndex];
 
-            // Remove-se o indice da lista de modo a nao have repetiçoes
+            //Removes the said index from the list so we dont get any repetitions
             availableTaskIndices.RemoveAt(randomIndex);
         }
 
-        // Log the selected tasks.
+        //Log the selected tasks.
         foreach (string task in currTasks)
         {
             Debug.Log("Selected Task: " + task);
         }
     }
 
-    //Funçao que usamos para marcar como completa as tarefas no array
+    
     public void MarkTaskComplete(int taskIndex)
     {
+        //Verifies if the taskIndex exists in our array
         if (taskIndex >= 0 && taskIndex < currTasks.Length)
         {
+            //If it does complete it
             taskCompleteness[taskIndex] = true;
         }
 
+        //Calls the function to see if everything is finished
         tasksCompleted = AreAllTasksComplete();
+
+        //Verifies if every task as been completed
         if (tasksCompleted)
         {
             Debug.Log("TODAS AS TASKS FEITAS");
         }
     }
+    
 
-    //Verifica se completamos todas as missoes
     public bool AreAllTasksComplete()
     {
+        //Goes through all the values in the array
         foreach (bool taskComplete in taskCompleteness)
         {
+            //If one of the values is false the function returns false
             if (!taskComplete)
             {
                 return false;            
             }
         }
-        //VARIAVEL DO SERVER PARA SABER QUE ESTA TUDO FEITOS
+        //VARIAVEL DO SERVER PARA SABER QUE ESTA TUDO FEITO
         return true;
     }
 }

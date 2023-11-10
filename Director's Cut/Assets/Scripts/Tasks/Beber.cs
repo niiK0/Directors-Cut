@@ -6,36 +6,35 @@ using UnityEngine;
 
 public class Beber : MonoBehaviour, IInteractable
 {
+    //Task info
     static int taskIndex = 1;
     static string taskName = "Beber";
     public bool isComplete = false;
 
+    //TasksUI 
     GameObject taskUI;
 
     private bool isTaskCancelled = false;
 
-    public void Start()
-    {
-        // Find the GameObject with the specified name
-        //taskUI = GameObject.Find("TasksListUI");
-    }
-
     public void Interact(GameObject player)
     {
+        //Giving the values to their respective holders
         TaskList taskList = TaskList.Instance;
         taskUI = taskList.gameObject;
+
+        //Interaction system for the task
         if (taskList != null)
         {
             if (taskList.currTasks.Contains(taskName) && !isComplete)
             {
-                //Reiniciar esta variavel todos os momentos de interaçao pq pode ser cancelado
+                //Reset this value everytime the task gets interacted with
                 isTaskCancelled = false;
 
                 //Outputs so para ver o que se passa
                 Debug.Log("Current Task Name: " + taskName);
                 Debug.Log("Is Task Completed: " + isComplete);
                 
-                // Fazer a corrotina que trata da task
+                //Starting the task
                 StartCoroutine(DoTask(taskList, player));
 
             }
@@ -50,13 +49,12 @@ public class Beber : MonoBehaviour, IInteractable
         }
     }
 
-    //NAO ESQUECER DE FREEZAR O JOGADOR
     IEnumerator DoTask(TaskList task, GameObject player)
     {
         //FREEZE PLAYER
         player.GetComponent<PlayerController>().freezePlayer = true;
         float elapsedTime = 0f;
-        float taskDuration = 5.0f; // Change this to your desired task duration
+        float taskDuration = 5.0f;
 
         while (elapsedTime < taskDuration)
         {
@@ -64,14 +62,15 @@ public class Beber : MonoBehaviour, IInteractable
             if (Input.GetKeyDown(KeyCode.X))
             {
                 isTaskCancelled = true;
-                break; // Exit the loop and cancel the task
+                break;
             }
 
             // Update elapsed time
             elapsedTime += Time.deltaTime;
-            yield return null; // Wait for the next frame
+            yield return null;
         }
 
+        //Verify if the task got Cancelled
         if (isTaskCancelled)
         {
             //UNFREEZE
@@ -80,12 +79,14 @@ public class Beber : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.Log("5 seconds have passed!");
+            //Setting task as complete
             task.MarkTaskComplete(taskIndex);
             isComplete = true;
+
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
 
+            //Make the task name turn green
             if (taskUI != null)
             {
                 Transform childTransform = taskUI.transform.Find(taskName);

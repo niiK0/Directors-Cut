@@ -7,43 +7,76 @@ using UnityEngine;
 
 public class Piano : MonoBehaviour, IInteractable
 {
-    public GameObject pianoGamePrefab;
-    private GameObject pianoGameInstance; 
+    //Singleton
+    public static Piano Instance;
 
+    //Task info
     static int taskIndex = 3;
     static string taskName = "Piano";
     public bool isComplete = false;
 
+    //Instantiated object
+    public GameObject pianoGamePrefab;
+    private GameObject pianoGameInstance;
+
+    //Player Holder
+    private GameObject currPlayer = null;
+    
+    //TasksUI 
     GameObject taskUI;
 
-    private bool isTaskCancelled = false;
-    
+    //TaskList Singleton Instance
     TaskList taskList;
+
+    private bool isTaskCancelled = false;
+
+    private void Awake()
+    {
+        //Singleton Verification
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void Update()
+    {
+        //Call cancel task after you can do it
+        if(currPlayer != null)
+            CancelTask(currPlayer);
+    }
 
     public void Interact(GameObject player)
     {
+        //Giving the values to their respective holders
+        currPlayer = player;
         taskList = TaskList.Instance;
         taskUI = taskList.gameObject;
+        
+        //Interaction system for the task
         if (taskList != null)
         {
             Debug.Log("Task Interaction - Task Type: " + taskName);
 
             if (taskList.currTasks.Contains(taskName) && !isComplete)
             {
-                //Reiniciar esta variavel todos os momentos de interaçao pq pode ser cancelado
+                //Reset this value everytime the task gets interacted with
                 isTaskCancelled = false;
 
-                //Instanciar o UI pretendido
+                //Instantiating the UI prefab
                 pianoGameInstance = Instantiate(pianoGamePrefab);
-                // Set the position of the UI (adjust as needed)
                 pianoGameInstance.transform.position = new Vector3(0f, 0f, 0f);
-
 
                 //Outputs so para ver o que se passa
                 Debug.Log("Current Task Name: " + taskName);
                 Debug.Log("Is Task Completed: " + isComplete);
 
-                //UNFREZE PLAYER
+                //FREEZE PLAYER
+                currPlayer.GetComponent<PlayerController>().freezePlayer = true;
             }
             else
             {
@@ -66,19 +99,30 @@ public class Piano : MonoBehaviour, IInteractable
 
         if (isTaskCancelled)
         {
+            //Removing the mini-game from the screen
+            Destroy(pianoGameInstance);
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
             Debug.Log("Task Cancelled!");
+            isTaskCancelled= false;
         }
     }
 
-    public void FinishTask(GameObject player)
+
+   
+    public void FinishTask()
     {
+        //Removing the mini-game from the screen
+        Destroy(pianoGameInstance);
+
+        //Setting task as complete
         taskList.MarkTaskComplete(taskIndex);
         isComplete = true;
-        //UNFREEZE
-        player.GetComponent<PlayerController>().freezePlayer = false;
 
+        //UNFREEZE
+        currPlayer.GetComponent<PlayerController>().freezePlayer = false;
+
+        //Make the task name turn green
         if (taskUI != null)
         {
             Transform childTransform = taskUI.transform.Find(taskName);
