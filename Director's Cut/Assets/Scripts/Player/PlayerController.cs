@@ -26,10 +26,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
 
+    public GameObject handler;
+
     public bool freezePlayer = false;
     public bool inShortcut = false;
 
     public PhotonView view;
+
+    public PlayerManager playerManager;
 
     //events
 
@@ -46,6 +50,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         view = GetComponent<PhotonView>();
         characterController = GetComponent<CharacterController>();
+        playerManager = PhotonView.Find((int)view.InstantiationData[0]).GetComponent<PlayerManager>();
     }
 
     private void Start()

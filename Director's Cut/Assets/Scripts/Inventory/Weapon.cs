@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,8 +82,6 @@ public class Weapon : MonoBehaviour
         // KILL HERE
         if(isEquipped && isActive)
         {
-            WeaponManager weaponManager = WeaponManager.Instance;
-
             // ATTACK ANIMATION
 
             // Kill logic HERE
@@ -90,7 +89,7 @@ public class Weapon : MonoBehaviour
             {
                 if (IsEnemyInRange())
                 {
-                    weaponManager.KillPlayer(playerInRange.GetComponent<PlayerManager>());
+                    RoleManager.Instance.KillPlayer(playerInRange.GetComponent<PlayerController>());
                     StartCoroutine(StartCooldown());
                 }
             

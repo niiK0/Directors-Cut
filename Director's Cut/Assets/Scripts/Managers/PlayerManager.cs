@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public bool isAlive { get; set; } = true;
     public int cachedActorNumber { get; set; }
 
+    public GameObject controller;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -29,7 +31,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("MY ACTOR = " + cachedActorNumber);
         Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation);
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation, 0, new object[] {PV.ViewID});
     }
 
     public void SyncPlayerTypeUI()

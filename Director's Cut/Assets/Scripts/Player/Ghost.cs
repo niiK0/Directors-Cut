@@ -1,32 +1,38 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Ghost : MonoBehaviour
 {
-    private bool isGhost = false;
-
     private MeshRenderer[] renderers;
 
+    private PhotonView pv;
 
     void Start()
     {
         renderers = GetComponentsInChildren<MeshRenderer>();
+        pv = GetComponent<PhotonView>();
     }
 
-    public void SetGhostMode(bool enableGhost)
+    public void SetGhostMode()
     {
-        isGhost = enableGhost;
-
         foreach (MeshRenderer renderer in renderers)
         {
-            renderer.enabled = !enableGhost;
+            renderer.enabled = false;
         }
+    }
 
+    public void SetGhostModeRPC()
+    {
+        pv.RPC("SetGhostOfPlayer", RpcTarget.Others, pv.ViewID);
+        SetGhostMode();
+    }
 
-        if (isGhost)
-        {
-            // INFORM OTHER PLAYERS THAT THIS PLAYER IS NOW A GHOST (NETWORK)
-        }
+    [PunRPC]
+    private void SetGhostOfPlayer(int viewId)
+    {
+        GameObject targetPlayerObj = PhotonView.Find(viewId).gameObject;
+        targetPlayerObj.GetComponent<Ghost>().SetGhostMode();
     }
 }
