@@ -130,7 +130,7 @@ public class VoteManager : MonoBehaviourPun
             }
         }
 
-        if (playersThatVotedList.Count == remainingPlayers)
+        if (playersThatVotedList.Count >= remainingPlayers)
         {
             view.RPC("FinishVote", RpcTarget.All);
         }
@@ -139,7 +139,6 @@ public class VoteManager : MonoBehaviourPun
     [PunRPC]
     private void FinishVote()
     {
-        if (!PhotonNetwork.IsMasterClient) { return; }
         //Aqui também haverá um check relacionado ao desconto de jogadores mortos
 
         //Contagem dos votos
@@ -179,7 +178,8 @@ public class VoteManager : MonoBehaviourPun
             Debug.Log("Foi eliminado o jogador de chave " + mostVotedPlayer + " com " + mostVotes + " votos.");
             //Implementar aqui o que ocorre quando um jogador é eliminado.
         }
-
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         votingWindow.SetActive(false);
     }
 
