@@ -10,35 +10,45 @@ public class Weapon : MonoBehaviour
     [SerializeField][Range(10.0f, 60.0f)] private int cooldownDuration = 10;
     [SerializeField][Range(1.0f, 15.0f)] private float maxRange = 3.0f;
 
-    private float attackRate = 1.0f;
+    [SerializeField] float attackRate = 5f;
+
+    private float nextAttackTime = 0f;
+
+    private bool canAttack = false;
 
     private GameObject playerInRange;
 
-    private bool isEquipped = false;
-    private bool isActive = false;
-    private float nextAttackTime = 0.0f;
+    private Item item;
 
     private void Start()
     {
-        if (isActive == false) StartCooldown();
+        item = GetComponent<Item>();
+        AttackCooldown();
     }
 
     void Update()
     {
         GetInput();
+
+        if (!canAttack)
+        {
+            if(nextAttackTime <= 0f)
+            {
+                InventoryManager.Instance.StopCooldown(item.slotNumber);
+                canAttack = true;
+            }
+
+            if(nextAttackTime > 0f && nextAttackTime <= attackRate)
+            {
+                nextAttackTime -= 1f * Time.deltaTime;
+                InventoryManager.Instance.UpdateCooldown(item.slotNumber, Mathf.RoundToInt(nextAttackTime));
+            }
+        }
     }
 
 
     public void GetInput()
     {
-        // Equip / Unequip
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            LittleDebug();
-            Equip();
-            
-        }
-
         // Kill / Attack
         if (Input.GetMouseButtonDown(0))
         {
@@ -47,67 +57,36 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    // Equip / Unequip method
-    private void Equip()
-    {
-        if (!isEquipped)
-        {
-            // Equip
-            isEquipped = true;
-        }
-        else if (isEquipped)
-        {
-            // Unequip
-            isEquipped = false;
-
-        }
-    }
-
     private void Kill()
     {
-        // Kill player
-
-        // NOT EQUIPPED
-        if (!isEquipped)
-        {
+        // NOT EQUIPPED/IN COOLDOWN
+        if (!item.isEquipped || !canAttack)
             return;
-        }
 
-        // EQUIPPED BUT ON COOLDOWN
-        if (isEquipped && !isActive)
+        // Kill logic HERE
+        if (IsEnemyInRange())
         {
-            return;
-        }
-
-        // KILL HERE
-        if(isEquipped && isActive)
-        {
-            // ATTACK ANIMATION
-
-            // Kill logic HERE
-            if(nextAttackTime <= 0.0f) 
-            {
-                if (IsEnemyInRange())
-                {
-                    RoleManager.Instance.KillPlayer(playerInRange.GetComponent<PlayerController>());
-                    StartCoroutine(StartCooldown());
-                }
-            
-                nextAttackTime = Time.time + 1.0f/attackRate;
-            }
+            RoleManager.Instance.KillPlayer(playerInRange.GetComponent<PlayerController>());
+            AttackCooldown();
         }
     }
 
 
     public bool isOnCooldown()
     {
-        return isActive;
+        return canAttack;
     }
 
+    private void AttackCooldown()
+    {
+        canAttack = false;
+        nextAttackTime = attackRate;
+        InventoryManager.Instance.StartCooldown(item.slotNumber, Mathf.RoundToInt(nextAttackTime));
+    }
 
     bool IsEnemyInRange()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, maxRange))
@@ -125,20 +104,9 @@ public class Weapon : MonoBehaviour
     
     public void LittleDebug()
     {
-        Console.WriteLine("Is Equipped = " + isEquipped + 
-                          " Is Active = " + isActive +
+        Console.WriteLine("Is Equipped = " + item.isEquipped + 
+                          " can attack = " + canAttack +
                           " cooldownDuration = " + cooldownDuration +
                           " nextAttackTime = " + nextAttackTime);
-    }
-
-
-    // Manages the weapons cooldown
-    public IEnumerator StartCooldown()
-    {
-        isActive = false;
-
-        yield return new WaitForSeconds(cooldownDuration);
-
-        isActive = true;
     }
 }

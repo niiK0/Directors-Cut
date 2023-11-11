@@ -23,11 +23,10 @@ public class RoleManager : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI winnerTeamText;
     [SerializeField] private Transform winnersContainer;
 
-    [SerializeField] private GameObject deadBodyPlayerPrefab;
     [SerializeField] private GameObject weaponPrefab;
 
     private bool loaded = false;
-    private int nOfDirectors = 2;
+    private int nOfDirectors = 1;
 
     private const string directors_property_key = "Directors";
 
@@ -67,14 +66,8 @@ public class RoleManager : MonoBehaviourPunCallbacks
     public void KillPlayer(PlayerController playerToDie)
     {
         //set ghost of playerToDie
-        playerToDie.GetComponent<Ghost>().SetGhostModeRPC();
-        playerToDie.photonView.RPC("SpawnDeadBody", RpcTarget.Others, playerToDie.transform);
-    }
-
-    [PunRPC]
-    public void SpawnDeadBody(Transform playerToDie)
-    {
-        Instantiate(deadBodyPlayerPrefab, playerToDie.transform.position, playerToDie.transform.rotation);
+        //playerToDie.GetComponent<Ghost>().SetGhostModeRPC();
+        playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
     }
 
     public void AddPlayer(PlayerManager player)

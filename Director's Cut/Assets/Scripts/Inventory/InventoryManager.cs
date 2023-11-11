@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,22 @@ public class InventoryManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    public void StartCooldown(int slot, int time)
+    {
+        slots[slot].transform.GetChild(2).gameObject.SetActive(true);
+        slots[slot].transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = time.ToString();
+    }
+
+    public void UpdateCooldown(int slot, int time)
+    {
+        slots[slot].transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>().text = time.ToString();
+    }
+
+    public void StopCooldown(int slot)
+    {
+        slots[slot].transform.GetChild(2).gameObject.SetActive(false);
     }
 
     public void UpdateUI()

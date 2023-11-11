@@ -5,16 +5,13 @@ using UnityEngine;
 
 public abstract class BaseReporter : MonoBehaviourPunCallbacks, IInteractable
 {
-    public Transform meetingPlace;
+    public Transform meetingHolder;
     [SerializeField] WarningScript warning;
 
     public void Interact(GameObject playerObj)
     {
-        Debug.Log("Interacted with btn");
+        Debug.Log("Interacted with emergency button");
         StartCoroutine(warning.CallWarning());
-        PlayerController playerMovement = playerObj.GetComponent<PlayerController>();
-        playerMovement.MovePlayer(meetingPlace);
-        playerMovement.freezePlayer = true;
         ReporterFunction(playerObj);
     }
 

@@ -67,3 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0822dabb4ee245749a82f4fa5cf04f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadBodyPlayerPrefab: {fileID: 6741943006646966358, guid: 5097a80fd2eef3c429abe2c1893d94cf,
+    type: 3}
+  controller: {fileID: 0}

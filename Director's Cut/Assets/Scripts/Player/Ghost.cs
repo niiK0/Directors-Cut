@@ -5,34 +5,17 @@ using UnityEngine;
 
 public class Ghost : MonoBehaviour
 {
-    private MeshRenderer[] renderers;
+    [SerializeField] GameObject playerVisual;
 
     private PhotonView pv;
 
     void Start()
     {
-        renderers = GetComponentsInChildren<MeshRenderer>();
         pv = GetComponent<PhotonView>();
     }
 
-    public void SetGhostMode()
+    public void SetGhostMode(bool isAlive)
     {
-        foreach (MeshRenderer renderer in renderers)
-        {
-            renderer.enabled = false;
-        }
-    }
-
-    public void SetGhostModeRPC()
-    {
-        pv.RPC("SetGhostOfPlayer", RpcTarget.Others, pv.ViewID);
-        SetGhostMode();
-    }
-
-    [PunRPC]
-    private void SetGhostOfPlayer(int viewId)
-    {
-        GameObject targetPlayerObj = PhotonView.Find(viewId).gameObject;
-        targetPlayerObj.GetComponent<Ghost>().SetGhostMode();
+        playerVisual.SetActive(!isAlive);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Item
   - Handler
   - PianoKey
+  - GhostPlayer
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Item
-  - 
+  - DeadPlayer
   - 
   - 
   - 

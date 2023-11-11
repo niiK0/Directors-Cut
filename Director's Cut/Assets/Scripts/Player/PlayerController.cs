@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public float mouseSensitivity = 2f;
 
     [SerializeField] float jumpForce = 5f;
-    [SerializeField] float gravity = -9.81f; // Gravity value
+    [SerializeField] float gravity = -10f; // Gravity value
 
     private float verticalRotation = 0f;
     private Vector3 playerVelocity;
@@ -26,10 +26,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
 
+    [SerializeField] Animator anim;
     public GameObject handler;
 
     public bool freezePlayer = false;
+    public bool freezeRotation = false;
     public bool inShortcut = false;
+
 
     public PhotonView view;
 
@@ -98,12 +101,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             return;
         }
 
-        if (freezePlayer)
+        if (freezePlayer && freezeRotation)
             return;
         
+        if (freezePlayer && !freezeRotation)
+        {
+            Rotate();
+            return;
+        }
+
         GetMove();
         Rotate();
         Jump();
+        HandleAnims();
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -121,6 +131,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         GameObject instantiatedObj = Instantiate(itemObj, item.GetItemHandPosition(), Quaternion.Euler(item.GetItemHandRotation()));
         instantiatedObj.GetComponent<Item>().SetPlayer(gameObject);
         instantiatedObj.GetComponent<Item>().EquipVisual();
+    }
+
+    void HandleAnims()
+    {
+        if(moveDir != Vector3.zero)
+        {
+            anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+        }
+
+        anim.SetBool("isJumping", !isGrounded);
     }
 
     void ShortcutKeys()
@@ -209,7 +233,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
 
         // Apply gravity
-        playerVelocity.y += gravity * Time.deltaTime;
+        playerVelocity.y += gravity * Time.fixedDeltaTime;
 
         // Move the player vertically
         characterController.Move(playerVelocity * Time.fixedDeltaTime);

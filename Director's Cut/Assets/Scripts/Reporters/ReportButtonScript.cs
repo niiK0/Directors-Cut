@@ -18,7 +18,7 @@ public class ReportButtonScript : BaseReporter
     {
         meetingPoints.Clear();
 
-        foreach(Transform point in meetingPlace)
+        foreach(Transform point in meetingHolder)
         {
             meetingPoints.Add(point);
         }
@@ -36,5 +36,8 @@ public class ReportButtonScript : BaseReporter
 
         player.transform.position = meetingPoints[meetingPointIndex].position;
         player.transform.rotation = meetingPoints[meetingPointIndex].rotation;
+        //freeze player
+        player.GetComponent<PlayerController>().freezePlayer = true;
+        // add sitting animation
     }
 }

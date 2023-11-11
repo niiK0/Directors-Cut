@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownDuration: 10
   maxRange: 3
+  attackRate: 5
 --- !u!54 &1272981064646580847
 Rigidbody:
   m_ObjectHideFlags: 0
