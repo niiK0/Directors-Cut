@@ -5,6 +5,7 @@ using TMPro;
 using Photon.Realtime;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
+using UnityEngine.UIElements;
 
 
 public class RoleManager : MonoBehaviourPunCallbacks
@@ -22,13 +23,16 @@ public class RoleManager : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI winnerTeamText;
     [SerializeField] private Transform winnersContainer;
 
+    [SerializeField] private GameObject deadBodyPlayerPrefab;
+    [SerializeField] private GameObject weaponPrefab;
+
     private bool loaded = false;
     private int nOfDirectors = 2;
 
     private const string directors_property_key = "Directors";
 
-    private const string directors_team_name = "DIRETORES";
-    private const string actors_team_name = "ATORES";
+    private const string directors_team_name = "DIRECTORS";
+    private const string actors_team_name = "ACTORS";
     #endregion
 
     #region Unity Callbacks
@@ -58,6 +62,19 @@ public class RoleManager : MonoBehaviourPunCallbacks
     public List<PlayerManager> GetPlayerList()
     {
         return players;
+    }
+
+    public void KillPlayer(PlayerController playerToDie)
+    {
+        //set ghost of playerToDie
+        playerToDie.GetComponent<Ghost>().SetGhostModeRPC();
+        playerToDie.photonView.RPC("SpawnDeadBody", RpcTarget.Others, playerToDie.transform);
+    }
+
+    [PunRPC]
+    public void SpawnDeadBody(Transform playerToDie)
+    {
+        Instantiate(deadBodyPlayerPrefab, playerToDie.transform.position, playerToDie.transform.rotation);
     }
 
     public void AddPlayer(PlayerManager player)
@@ -130,6 +147,12 @@ public class RoleManager : MonoBehaviourPunCallbacks
                 if (directorUpdatedList.Contains(player.cachedActorNumber)){
                     Debug.Log("Changing player with actor number " + player.cachedActorNumber + " to director");
                     player.isDirector = true;
+                    if (player.photonView.IsMine)
+                    {
+                        GameObject weapon = Instantiate(weaponPrefab);
+                        weapon.GetComponent<Item>().Interact(player.controller);
+                        weapon.GetComponent<Item>().Unequip();
+                    }
                 }
             }
 

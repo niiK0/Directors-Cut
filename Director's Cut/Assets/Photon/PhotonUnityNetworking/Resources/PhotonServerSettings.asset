@@ -45,6 +45,8 @@ MonoBehaviour:
   - CastPlayerVoteRPC
   - FinishVote
   - AddPlayerRPC
+  - SetGhostOfPlayer
+  - SpawnDeadBody
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

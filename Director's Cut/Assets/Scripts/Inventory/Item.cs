@@ -37,24 +37,8 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         Debug.Log("Interacted");
         player = playerObj;
-        handler = FindChildWithTag(player, "Handler");
+        handler = playerObj.GetComponent<PlayerController>().handler;
         Pickup();
-    }
-
-    GameObject FindChildWithTag(GameObject parent, string tag)
-    {
-        GameObject child = null;
-
-        foreach (Transform transform in parent.transform)
-        {
-            if (transform.CompareTag(tag))
-            {
-                child = transform.gameObject;
-                break;
-            }
-        }
-        Console.WriteLine("Handler detected.");
-        return child;
     }
 
     public void Pickup()
@@ -107,6 +91,7 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
             gameObject.transform.position = handler.transform.position;
             transform.parent = handler.gameObject.transform;
 
+            rb = gameObject.GetComponent<Rigidbody>();
             rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             rb.detectCollisions = false;
 
