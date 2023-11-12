@@ -4370,6 +4370,7 @@ MonoBehaviour:
   endScreen: {fileID: 1175567865}
   winnerTeamText: {fileID: 1289863721}
   winnersContainer: {fileID: 1445942246}
+  weaponPrefab: {fileID: 0}
 --- !u!1 &828098896
 GameObject:
   m_ObjectHideFlags: 0
@@ -9217,6 +9218,11 @@ PrefabInstance:
       propertyPath: meetingPlace
       value: 
       objectReference: {fileID: 1634499378}
+    - target: {fileID: 3535731790459677164, guid: c80f15c97849b404ea37524711907f1b,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c80f15c97849b404ea37524711907f1b, type: 3}
 --- !u!1 &1851732108

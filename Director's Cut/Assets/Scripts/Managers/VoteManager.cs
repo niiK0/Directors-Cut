@@ -42,8 +42,13 @@ public class VoteManager : MonoBehaviourPun
     #endregion
 
     #region Class Methods
-    [PunRPC]
     public void StartMeeting()
+    {
+        view.RPC("StartMeetingRPC", RpcTarget.All);
+    }
+    
+    [PunRPC]
+    private void StartMeetingRPC()
     {
         PopulatePlayerList();
         playersThatVotedList.Clear();
@@ -132,7 +137,7 @@ public class VoteManager : MonoBehaviourPun
 
         if (playersThatVotedList.Count >= remainingPlayers)
         {
-            view.RPC("FinishVote", RpcTarget.All);
+            view.RPC("FinishVote", RpcTarget.All);;
         }
     }
 
@@ -187,7 +192,7 @@ public class VoteManager : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            view.RPC("StartMeeting", RpcTarget.All);
+            StartMeeting();
         }
     }
     #endregion

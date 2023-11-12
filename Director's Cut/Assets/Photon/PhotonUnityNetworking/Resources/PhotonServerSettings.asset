@@ -49,6 +49,7 @@ MonoBehaviour:
   - SpawnDeadBody
   - KillPlayer
   - HideDeadPlayer
+  - StartMeetingRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

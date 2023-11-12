@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         ApplyGravity();
 
-        if (freezePlayer)
+        if (freezePlayer || isInMeeting)
         {
             moveDir = Vector3.zero;
             return;
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             return;
         }
 
-        if (freezePlayer && freezeRotation)
+        if ((freezePlayer && freezeRotation) || isInMeeting)
             return;
         
         if (freezePlayer && !freezeRotation)

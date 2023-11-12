@@ -6,22 +6,30 @@ using UnityEngine;
 
 public class ReportButtonScript : BaseReporter
 {
+    VoteManager voteManager;
     [SerializeField] List<Transform> meetingPoints = new List<Transform>();
+
+    private void Start()
+    {
+        voteManager = VoteManager.Instance;
+    }
 
     protected override void ReporterFunction(GameObject playerObj)
     {
         ResetMeetingPoints();
         SeatPlayer(playerObj);
+        voteManager.StartMeeting();
+        
     }
 
     private void ResetMeetingPoints()
     {
         meetingPoints.Clear();
 
-        foreach(Transform point in meetingHolder)
+        /*foreach(Transform point in meetingHolder)
         {
             meetingPoints.Add(point);
-        }
+        }*/
     }
 
     public void SeatPlayer(GameObject player)
