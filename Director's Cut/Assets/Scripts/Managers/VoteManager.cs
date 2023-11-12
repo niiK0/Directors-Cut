@@ -186,6 +186,7 @@ public class VoteManager : MonoBehaviourPun
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         votingWindow.SetActive(false);
+        roleManager.TryEndGame();
     }
 
     private void Update()
