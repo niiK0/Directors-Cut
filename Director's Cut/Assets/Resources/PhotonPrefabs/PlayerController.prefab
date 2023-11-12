@@ -204,6 +204,7 @@ MonoBehaviour:
   freezePlayer: 0
   freezeRotation: 0
   inShortcut: 0
+  isInMeeting: 0
   view: {fileID: 0}
   playerManager: {fileID: 0}
 --- !u!114 &7783212498707535123

@@ -140,6 +140,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3489887354386841713}
+  - {fileID: 4852134029816960279}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -199,10 +200,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  anim: {fileID: 5813069633821502807}
   handler: {fileID: 2879522077050581200}
   freezePlayer: 0
   freezeRotation: 0
   inShortcut: 0
+  isInMeeting: 0
   view: {fileID: 0}
   playerManager: {fileID: 0}
 --- !u!114 &7783212498707535123
@@ -903,6 +906,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95984852126199364, guid: 19601ffa0fe21a0449b6f23a8be4675e,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e6c956db32f8cfd4d88aa4d8fa651ba2, type: 2}
     - target: {fileID: 137037638885164532, guid: 19601ffa0fe21a0449b6f23a8be4675e,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -955,6 +963,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 2ec72db671a6c4e468a370f08b87b462, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19601ffa0fe21a0449b6f23a8be4675e, type: 3}
+--- !u!95 &5813069633821502807 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95984852126199364, guid: 19601ffa0fe21a0449b6f23a8be4675e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5906802682827801363}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5906413818404027481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4188785271684938, guid: 19601ffa0fe21a0449b6f23a8be4675e,
@@ -967,3 +981,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5906802682827801363}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4852134029816960279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907919811013230195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isJumping
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0

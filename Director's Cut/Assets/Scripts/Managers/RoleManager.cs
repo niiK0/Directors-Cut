@@ -70,9 +70,37 @@ public class RoleManager : MonoBehaviourPunCallbacks
         playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
     }
 
+    public PlayerManager GetMyPlayerManager()
+    {
+        foreach (PlayerManager player in players)
+        {
+            if (player.photonView.AmOwner)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
     public void AddPlayer(PlayerManager player)
     {
         players.Add(player);
+    }
+
+    public List<PlayerManager> GetDeadPlayers()
+    {
+        List<PlayerManager> deadPlayers = new List<PlayerManager>();
+
+        foreach(PlayerManager player in players)
+        {
+            if (!player.isAlive)
+            {
+                deadPlayers.Add(player);
+            }
+        }
+
+        return deadPlayers;
     }
 
     public PlayerManager FindPMByActorNumber(int actorNumber)

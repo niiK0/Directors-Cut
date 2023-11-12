@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using System.IO;
+using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
@@ -43,17 +44,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         PhotonView playerView = PhotonView.Find(viewId);
         if (playerView == null) return;
+
+        playerView.gameObject.GetComponent<PlayerController>().playerManager.isAlive = false;
+
         if (!playerView.IsMine) return;
 
         PhotonNetwork.Destroy(controller);
-        isAlive = false;
         CreateGhost(playerPos, playerRot);
     }
 
     private void CreateGhost(Vector3 playerPos, Quaternion playerRot)
     {
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerGhost"), playerPos, playerRot, 0, new object[] { PV.ViewID });
-        PV.RPC("HideDeadPlayer", RpcTarget.All, controller.GetPhotonView().ViewID);
+        photonView.RPC("HideDeadPlayer", RpcTarget.All, controller.GetPhotonView().ViewID);
     }
 
     [PunRPC]
@@ -62,7 +65,23 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         PhotonView playerView = PhotonView.Find(viewId);
         if (playerView == null) return;
 
-        playerView.gameObject.GetComponent<Ghost>().SetGhostMode(this.isAlive);
+        PlayerManager myPlayer = RoleManager.Instance.GetMyPlayerManager();
+
+        playerView.gameObject.GetComponent<Ghost>().SetGhostMode(!myPlayer.isAlive);
+
+        if (!myPlayer.isAlive)
+        {
+            List<PlayerManager> deadPlayers = RoleManager.Instance.GetDeadPlayers();
+
+            foreach(PlayerManager player in deadPlayers)
+            {
+                if (player.controller.CompareTag("GhostPlayer"))
+                {
+                    player.controller.gameObject.GetComponent<Ghost>().SetGhostMode(true);
+                }
+            }
+        }
+
     }
 
     public void SyncPlayerTypeUI()

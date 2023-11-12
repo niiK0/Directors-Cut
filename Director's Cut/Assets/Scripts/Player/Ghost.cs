@@ -16,6 +16,6 @@ public class Ghost : MonoBehaviour
 
     public void SetGhostMode(bool isAlive)
     {
-        playerVisual.SetActive(!isAlive);
+        playerVisual.SetActive(isAlive);
     }
 }

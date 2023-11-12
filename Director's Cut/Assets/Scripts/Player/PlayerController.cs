@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public bool freezePlayer = false;
     public bool freezeRotation = false;
     public bool inShortcut = false;
-
+    public bool isInMeeting = false;
 
     public PhotonView view;
 
@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         view = GetComponent<PhotonView>();
         characterController = GetComponent<CharacterController>();
         playerManager = PhotonView.Find((int)view.InstantiationData[0]).GetComponent<PlayerManager>();
+        playerManager.controller = gameObject;
     }
 
     private void Start()
