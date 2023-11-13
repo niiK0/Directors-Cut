@@ -15,10 +15,10 @@ public class DeadBodyScript : BaseReporter
 
     protected override void ReporterFunction(GameObject playerObj)
     {
-        Destroy(gameObject, 3f);
         ResetMeetingPoints();
         SeatPlayer(playerObj);
         voteManager.StartMeeting();
+        Destroy(gameObject, 3f);
     }
 
     private void ResetMeetingPoints()

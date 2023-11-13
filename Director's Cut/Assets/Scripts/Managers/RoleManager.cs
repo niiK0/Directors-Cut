@@ -264,7 +264,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
                     TextMeshProUGUI directorName = new TextMeshProUGUI();
                     directorName.text = player.GetComponent<PhotonView>().Owner.NickName;
                     directorName.color = Color.red;
-                     Instantiate(directorName, winnersContainer);
+                    Instantiate(directorName, winnersContainer);
                 }
             }
         }
