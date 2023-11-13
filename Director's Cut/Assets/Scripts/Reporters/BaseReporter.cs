@@ -8,13 +8,15 @@ public abstract class BaseReporter : MonoBehaviourPunCallbacks, IInteractable
     public Transform meetingPlace;
     [SerializeField] WarningScript warning;
 
+    private void Start()
+    {
+        meetingPlace = GameObject.FindGameObjectWithTag("MeetingPlace").transform;
+    }
+
     public void Interact(GameObject playerObj)
     {
         Debug.Log("Interacted with btn");
         StartCoroutine(warning.CallWarning());
-        PlayerController playerMovement = playerObj.GetComponent<PlayerController>();
-        playerMovement.MovePlayer(meetingPlace);
-        playerMovement.freezePlayer = true;
         ReporterFunction(playerObj);
     }
 

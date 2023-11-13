@@ -19,17 +19,16 @@ public class ReportButtonScript : BaseReporter
         ResetMeetingPoints();
         SeatPlayer(playerObj);
         voteManager.StartMeeting();
-        
     }
 
     private void ResetMeetingPoints()
     {
         meetingPoints.Clear();
 
-        /*foreach(Transform point in meetingHolder)
+        foreach(Transform point in meetingPlace)
         {
             meetingPoints.Add(point);
-        }*/
+        }
     }
 
     public void SeatPlayer(GameObject player)

@@ -182,6 +182,11 @@ public class VoteManager : MonoBehaviourPun
             //Caso um jogador seja eliminado:
             Debug.Log("Foi eliminado o jogador de chave " + mostVotedPlayer + " com " + mostVotes + " votos.");
             //Implementar aqui o que ocorre quando um jogador é eliminado.
+            PlayerManager playerToDie = RoleManager.Instance.FindPMByActorNumber(mostVotedPlayer);
+            if (playerToDie.photonView.IsMine)
+            {
+                RoleManager.Instance.KillPlayer(playerToDie.controller.GetComponent<PlayerController>());
+            }
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

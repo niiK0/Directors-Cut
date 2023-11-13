@@ -49,6 +49,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         if (!playerView.IsMine) return;
 
+        RoleManager.Instance.TryEndGame();
+
         PhotonNetwork.Destroy(controller);
         CreateGhost(playerPos, playerRot);
     }

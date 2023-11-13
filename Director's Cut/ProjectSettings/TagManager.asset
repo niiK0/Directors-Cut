@@ -8,6 +8,7 @@ TagManager:
   - Handler
   - PianoKey
   - GhostPlayer
+  - MeetingPlace
   layers:
   - Default
   - TransparentFX
