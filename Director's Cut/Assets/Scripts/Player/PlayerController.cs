@@ -198,14 +198,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Move()
     {
-        characterController.Move(moveDir * moveSpeed * Time.fixedDeltaTime);
+        characterController.Move(moveDir.normalized * moveSpeed * Time.fixedDeltaTime);
     }
 
     void GetMove()
     {
         // Player Movement
-        float horizontalMovement = Input.GetAxis("Horizontal");
-        float verticalMovement = Input.GetAxis("Vertical");
+        float horizontalMovement = Input.GetAxisRaw("Horizontal");
+        float verticalMovement = Input.GetAxisRaw("Vertical");
 
         moveDir = transform.forward * verticalMovement + transform.right * horizontalMovement;
     }

@@ -54,7 +54,6 @@ public class TaskList : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Debug.Log("Ola niko");
             tasksCanvas.SetActive(true);
         }
 
