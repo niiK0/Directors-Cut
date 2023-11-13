@@ -406,8 +406,8 @@ MonoBehaviour:
   endPoint: {fileID: 6860165837394827624}
   keyPrefab: {fileID: 843057615143378733, guid: c0ae4f5e79a6e3e46a782c50e6520619,
     type: 3}
-  keySpeed: 50
-  spawnInterval: 10
+  keySpeed: 200
+  spawnInterval: 2
   isKeyPassingThrough: 0
 --- !u!1 &7619281581910767194
 GameObject:

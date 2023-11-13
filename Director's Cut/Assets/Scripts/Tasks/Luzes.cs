@@ -7,12 +7,12 @@ using UnityEngine;
 public class Luzes : MonoBehaviour, IInteractable
 {
     //Task info
-    static int taskIndex = 4;
+    static int taskIndex = 3;
     static string taskName = "Luz";
     public bool isComplete = false;
 
     //TasksUI 
-    GameObject taskUI;
+    public GameObject taskUI;
 
     //Lantern
     public GameObject taskLight;
@@ -22,7 +22,6 @@ public class Luzes : MonoBehaviour, IInteractable
     {
         //Giving the values to their respective holders
         TaskList taskList = TaskList.Instance;
-        taskUI = taskList.gameObject;
 
         //Interaction system for the task
         if (taskList != null)
@@ -49,7 +48,7 @@ public class Luzes : MonoBehaviour, IInteractable
 
     public void DoTask(TaskList task, GameObject player)
     {
-        
+        //Complete the task
         taskLight.SetActive(false);
         taskLightModified.SetActive(true);
 

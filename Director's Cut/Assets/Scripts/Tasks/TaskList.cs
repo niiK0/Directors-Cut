@@ -13,6 +13,7 @@ public class TaskList : MonoBehaviour
 
     //Array that saves every task (In inspector)
     public string[] tasks;
+    public string[] tasksUI;
 
     //Array that saves the completness of tasks 
     public bool[] taskCompleteness;
@@ -20,9 +21,11 @@ public class TaskList : MonoBehaviour
 
     //Array that saves the tasks selected for the player
     public string[] currTasks;
+    public string[] currTasksUI;
 
-    
-
+    //UI Elements
+    public GameObject tasksCanvas;
+ 
     private void Awake()
     {
         //Singleton Verification
@@ -37,12 +40,28 @@ public class TaskList : MonoBehaviour
 
         //Instantiate currTasks with the desired number of tasks
         currTasks = new string[tasksNumber];
+        currTasksUI = new string[tasksNumber];
 
         //Instantiate taskCompleteness with the size of the currTask
         taskCompleteness = new bool[tasksNumber];
 
         //This function gets all tasks at random for the currTasks array
         RandomTasks();
+
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log("Ola niko");
+            tasksCanvas.SetActive(true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            tasksCanvas.SetActive(false);
+        }
     }
 
     public void RandomTasks()
@@ -77,6 +96,7 @@ public class TaskList : MonoBehaviour
 
             //Selects the new task 
             currTasks[i] = tasks[selectedTaskIndex];
+            currTasksUI[i] = tasksUI[selectedTaskIndex];
 
             //Removes the said index from the list so we dont get any repetitions
             availableTaskIndices.RemoveAt(randomIndex);

@@ -7,12 +7,12 @@ using UnityEngine;
 public class Beber : MonoBehaviour, IInteractable
 {
     //Task info
-    static int taskIndex = 1;
+    static int taskIndex = 0;
     static string taskName = "Beber";
     public bool isComplete = false;
 
     //TasksUI 
-    GameObject taskUI;
+    public GameObject taskUI;
 
     private bool isTaskCancelled = false;
 
@@ -20,8 +20,7 @@ public class Beber : MonoBehaviour, IInteractable
     {
         //Giving the values to their respective holders
         TaskList taskList = TaskList.Instance;
-        taskUI = taskList.gameObject;
-
+        
         //Interaction system for the task
         if (taskList != null)
         {
@@ -53,6 +52,8 @@ public class Beber : MonoBehaviour, IInteractable
     {
         //FREEZE PLAYER
         player.GetComponent<PlayerController>().freezePlayer = true;
+        player.GetComponent<PlayerController>().freezeRotation = true;
+        
         float elapsedTime = 0f;
         float taskDuration = 5.0f;
 
@@ -75,6 +76,7 @@ public class Beber : MonoBehaviour, IInteractable
         {
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
             Debug.Log("Task Cancelled!");
         }
         else
@@ -85,6 +87,7 @@ public class Beber : MonoBehaviour, IInteractable
 
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
 
             //Make the task name turn green
             if (taskUI != null)

@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,19 +7,17 @@ using UnityEngine;
 
 public class Bathroom : MonoBehaviour, IInteractable
 {
-    static int taskIndex = 2;
+    static int taskIndex = 1;
     static string taskName = "Cagar";
-    static float taskRange = 2f;
     public bool isComplete = false;
 
-    GameObject taskUI;
+    public GameObject taskUI;
 
     private bool isTaskCancelled = false;
 
     public void Interact(GameObject player)
     {
         TaskList taskList = TaskList.Instance;
-        taskUI = taskList.gameObject;
         if (taskList != null)
         {
             Debug.Log("Task Interaction - Task Type: " + taskName);
@@ -33,7 +32,7 @@ public class Bathroom : MonoBehaviour, IInteractable
                 Debug.Log("Is Task Completed: " + isComplete);
 
                 // Fazer a corrotina que trata da task
-                StartCoroutine(DoTask(taskList));
+                StartCoroutine(DoTask(taskList, player));
 
                 //UNFREZE PLAYER
             }
@@ -49,11 +48,14 @@ public class Bathroom : MonoBehaviour, IInteractable
     }
 
     //NAO ESQUECER DE FREEZAR O JOGADOR
-    IEnumerator DoTask(TaskList task)
+    IEnumerator DoTask(TaskList task, GameObject player)
     {
         //FREEZE PLAYER
+        player.GetComponent<PlayerController>().freezePlayer = true;
+        player.GetComponent<PlayerController>().freezeRotation = true;
+
         float elapsedTime = 0f;
-        float taskDuration = 15.0f; // Change this to your desired task duration
+        float taskDuration = 10.0f; // Change this to your desired task duration
 
         while (elapsedTime < taskDuration)
         {
@@ -71,11 +73,18 @@ public class Bathroom : MonoBehaviour, IInteractable
 
         if (isTaskCancelled)
         {
+            //UNFREEZE
+            player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
             Debug.Log("Task Cancelled!");
         }
         else
         {
-            Debug.Log("5 seconds have passed!");
+            //UNFREEZE
+            player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
+
+            //Setting task as complete
             task.MarkTaskComplete(taskIndex);
             isComplete = true;
 
