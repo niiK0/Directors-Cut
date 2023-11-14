@@ -46,5 +46,6 @@ public class ReportButtonScript : BaseReporter
         //freeze player
         player.GetComponent<PlayerController>().freezePlayer = true;
         // add sitting animation
+        player.GetComponent<Animator>().SetBool("isSitting", true);
     }
 }
