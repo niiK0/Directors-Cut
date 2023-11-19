@@ -13,6 +13,8 @@ public class Beber : MonoBehaviour, IInteractable
 
     //TasksUI 
     public GameObject taskUI;
+    public GameObject waitingUI;
+    public GameObject newWaitingUI;
 
     private bool isTaskCancelled = false;
 
@@ -32,8 +34,9 @@ public class Beber : MonoBehaviour, IInteractable
                 //Outputs so para ver o que se passa
                 Debug.Log("Current Task Name: " + taskName);
                 Debug.Log("Is Task Completed: " + isComplete);
-                
+
                 //Starting the task
+                newWaitingUI = Instantiate(waitingUI, taskUI.transform);
                 StartCoroutine(DoTask(taskList, player));
 
             }
@@ -77,6 +80,7 @@ public class Beber : MonoBehaviour, IInteractable
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
             player.GetComponent<PlayerController>().freezeRotation = false;
+            Destroy(newWaitingUI);
             Debug.Log("Task Cancelled!");
         }
         else
@@ -84,6 +88,7 @@ public class Beber : MonoBehaviour, IInteractable
             //Setting task as complete
             task.MarkTaskComplete(taskIndex);
             isComplete = true;
+            Destroy(newWaitingUI);
 
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;

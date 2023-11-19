@@ -12,6 +12,8 @@ public class Bathroom : MonoBehaviour, IInteractable
     public bool isComplete = false;
 
     public GameObject taskUI;
+    public GameObject waitingUI;
+    public GameObject newWaitingUI;
 
     private bool isTaskCancelled = false;
 
@@ -32,6 +34,7 @@ public class Bathroom : MonoBehaviour, IInteractable
                 Debug.Log("Is Task Completed: " + isComplete);
 
                 // Fazer a corrotina que trata da task
+                newWaitingUI = Instantiate(waitingUI, taskUI.transform);
                 StartCoroutine(DoTask(taskList, player));
 
                 //UNFREZE PLAYER
@@ -76,6 +79,7 @@ public class Bathroom : MonoBehaviour, IInteractable
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
             player.GetComponent<PlayerController>().freezeRotation = false;
+            Destroy(newWaitingUI);
             Debug.Log("Task Cancelled!");
         }
         else
@@ -85,6 +89,7 @@ public class Bathroom : MonoBehaviour, IInteractable
             player.GetComponent<PlayerController>().freezeRotation = false;
 
             //Setting task as complete
+            Destroy(newWaitingUI);
             task.MarkTaskComplete(taskIndex);
             isComplete = true;
 
