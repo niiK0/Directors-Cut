@@ -168,9 +168,17 @@ public class RoleManager : MonoBehaviourPunCallbacks
                 if (directorUpdatedList.Contains(player.cachedActorNumber)){
                     Debug.Log("Changing player with actor number " + player.cachedActorNumber + " to director");
                     player.isDirector = true;
+                    GameObject weapon = Instantiate(weaponPrefab);
+
+                    if (!player.photonView.IsMine)
+                    {
+                        weapon.GetComponent<Item>().SetPlayer(player.controller);
+                        weapon.GetComponent<Weapon>().enabled = false;
+                        weapon.GetComponent<Item>().UnequipVisual();
+                    }
+
                     if (player.photonView.IsMine)
                     {
-                        GameObject weapon = Instantiate(weaponPrefab);
                         weapon.GetComponent<Item>().Interact(player.controller);
                         weapon.GetComponent<Item>().Unequip();
                     }

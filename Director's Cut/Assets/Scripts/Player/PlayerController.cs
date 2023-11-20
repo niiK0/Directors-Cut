@@ -117,21 +117,39 @@ public class PlayerController : MonoBehaviourPunCallbacks
         HandleAnims();
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    public void SyncItem(int itemIndex)
     {
-        if (!view.IsMine && targetPlayer == view.Owner)
+        if (view.IsMine)
         {
-            EquipItem((int)changedProps["itemIndex"]);
+            view.RPC("EquipItem", RpcTarget.Others, itemIndex, view.ViewID);
         }
     }
 
-    private void EquipItem(int id)
+    [PunRPC]
+    private void EquipItem(int id, int viewId)
     {
-        GameObject itemObj = ItemManager.Instance.gameObject.GetComponent<ItemList>().items[id];
-        Item item = itemObj.GetComponent<Item>();
-        GameObject instantiatedObj = Instantiate(itemObj, item.GetItemHandPosition(), Quaternion.Euler(item.GetItemHandRotation()));
-        instantiatedObj.GetComponent<Item>().SetPlayer(gameObject);
-        instantiatedObj.GetComponent<Item>().EquipVisual();
+        PhotonView playerView = PhotonView.Find(viewId);
+        if (playerView == null) return;
+
+        Debug.Log("SyncEquipItem at " + id);
+
+        Item[] items = playerView.transform.GetComponentsInChildren<Item>();
+
+        Item currItem = null;
+
+        foreach (Item item in items)
+        {
+            item.UnequipVisual();
+            if(item.slotNumber == id)
+            {
+                currItem = item;
+            }
+        }
+
+        if(currItem != null)
+        {
+            currItem.EquipVisual();
+        }
     }
 
     void HandleAnims()

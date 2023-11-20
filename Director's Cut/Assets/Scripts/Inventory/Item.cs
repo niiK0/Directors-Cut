@@ -85,9 +85,8 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
                 }
             }
 
-            gameObject.SetActive(true);
+            gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
-            
             gameObject.transform.position = handler.transform.position;
             transform.parent = handler.gameObject.transform;
 
@@ -98,14 +97,7 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
             itemManager.currentSlot = slotNumber;
             isEquipped = true;
 
-            PhotonView view = player.GetComponent<PlayerController>().view;
-
-            if (view.IsMine)
-            {
-                Hashtable hash = new Hashtable();
-                hash.Add("itemIndex", itemInfo.itemId);
-                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-            }
+            player.GetComponent<PlayerController>().SyncItem(slotNumber);
         }
 
         InventoryManager.Instance.UpdateUI();
@@ -114,12 +106,12 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     public void SetPlayer(GameObject playerObj)
     {
         player = playerObj;
-        handler = player.transform.GetChild(0).GetChild(0).gameObject;
+        handler = playerObj.GetComponent<PlayerController>().handler;
     }
 
     public void EquipVisual()
     {
-        gameObject.SetActive(true);
+        gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
         gameObject.transform.position = itemInfo.handPosition;
         gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation);
@@ -133,7 +125,16 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
 
     public void UnequipVisual()
     {
-        gameObject.SetActive(false);
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
+        gameObject.transform.position = itemInfo.handPosition;
+        gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation);
+        transform.parent = handler.gameObject.transform;
+
+        //recheck rb for some reason lol
+        rb = gameObject.GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        rb.detectCollisions = false;
     }
 
     public Sprite GetItemIcon()
@@ -155,8 +156,9 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         isEquipped = false;
         ItemManager.Instance.currentSlot = -1;
-        gameObject.SetActive(false);
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
         InventoryManager.Instance.UpdateUI();
+        player.GetComponent<PlayerController>().SyncItem(slotNumber);
     }
 
     public void Drop()

@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public bool isDirector { get; set; } = false;
     public bool isAlive { get; set; } = true;
     public int cachedActorNumber { get; set; }
+    public string nickname { get; set; }
 
     [SerializeField] private GameObject deadBodyPlayerPrefab;
 
@@ -17,6 +18,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
+        nickname = photonView.Owner.NickName;
     }
 
     void Start()

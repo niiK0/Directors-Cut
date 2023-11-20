@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class VoteCell : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI playerNameText;
+    [SerializeField] TextMeshProUGUI playerNameText;
     private bool isSelected = false;
 
     private int actorNumber;
@@ -16,7 +16,7 @@ public class VoteCell : MonoBehaviour
         get { return actorNumber; }
     }
 
-    [SerializeField] private Button voteButton;
+    [SerializeField] Button voteButton;
     private VoteManager voteManager;
 
     private void Awake()
@@ -30,11 +30,12 @@ public class VoteCell : MonoBehaviour
         voteManager.CastVote(actorNumber);
     }
 
-    public void Initialize(Player player, VoteManager voteManager)
+    public void Initialize(PlayerManager player)
     {
-        actorNumber = player.ActorNumber;
-        playerNameText.text = player.NickName;
-        this.voteManager = voteManager;
+        actorNumber = player.photonView.OwnerActorNr;
+        playerNameText.text = player.nickname;
+        voteManager = VoteManager.Instance;
+        voteButton.interactable = player.isAlive;
     }
 
     public void UpdateStatus(bool selected)

@@ -9,6 +9,7 @@ TagManager:
   - PianoKey
   - GhostPlayer
   - MeetingPlace
+  - UIInteract
   layers:
   - Default
   - TransparentFX

@@ -16,8 +16,8 @@ public class ReportButtonScript : BaseReporter
 
     protected override void ReporterFunction(GameObject playerObj)
     {
-        ResetMeetingPoints();
-        SeatPlayer(playerObj);
+        photonView.RPC("SeatPlayerRPC", RpcTarget.All);
+        //SeatPlayer(playerObj);
         voteManager.StartMeeting();
     }
 
@@ -29,6 +29,17 @@ public class ReportButtonScript : BaseReporter
         {
             meetingPoints.Add(point);
         }
+    }
+
+    [PunRPC]
+    public void SeatPlayerRPC()
+    {
+        //if (photonView.IsMine)
+        //{
+        ResetMeetingPoints();
+        PlayerManager player = RoleManager.Instance.GetMyPlayerManager();
+        SeatPlayer(player.controller.gameObject);
+        //}
     }
 
     public void SeatPlayer(GameObject player)
@@ -46,6 +57,6 @@ public class ReportButtonScript : BaseReporter
         //freeze player
         player.GetComponent<PlayerController>().freezePlayer = true;
         // add sitting animation
-        player.GetComponent<Animator>().SetBool("isSitting", true);
+        player.GetComponentInChildren<Animator>().SetBool("isSitting", true);
     }
 }

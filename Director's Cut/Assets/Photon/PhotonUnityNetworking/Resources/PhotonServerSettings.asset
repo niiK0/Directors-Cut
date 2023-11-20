@@ -50,6 +50,8 @@ MonoBehaviour:
   - KillPlayer
   - HideDeadPlayer
   - StartMeetingRPC
+  - SeatPlayerRPC
+  - EquipItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

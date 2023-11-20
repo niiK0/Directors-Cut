@@ -12,12 +12,11 @@ public class VoteManager : MonoBehaviourPun
     //Referências in-code
     public static VoteManager Instance;
     PhotonView view;
-    RoleManager roleManager;
 
     //Referências na interface
-    [SerializeField] private GameObject votingWindow;
     [SerializeField] private VoteCell voteCellPrefab;
     [SerializeField] private Transform voteCellContainer;
+    [SerializeField] private TMP_Text voteTimeLeft;
 
     //Listas
     private List<VoteCell> voteCellList = new List<VoteCell>();
@@ -28,6 +27,9 @@ public class VoteManager : MonoBehaviourPun
     [HideInInspector] private bool hasAlreadyVoted;
     private int skipped;
 
+    public float meetingTime;
+    private float meetingTimeInternal;
+
     //Consts
     public const int skipped_vote_value = 0;
     #endregion
@@ -37,7 +39,6 @@ public class VoteManager : MonoBehaviourPun
     {
         Instance = this;
         view = GetComponent<PhotonView>();
-        roleManager = RoleManager.Instance;
     }
     #endregion
 
@@ -55,12 +56,25 @@ public class VoteManager : MonoBehaviourPun
         playersThatHaveBeenVotedList.Clear();
         hasAlreadyVoted = false;
         skipped = 0;
-        ToggleAllButtons(true);
-        votingWindow.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        StartCoroutine(TimeMeeting());
     }
 
+    public IEnumerator TimeMeeting()
+    {
+        meetingTimeInternal = meetingTime;
+        while(meetingTimeInternal > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            meetingTimeInternal--;
+            voteTimeLeft.text = meetingTimeInternal.ToString();
+        }
+
+        if(meetingTimeInternal <= 0 && PhotonNetwork.IsMasterClient)
+        {
+            view.RPC("FinishVote", RpcTarget.All); ;
+        }
+    }
+    
     private void PopulatePlayerList()
     {
         //Limpa a lista prévia de jogadores
@@ -71,37 +85,16 @@ public class VoteManager : MonoBehaviourPun
 
         voteCellList.Clear();
 
+        List<PlayerManager> players = RoleManager.Instance.GetPlayerList();
+
         //Cria uma nova lista de jogadores
-        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        foreach (PlayerManager player in players)
         {
-            if (!roleManager.FindPMByActorNumber(player.Value.ActorNumber).isAlive)
-            {
-                continue;
-            }
 
             VoteCell newVoteCell = Instantiate(voteCellPrefab, voteCellContainer);
-            newVoteCell.Initialize(player.Value, this);
+            newVoteCell.Initialize(player);
             voteCellList.Add(newVoteCell);
         }
-    }
-
-    private void ToggleAllButtons(bool areOn)
-    {
-        if (roleManager.FindPMByActorNumber(PhotonNetwork.LocalPlayer.ActorNumber).isAlive)
-        {
-            foreach (VoteCell voteCell in voteCellList)
-            {
-                voteCell.ToggleButton(areOn);
-            }
-        }
-        else
-        {
-            foreach (VoteCell voteCell in voteCellList)
-            {
-                voteCell.ToggleButton(false);
-            }
-        }
-
     }
 
     public void CastVote(int targetActorNumber)
@@ -112,14 +105,14 @@ public class VoteManager : MonoBehaviourPun
         }
 
         hasAlreadyVoted = true;
-        ToggleAllButtons(false);
         photonView.RPC("CastPlayerVoteRPC", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, targetActorNumber);
     }
 
     [PunRPC]
     public void CastPlayerVoteRPC(int actorNumber, int targetActorNumber)
     {
-        int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount;// - (roleManager.ActorsAlive() + roleManager.DirectorsAlive());
+        //int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount;// - (roleManager.ActorsAlive() + roleManager.DirectorsAlive());
+        int remainingPlayers = PhotonNetwork.CurrentRoom.PlayerCount - RoleManager.Instance.GetDeadPlayers().Count;
 
         if (!playersThatVotedList.Contains(actorNumber))
         {
@@ -135,7 +128,7 @@ public class VoteManager : MonoBehaviourPun
             }
         }
 
-        if (playersThatVotedList.Count >= remainingPlayers)
+        if (playersThatVotedList.Count >= remainingPlayers && PhotonNetwork.IsMasterClient)
         {
             view.RPC("FinishVote", RpcTarget.All);;
         }
@@ -188,10 +181,15 @@ public class VoteManager : MonoBehaviourPun
                 RoleManager.Instance.KillPlayer(playerToDie.controller.GetComponent<PlayerController>());
             }
         }
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        votingWindow.SetActive(false);
-        roleManager.TryEndGame();
+
+        //DO STUFF TO ENT MEETING
+         //NEED TO CLEAN BODIES AND SO ON
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        PlayerController player = RoleManager.Instance.GetMyPlayerManager().controller.GetComponent<PlayerController>();
+        player.MovePlayer(spawnPoint);
+        player.freezePlayer = false;
+        player.GetComponentInChildren<Animator>().SetBool("isSitting", false);
+
     }
 
     private void Update()
