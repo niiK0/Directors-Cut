@@ -117,21 +117,22 @@ public class PlayerController : MonoBehaviourPunCallbacks
         HandleAnims();
     }
 
-    public void SyncItem(int itemIndex)
+    public void SyncItem(string itemIdentifier)
     {
+        //Debug.Log("(1) SyncItem with index " + itemIndex);
+
         if (view.IsMine)
         {
-            view.RPC("EquipItem", RpcTarget.Others, itemIndex, view.ViewID);
+            //Debug.Log("(2) SyncItem with index " + itemIndex + " .. calling rpc to others with viewid = " + view.ViewID);
+            photonView.RPC("EquipItem", RpcTarget.Others, itemIdentifier, view.ViewID);
         }
     }
 
     [PunRPC]
-    private void EquipItem(int id, int viewId)
+    public void EquipItem(string identifier, int viewId)
     {
         PhotonView playerView = PhotonView.Find(viewId);
         if (playerView == null) return;
-
-        Debug.Log("SyncEquipItem at " + id);
 
         Item[] items = playerView.transform.GetComponentsInChildren<Item>();
 
@@ -140,13 +141,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         foreach (Item item in items)
         {
             item.UnequipVisual();
-            if(item.slotNumber == id)
+            if (!string.IsNullOrEmpty(identifier) && item.itemIdentifier == identifier)
             {
                 currItem = item;
             }
         }
 
-        if(currItem != null)
+        if(currItem != null && !string.IsNullOrEmpty(identifier))
         {
             currItem.EquipVisual();
         }

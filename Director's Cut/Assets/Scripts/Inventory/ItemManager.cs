@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
-public class ItemManager : MonoBehaviour
+public class ItemManager : MonoBehaviourPunCallbacks
 {
     public static ItemManager Instance;
 
@@ -92,6 +93,8 @@ public class ItemManager : MonoBehaviour
         }
 
         if (itemGameObject == null) return;
+
+        //photonView.RPC("SyncItem")
        
         Item item = itemGameObject.GetComponent<Item>();
 
