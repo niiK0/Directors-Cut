@@ -6,7 +6,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine.UIElements;
-
+using System.IO;
 
 public class RoleManager : MonoBehaviourPunCallbacks
 {
@@ -169,6 +169,13 @@ public class RoleManager : MonoBehaviourPunCallbacks
                     Debug.Log("Changing player with actor number " + player.cachedActorNumber + " to director");
                     player.isDirector = true;
                     GameObject weapon = Instantiate(weaponPrefab);
+                    weapon.GetComponent<Item>().itemIdentifier = "weapon" + player.cachedActorNumber;
+
+                    if (player.photonView.IsMine)
+                    {
+                        weapon.GetComponent<Item>().Interact(player.controller);
+                        weapon.GetComponent<Item>().Unequip();
+                    }
 
                     if (!player.photonView.IsMine)
                     {
@@ -177,11 +184,6 @@ public class RoleManager : MonoBehaviourPunCallbacks
                         weapon.GetComponent<Item>().UnequipVisual();
                     }
 
-                    if (player.photonView.IsMine)
-                    {
-                        weapon.GetComponent<Item>().Interact(player.controller);
-                        weapon.GetComponent<Item>().Unequip();
-                    }
                 }
             }
 

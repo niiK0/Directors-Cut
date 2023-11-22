@@ -12,6 +12,8 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     public bool isEquipped { get; private set; } = false;
     public bool inInventory { get; private set; } = false;
 
+    public string itemIdentifier;
+
     public int slotNumber = -1;
 
     private Rigidbody rb;
@@ -22,7 +24,6 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         rb = GetComponent<Rigidbody>();
     }
-
 
     private void Update()
     {
@@ -85,19 +86,12 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
                 }
             }
 
-            gameObject.transform.GetChild(0).gameObject.SetActive(true);
-
-            gameObject.transform.position = handler.transform.position;
-            transform.parent = handler.gameObject.transform;
-
-            rb = gameObject.GetComponent<Rigidbody>();
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            rb.detectCollisions = false;
+            EquipVisual();
 
             itemManager.currentSlot = slotNumber;
             isEquipped = true;
 
-            player.GetComponent<PlayerController>().SyncItem(slotNumber);
+            player.GetComponent<PlayerController>().SyncItem(itemIdentifier);
         }
 
         InventoryManager.Instance.UpdateUI();
@@ -113,9 +107,9 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
-        gameObject.transform.position = itemInfo.handPosition;
-        gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation);
         transform.parent = handler.gameObject.transform;
+        gameObject.transform.localPosition = itemInfo.handPosition;
+        gameObject.transform.localRotation = Quaternion.Euler(itemInfo.handRotation);
 
         //recheck rb for some reason lol
         rb = gameObject.GetComponent<Rigidbody>();
@@ -127,9 +121,9 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
-        gameObject.transform.position = itemInfo.handPosition;
-        gameObject.transform.rotation = Quaternion.Euler(itemInfo.handRotation);
         transform.parent = handler.gameObject.transform;
+        gameObject.transform.localPosition = itemInfo.handPosition;
+        gameObject.transform.localRotation = Quaternion.Euler(itemInfo.handRotation);
 
         //recheck rb for some reason lol
         rb = gameObject.GetComponent<Rigidbody>();
@@ -156,9 +150,9 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
     {
         isEquipped = false;
         ItemManager.Instance.currentSlot = -1;
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        UnequipVisual();
         InventoryManager.Instance.UpdateUI();
-        player.GetComponent<PlayerController>().SyncItem(slotNumber);
+        player.GetComponent<PlayerController>().SyncItem(string.Empty);
     }
 
     public void Drop()
@@ -174,6 +168,8 @@ public class Item : MonoBehaviourPunCallbacks, IInteractable
         rb.detectCollisions = true;
         transform.parent = null;
         rb.constraints = RigidbodyConstraints.None;
+
+        player.GetComponent<PlayerController>().SyncItem(string.Empty);
 
         Debug.Log(itemInfo.itemName + " has been dropped from inventory.");
         InventoryManager.Instance.UpdateUI();

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7255163328278653711}
   m_Layer: 0
   m_Name: Knife
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 9d49753bd7d14634b932ede1ff149162, type: 2}
+  itemIdentifier: 
   slotNumber: -1
   handler: {fileID: 0}
 --- !u!1 &5538958467329504055
