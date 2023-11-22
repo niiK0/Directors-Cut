@@ -21,25 +21,29 @@ public class Shortcut : MonoBehaviour, IInteractable
 
         PlayerController playerMovement = player.GetComponent<PlayerController>();
 
-        //Muda a câmera atual para a do shortcut
-        shortcutCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
-        currentCamera = shortcutCamera;
+        if(playerMovement.playerManager.isDirector == true)
+        {
+            Debug.Log("Director Entered Shortcut");
+            //Muda a câmera atual para a do shortcut
+            shortcutCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
+            currentCamera = shortcutCamera;
 
-        currentCamera.transform.rotation = gameObject.transform.rotation;
+            currentCamera.transform.rotation = gameObject.transform.rotation;
 
-        //Coloca o jogador no "modo shortcut"
-        playerMovement.EnableShortcutMode(true);
+            //Coloca o jogador no "modo shortcut"
+            playerMovement.EnableShortcutMode(true);
 
-        //Envia o jogador para outra localização
-        playerMovement.MovePlayer(secretRoom);
+            //Envia o jogador para outra localização
+            playerMovement.MovePlayer(secretRoom);
 
-        //Subscreve ao evento do jogador
-        playerMovement.OnKeyPressedInShortcutMode += OnKeyPress;
+            //Subscreve ao evento do jogador
+            playerMovement.OnKeyPressedInShortcutMode += OnKeyPress;
 
-        //Define a porta selecionada como o currentShortcut
-        currentShortcut = 0;
+            //Define a porta selecionada como o currentShortcut
+            currentShortcut = 0;
 
-        PostProcessManager.Instance.SetVolume(1);
+            PostProcessManager.Instance.SetVolume(1);
+        }
     }
 
     private void ChangeToShortcutCamera(GameObject previousCamera, GameObject newCamera)
