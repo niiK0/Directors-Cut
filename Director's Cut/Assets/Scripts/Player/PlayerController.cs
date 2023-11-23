@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             return;
         }
 
+
         if (inShortcut)
             return;
 
@@ -110,6 +111,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Rotate();
             return;
         }
+
+        
 
         GetMove();
         Rotate();

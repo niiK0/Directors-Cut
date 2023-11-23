@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,27 @@ public class Beber : MonoBehaviour, IInteractable
     public GameObject waitingUI;
     public GameObject newWaitingUI;
 
+    //Player Controller Reference
+    public GameObject playerObject;
+
     private bool isTaskCancelled = false;
+
+
+    public void Update()
+    {
+        // Check for "x" key press to cancel the task
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            CancelTask(playerObject);
+        }
+    }
 
     public void Interact(GameObject player)
     {
         //Giving the values to their respective holders
         TaskList taskList = TaskList.Instance;
-        
+        playerObject = player;
+
         //Interaction system for the task
         if (taskList != null)
         {
@@ -62,17 +77,21 @@ public class Beber : MonoBehaviour, IInteractable
 
         while (elapsedTime < taskDuration)
         {
-            // Check for "x" key press to cancel the task
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                isTaskCancelled = true;
-                break;
-            }
-
             // Update elapsed time
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        if(elapsedTime >= 5)
+        {
+            FinishTask(task);
+        }
+    }
+
+
+    public void CancelTask(GameObject player)
+    {
+        isTaskCancelled = true;
 
         //Verify if the task got Cancelled
         if (isTaskCancelled)
@@ -83,39 +102,39 @@ public class Beber : MonoBehaviour, IInteractable
             Destroy(newWaitingUI);
             Debug.Log("Task Cancelled!");
         }
-        else
+    }
+
+    public void FinishTask(TaskList task)
+    {
+        //Setting task as complete
+        task.MarkTaskComplete(taskIndex);
+        isComplete = true;
+        Destroy(newWaitingUI);
+
+        //UNFREEZE
+        playerObject.GetComponent<PlayerController>().freezePlayer = false;
+        playerObject.GetComponent<PlayerController>().freezeRotation = false;
+
+        //Make the task name turn green
+        if (taskUI != null)
         {
-            //Setting task as complete
-            task.MarkTaskComplete(taskIndex);
-            isComplete = true;
-            Destroy(newWaitingUI);
+            Transform childTransform = taskUI.transform.Find(taskName);
 
-            //UNFREEZE
-            player.GetComponent<PlayerController>().freezePlayer = false;
-            player.GetComponent<PlayerController>().freezeRotation = false;
-
-            //Make the task name turn green
-            if (taskUI != null)
+            if (childTransform != null)
             {
-                Transform childTransform = taskUI.transform.Find(taskName);
 
-                if (childTransform != null)
-                {
-
-                    TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
-                    childText.color = Color.green;
-                }
-                else
-                {
-                    Debug.LogWarning("Child not found with name: " + taskName);
-                }
+                TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
+                childText.color = Color.green;
             }
             else
             {
-                Debug.LogWarning("TaskUI not found with name: TaskUI");
+                Debug.LogWarning("Child not found with name: " + taskName);
             }
         }
-
+        else
+        {
+            Debug.LogWarning("TaskUI not found with name: TaskUI");
+        }
     }
 }
     

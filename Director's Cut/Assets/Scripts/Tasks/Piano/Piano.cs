@@ -19,15 +19,15 @@ public class Piano : MonoBehaviour, IInteractable
     //Instantiated object
     public GameObject pianoGamePrefab;
     private GameObject pianoGameInstance;
-
-    //Player Holder
-    private GameObject currPlayer = null;
     
     //TasksUI 
     public GameObject taskUI;
 
     //TaskList Singleton Instance
     TaskList taskList;
+
+    //Player Controller Reference
+    public GameObject playerObject;
 
     private bool isTaskCancelled = false;
 
@@ -48,17 +48,18 @@ public class Piano : MonoBehaviour, IInteractable
 
     public void Update()
     {
-        //Call cancel task after you can do it
-        if(currPlayer != null)
-            CancelTask(currPlayer);
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+           CancelTask(playerObject);
+        }
     }
 
     public void Interact(GameObject player)
     {
         //Giving the values to their respective holders
-        currPlayer = player;
         taskList = TaskList.Instance;
-        
+        playerObject = player;
+
         //Interaction system for the task
         if (taskList != null)
         {
@@ -68,6 +69,7 @@ public class Piano : MonoBehaviour, IInteractable
             {
                 //Reset this value everytime the task gets interacted with
                 isTaskCancelled = false;
+
 
                 if (!isDoing) {
                     //Instantiating the UI prefab
@@ -80,8 +82,8 @@ public class Piano : MonoBehaviour, IInteractable
                 Debug.Log("Is Task Completed: " + isComplete);
 
                 //FREEZE PLAYER
-                currPlayer.GetComponent<PlayerController>().freezePlayer = true;
-                currPlayer.GetComponent<PlayerController>().freezeRotation = true;
+                player.GetComponent<PlayerController>().freezePlayer = true;
+                player.GetComponent<PlayerController>().freezeRotation = true;
             }
             else
             {
@@ -96,19 +98,16 @@ public class Piano : MonoBehaviour, IInteractable
 
     public void CancelTask(GameObject player)
     {
-        // Check for "x" key press to cancel the task
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            isTaskCancelled = true;
-        }
-
+        //Cancel the task
+        isTaskCancelled = true;
+        
         if (isTaskCancelled)
         {
             //Removing the mini-game from the screen
             Destroy(pianoGameInstance);
             //UNFREEZE
-            currPlayer.GetComponent<PlayerController>().freezePlayer = false;
-            currPlayer.GetComponent<PlayerController>().freezeRotation = false;
+            player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
             Debug.Log("Task Cancelled!");
             isTaskCancelled= false;
             isDoing = false;
@@ -128,8 +127,8 @@ public class Piano : MonoBehaviour, IInteractable
         isDoing=false;
 
         //UNFREEZE
-        currPlayer.GetComponent<PlayerController>().freezePlayer = false;
-        currPlayer.GetComponent<PlayerController>().freezeRotation = false;
+        playerObject.GetComponent<PlayerController>().freezePlayer = false;
+        playerObject.GetComponent<PlayerController>().freezeRotation = false;
 
         //Make the task name turn green
         if (taskUI != null)
