@@ -17,6 +17,20 @@ public class Bathroom : MonoBehaviour, IInteractable
 
     private bool isTaskCancelled = false;
 
+    //Player Controller Reference
+    public GameObject playerObject;
+
+
+    public void Update()
+    {
+        // Check for "x" key press to cancel the task
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            CancelTask(playerObject);
+        }
+    }
+
+
     public void Interact(GameObject player)
     {
         TaskList taskList = TaskList.Instance;
@@ -62,18 +76,24 @@ public class Bathroom : MonoBehaviour, IInteractable
 
         while (elapsedTime < taskDuration)
         {
-            // Check for "x" key press to cancel the task
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                isTaskCancelled = true;
-                break; // Exit the loop and cancel the task
-            }
-
             // Update elapsed time
             elapsedTime += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
 
+
+        if (elapsedTime >= taskDuration && !isTaskCancelled)
+        {
+            FinishTask(task);
+        }
+    }
+
+
+    public void CancelTask(GameObject player)
+    {
+        isTaskCancelled = true;
+
+        //Verify if the task got Cancelled
         if (isTaskCancelled)
         {
             //UNFREEZE
@@ -82,35 +102,38 @@ public class Bathroom : MonoBehaviour, IInteractable
             Destroy(newWaitingUI);
             Debug.Log("Task Cancelled!");
         }
-        else
+    }
+
+    public void FinishTask(TaskList task)
+    {
+        //Setting task as complete
+        task.MarkTaskComplete(taskIndex);
+        isComplete = true;
+        Destroy(newWaitingUI);
+
+        //UNFREEZE
+        playerObject.GetComponent<PlayerController>().freezePlayer = false;
+        playerObject.GetComponent<PlayerController>().freezeRotation = false;
+
+        //Make the task name turn green
+        if (taskUI != null)
         {
-            //UNFREEZE
-            player.GetComponent<PlayerController>().freezePlayer = false;
-            player.GetComponent<PlayerController>().freezeRotation = false;
+            Transform childTransform = taskUI.transform.Find(taskName);
 
-            //Setting task as complete
-            Destroy(newWaitingUI);
-            task.MarkTaskComplete(taskIndex);
-            isComplete = true;
-
-            if (taskUI != null)
+            if (childTransform != null)
             {
-                Transform childTransform = taskUI.transform.Find(taskName);
 
-                if (childTransform != null)
-                {
-                    TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
-                    childText.color = Color.green;
-                }
-                else
-                {
-                    Debug.LogWarning("Child not found with name: " + taskName);
-                }
+                TextMeshProUGUI childText = childTransform.GetComponent<TextMeshProUGUI>();
+                childText.color = Color.green;
             }
             else
             {
-                Debug.LogWarning("TaskUI not found with name: TaskUI");
+                Debug.LogWarning("Child not found with name: " + taskName);
             }
+        }
+        else
+        {
+            Debug.LogWarning("TaskUI not found with name: TaskUI");
         }
     }
 }

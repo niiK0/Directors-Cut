@@ -82,7 +82,7 @@ public class Beber : MonoBehaviour, IInteractable
             yield return null;
         }
 
-        if(elapsedTime >= 5)
+        if(elapsedTime >= taskDuration && !isTaskCancelled)
         {
             FinishTask(task);
         }
