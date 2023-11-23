@@ -39,6 +39,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation, 0, new object[] {PV.ViewID});
     }
 
+    public void SendCompleteTask()
+    {
+        if(!isDirector)
+            photonView.RPC("SendCompleteTaskRPC", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void SendCompleteTaskRPC()
+    {
+        RoleManager.Instance.CompleteTask();
+    }
+
     [PunRPC]
     public void KillPlayer(int viewId, Vector3 playerPos, Quaternion playerRot)
     {
@@ -51,7 +63,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         RoleManager.Instance.TryEndGame();
 
         if (!playerView.IsMine) return;
-
 
         PhotonNetwork.Destroy(controller);
         CreateGhost(playerPos, playerRot);

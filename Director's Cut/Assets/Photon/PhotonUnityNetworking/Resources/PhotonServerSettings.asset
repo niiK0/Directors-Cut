@@ -52,6 +52,10 @@ MonoBehaviour:
   - StartMeetingRPC
   - SeatPlayerRPC
   - EquipItem
+  - UpdateCompletionRPC
+  - SendCompleteTaskRPC
+  - CompleteTaskRPC
+  - WinByTasksRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

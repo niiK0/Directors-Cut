@@ -7,9 +7,9 @@ using TMPro;
 public class TasksUI : MonoBehaviour
 {
     public Transform taskListPanel; 
-    public GameObject taskPrefab; 
+    public GameObject taskPrefab;
 
-    private void Start()
+    public void SetUI()
     {
         TaskList taskList = TaskList.Instance;
 
@@ -21,7 +21,7 @@ public class TasksUI : MonoBehaviour
             taskUI.name = taskList.currTasks[i];
 
             // Ajusta a posiçao de forma a nao dar overlap
-            float yOffset = i * taskText.preferredHeight + 10; 
+            float yOffset = i * taskText.preferredHeight + 10;
             taskUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -yOffset);
         }
     }

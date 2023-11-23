@@ -27,8 +27,13 @@ public class RoleManager : MonoBehaviourPunCallbacks
 
     private bool loaded = false;
     private int nOfDirectors = 1;
+    private int nOfTasks = 4;
+    private int totalNumOfTasks;
+    private int nOfCompletedTasks = 0;
 
     private const string directors_property_key = "Directors";
+    private const string tasks_property_key = "NumTasks";
+    private const string total_tasks_property_key = "TotalNumTasks";
 
     private const string directors_team_name = "DIRECTORS";
     private const string actors_team_name = "ACTORS";
@@ -61,6 +66,36 @@ public class RoleManager : MonoBehaviourPunCallbacks
     public List<PlayerManager> GetPlayerList()
     {
         return players;
+    }
+
+    public void CompleteTask()
+    {
+        nOfCompletedTasks++;
+
+        Debug.Log("completedtasks = " + nOfCompletedTasks + " and totaltasks = " + totalNumOfTasks);
+
+        float percentage = (float)nOfCompletedTasks / totalNumOfTasks;
+        string percentageText = percentage * 100 + "%";
+
+        Debug.Log("Changing compelte task percentage to " + percentage + " and text to " + percentageText);
+
+        TaskCompletion.Instance.UpdateCompletion(percentage, percentageText);
+
+        CheckTasksWin();
+    }
+
+    private void CheckTasksWin()
+    {
+        if(nOfCompletedTasks >= totalNumOfTasks)
+        {
+            photonView.RPC("WinByTasksRPC", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    public void WinByTasksRPC()
+    {
+        EndScreen(true);
     }
 
     public void KillPlayer(PlayerController playerToDie)
@@ -151,13 +186,31 @@ public class RoleManager : MonoBehaviourPunCallbacks
             Debug.Log("Chose this guy for director : " + players[n].cachedActorNumber);
         }
 
-        Hashtable directorsRoomProperties = new Hashtable();
-        directorsRoomProperties[directors_property_key] = aux.ToArray();
-        PhotonNetwork.CurrentRoom.SetCustomProperties(directorsRoomProperties);
+        int totalTasks = Mathf.RoundToInt(nOfTasks * (nOfPlayers - nOfDirectors));
+
+        Hashtable updateRoomProps = new Hashtable();
+        updateRoomProps[directors_property_key] = aux.ToArray();
+        updateRoomProps[tasks_property_key] = nOfTasks;
+        updateRoomProps[total_tasks_property_key] = totalTasks;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(updateRoomProps);
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
+        if (propertiesThatChanged.ContainsKey(tasks_property_key))
+        {
+            int numTasks = (int)propertiesThatChanged[tasks_property_key];
+            Debug.Log("Setting numTasks to " + numTasks);
+            TaskList.Instance.SetTasks(numTasks);
+        }
+
+        if (propertiesThatChanged.ContainsKey(total_tasks_property_key))
+        {
+            int totalNumTasks = (int)propertiesThatChanged[total_tasks_property_key];
+            Debug.Log("Setting totalNumOfTasks to " + totalNumTasks);
+            totalNumOfTasks = totalNumTasks;
+        }
+
         if (propertiesThatChanged.ContainsKey(directors_property_key))
         {
             // Update the list of director actor numbers when the room property changes

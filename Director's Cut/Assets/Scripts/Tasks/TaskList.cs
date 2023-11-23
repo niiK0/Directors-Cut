@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class TaskList : MonoBehaviour
+public class TaskList : MonoBehaviourPunCallbacks
 {
     //Singleton
     public static TaskList Instance;
@@ -23,9 +25,11 @@ public class TaskList : MonoBehaviour
     public string[] currTasks;
     public string[] currTasksUI;
 
+    public GameObject playerController;
+
     //UI Elements
     public GameObject tasksCanvas;
- 
+
     private void Awake()
     {
         //Singleton Verification
@@ -37,17 +41,6 @@ public class TaskList : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        //Instantiate currTasks with the desired number of tasks
-        currTasks = new string[tasksNumber];
-        currTasksUI = new string[tasksNumber];
-
-        //Instantiate taskCompleteness with the size of the currTask
-        taskCompleteness = new bool[tasksNumber];
-
-        //This function gets all tasks at random for the currTasks array
-        RandomTasks();
-
     }
 
     private void Update()
@@ -61,6 +54,22 @@ public class TaskList : MonoBehaviour
         {
             tasksCanvas.SetActive(false);
         }
+    }
+
+    public void SetTasks(int nOfTasks)
+    {
+        playerController = RoleManager.Instance.GetMyPlayerManager().controller;
+
+        //Instantiate currTasks with the desired number of tasks
+        tasksNumber = nOfTasks;
+        currTasks = new string[tasksNumber];
+        currTasksUI = new string[tasksNumber];
+
+        //Instantiate taskCompleteness with the size of the currTask
+        taskCompleteness = new bool[tasksNumber];
+
+        //This function gets all tasks at random for the currTasks array
+        RandomTasks();
     }
 
     public void RandomTasks()
@@ -101,6 +110,8 @@ public class TaskList : MonoBehaviour
             availableTaskIndices.RemoveAt(randomIndex);
         }
 
+        tasksCanvas.GetComponent<TasksUI>().SetUI();
+
         //Log the selected tasks.
         foreach (string task in currTasks)
         {
@@ -118,14 +129,16 @@ public class TaskList : MonoBehaviour
             taskCompleteness[taskIndex] = true;
         }
 
-        //Calls the function to see if everything is finished
-        tasksCompleted = AreAllTasksComplete();
+        playerController.GetComponent<PlayerController>().playerManager.SendCompleteTask();
 
-        //Verifies if every task as been completed
-        if (tasksCompleted)
-        {
-            Debug.Log("TODAS AS TASKS FEITAS");
-        }
+        ////Calls the function to see if everything is finished
+        //tasksCompleted = AreAllTasksComplete();
+
+        ////Verifies if every task as been completed
+        //if (tasksCompleted)
+        //{
+        //    Debug.Log("TODAS AS TASKS FEITAS");
+        //}
     }
     
 

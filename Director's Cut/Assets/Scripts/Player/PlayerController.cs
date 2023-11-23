@@ -5,6 +5,7 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using System;
 using System.IO;
+using TMPro;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public PhotonView view;
 
     public PlayerManager playerManager;
+    public TMP_Text NameText;
 
     //events
 
@@ -59,8 +61,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; 
         Cursor.visible = false;
+
+        NameText.text = view.Owner.NickName;
 
         if (!view.IsMine)
         {
