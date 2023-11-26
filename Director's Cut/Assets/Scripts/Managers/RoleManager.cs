@@ -22,6 +22,7 @@ public class RoleManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject endScreen;
     [SerializeField] private TextMeshProUGUI winnerTeamText;
     [SerializeField] private Transform winnersContainer;
+    [SerializeField] private GameObject winnerPlayerPrefab;
 
     [SerializeField] private GameObject weaponPrefab;
 
@@ -308,10 +309,14 @@ public class RoleManager : MonoBehaviourPunCallbacks
             {
                 if (!player.isDirector)
                 {
-                    TextMeshProUGUI actorName = new TextMeshProUGUI();
+                    GameObject playerName = Instantiate(winnerPlayerPrefab, winnersContainer);
+                    playerName.GetComponent<TextMeshProUGUI>().text = player.GetComponent<PhotonView>().Owner.NickName;
+                    playerName.GetComponent<TextMeshProUGUI>().color = Color.green;
+
+                    /*TextMeshProUGUI actorName = new TextMeshProUGUI();
                     actorName.text = player.GetComponent<PhotonView>().Owner.NickName;
                     actorName.color = Color.green;
-                    Object.Instantiate(actorName, winnersContainer);
+                    Object.Instantiate(actorName, winnersContainer);*/
                 }
             }
         }
@@ -324,10 +329,9 @@ public class RoleManager : MonoBehaviourPunCallbacks
             {
                 if (player.isDirector)
                 {
-                    TextMeshProUGUI directorName = new TextMeshProUGUI();
-                    directorName.text = player.GetComponent<PhotonView>().Owner.NickName;
-                    directorName.color = Color.red;
-                    Instantiate(directorName, winnersContainer);
+                    GameObject playerName = Instantiate(winnerPlayerPrefab, winnersContainer);
+                    playerName.GetComponent<TextMeshProUGUI>().text = player.GetComponent<PhotonView>().Owner.NickName;
+                    playerName.GetComponent<TextMeshProUGUI>().color = Color.red;
                 }
             }
         }
