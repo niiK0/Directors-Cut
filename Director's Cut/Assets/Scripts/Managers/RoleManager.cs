@@ -103,7 +103,10 @@ public class RoleManager : MonoBehaviourPunCallbacks
     {
         //set ghost of playerToDie
         //playerToDie.GetComponent<Ghost>().SetGhostModeRPC();
-        playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
+        PlayerManager myPlayer = GetMyPlayerManager();
+
+        if(myPlayer.isAlive)
+            playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
     }
 
     public PlayerManager GetMyPlayerManager()

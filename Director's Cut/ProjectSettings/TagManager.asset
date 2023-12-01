@@ -10,6 +10,7 @@ TagManager:
   - GhostPlayer
   - MeetingPlace
   - UIInteract
+  - TaskItem
   layers:
   - Default
   - TransparentFX

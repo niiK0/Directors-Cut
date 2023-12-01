@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (playerView == null) return;
 
         playerView.gameObject.GetComponent<PlayerController>().playerManager.isAlive = false;
-        RoleManager.Instance.TryEndGame();
+        //RoleManager.Instance.TryEndGame();
 
         if (!playerView.IsMine) return;
 
