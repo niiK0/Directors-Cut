@@ -86,7 +86,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5088c7e395c9d874a98306f05265172b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractRange: 5
+  InteractRange: 2
+  layers:
+    serializedVersion: 2
+    m_Bits: 2147483647
   cam: {fileID: 0}
 --- !u!143 &2176655674552294550
 CharacterController:
@@ -178,8 +181,8 @@ MonoBehaviour:
   moveSpeed: 3
   moveDir: {x: 0, y: 0, z: 0}
   mouseSensitivity: 0.5
-  jumpForce: 1
-  gravity: -9.81
+  jumpForce: 0.75
+  gravity: -10
   vCam: {fileID: 3020546345687352787}
   groundCheck: {fileID: 410814300}
   isGrounded: 0
@@ -202,7 +205,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2176655674552294540}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
   m_Name: 

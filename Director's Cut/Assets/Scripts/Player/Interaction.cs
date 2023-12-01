@@ -13,6 +13,7 @@ public class Interaction : MonoBehaviour
 {
     public float InteractRange;
     private Transform highlight;
+    [SerializeField] LayerMask layers;
     [SerializeField] CinemachineVirtualCamera cam;
 
     private void OnDrawGizmos()
@@ -34,7 +35,6 @@ public class Interaction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         //Ray ray = new Ray(gameObject.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
@@ -45,11 +45,20 @@ public class Interaction : MonoBehaviour
             highlight = null;
         }
 
-        if (Physics.Raycast(ray, out hit, InteractRange))
+        if (Physics.Raycast(ray, out hit, InteractRange, layers))
         {
             highlight = hit.transform;
 
-            if (highlight.CompareTag("Item"))
+            if (gameObject.CompareTag("GhostPlayer"))
+            {
+                if (!highlight.CompareTag("TaskItem"))
+                {
+                    highlight = null;
+                    return;
+                }
+            }
+
+            if (highlight.CompareTag("Item") || highlight.CompareTag("TaskItem"))
             {
                 if (highlight.gameObject.GetComponent<Outline>() != null)
                 {
@@ -73,7 +82,17 @@ public class Interaction : MonoBehaviour
                 // Debug.Log("Hit object: " + hit.transform.name);
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactObj))
                 {
-                    interactObj.Interact(gameObject);
+                    if(highlight)
+                    {
+                        if (!highlight.CompareTag("TaskItem") && gameObject.CompareTag("GhostPlayer"))
+                        {
+                            highlight = null;
+                            return;
+                        }
+
+                        if(highlight.CompareTag("Item") || highlight.CompareTag("TaskItem"))
+                            interactObj.Interact(gameObject);
+                    }
                 }
             }
         }

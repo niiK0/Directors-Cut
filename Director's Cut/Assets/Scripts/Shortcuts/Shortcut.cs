@@ -21,7 +21,7 @@ public class Shortcut : MonoBehaviour, IInteractable
 
         PlayerController playerMovement = player.GetComponent<PlayerController>();
 
-        if(playerMovement.playerManager.isDirector == true)
+        if(playerMovement.playerManager.isDirector)
         {
             Debug.Log("Director Entered Shortcut");
             //Muda a câmera atual para a do shortcut
