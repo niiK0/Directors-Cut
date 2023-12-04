@@ -27,6 +27,8 @@ public class VoteManager : MonoBehaviourPun
     [HideInInspector] private bool hasAlreadyVoted;
     private int skipped;
 
+    private bool isMeetingRunning = false;
+
     public float meetingTime;
     private float meetingTimeInternal;
 
@@ -51,28 +53,38 @@ public class VoteManager : MonoBehaviourPun
     [PunRPC]
     private void StartMeetingRPC()
     {
-        PopulatePlayerList();
-        playersThatVotedList.Clear();
-        playersThatHaveBeenVotedList.Clear();
-        hasAlreadyVoted = false;
-        skipped = 0;
-        StartCoroutine(TimeMeeting());
+        if (!isMeetingRunning)
+        {
+            isMeetingRunning = true;
+            PopulatePlayerList();
+            playersThatVotedList.Clear();
+            playersThatHaveBeenVotedList.Clear();
+            hasAlreadyVoted = false;
+            skipped = 0;
+            StartCoroutine(TimeMeeting());
+        }
     }
 
     public IEnumerator TimeMeeting()
     {
         meetingTimeInternal = meetingTime;
-        while(meetingTimeInternal > 0)
+
+        if (isMeetingRunning)
         {
-            yield return new WaitForSeconds(1f);
-            meetingTimeInternal--;
-            voteTimeLeft.text = meetingTimeInternal.ToString();
+            while(meetingTimeInternal > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                meetingTimeInternal--;
+                voteTimeLeft.text = meetingTimeInternal.ToString();
+            }
+
+            if(meetingTimeInternal <= 0 && PhotonNetwork.IsMasterClient)
+            {
+                view.RPC("FinishVote", RpcTarget.All);
+            }
         }
 
-        if(meetingTimeInternal <= 0 && PhotonNetwork.IsMasterClient)
-        {
-            view.RPC("FinishVote", RpcTarget.All); ;
-        }
+        isMeetingRunning = false;
     }
     
     private void PopulatePlayerList()
@@ -138,6 +150,9 @@ public class VoteManager : MonoBehaviourPun
     private void FinishVote()
     {
         //Aqui também haverá um check relacionado ao desconto de jogadores mortos
+        isMeetingRunning = false;
+        StopAllCoroutines();
+        voteTimeLeft.text = meetingTime.ToString();
 
         //Contagem dos votos
         Dictionary<int, int> playerVoteCount = new Dictionary<int, int>();
@@ -178,7 +193,8 @@ public class VoteManager : MonoBehaviourPun
             PlayerManager playerToDie = RoleManager.Instance.FindPMByActorNumber(mostVotedPlayer);
             if (playerToDie.photonView.IsMine)
             {
-                RoleManager.Instance.KillPlayer(playerToDie.controller.GetComponent<PlayerController>());
+                if(playerToDie.isAlive)
+                    RoleManager.Instance.KillPlayer(playerToDie.controller.GetComponent<PlayerController>());
             }
         }
 

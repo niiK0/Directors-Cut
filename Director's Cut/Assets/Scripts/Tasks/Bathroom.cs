@@ -96,6 +96,9 @@ public class Bathroom : MonoBehaviour, IInteractable
         //Verify if the task got Cancelled
         if (isTaskCancelled)
         {
+
+            StopAllCoroutines();
+
             //UNFREEZE
             player.GetComponent<PlayerController>().freezePlayer = false;
             player.GetComponent<PlayerController>().freezeRotation = false;
@@ -106,6 +109,8 @@ public class Bathroom : MonoBehaviour, IInteractable
 
     public void FinishTask(TaskList task)
     {
+        StopAllCoroutines();
+
         //Setting task as complete
         task.MarkTaskComplete(taskIndex);
         isComplete = true;

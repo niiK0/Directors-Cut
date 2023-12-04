@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4304123672387469955}
   - component: {fileID: 4304123672387469954}
   - component: {fileID: 4304123672387469965}
+  - component: {fileID: 4304123673835234748}
   m_Layer: 0
   m_Name: VoiceManager
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4304123672387469964}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -50,7 +51,8 @@ MonoBehaviour:
   ApplyDontDestroyOnLoad: 0
   runInBackground: 1
   statsResetInterval: 1000
-  speakerPrefab: {fileID: 0}
+  speakerPrefab: {fileID: 2176655674552294540, guid: 0adfb979b37c2414ca52f711fe560208,
+    type: 3}
   primaryRecorder: {fileID: 4304123672387469965}
   usePrimaryRecorder: 0
   cppCompatibilityMode: 0
@@ -117,3 +119,16 @@ MonoBehaviour:
   useOnAudioFilterRead: 0
   useMicrophoneTypeFallback: 1
   recordWhenJoined: 1
+--- !u!114 &4304123673835234748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304123672387469964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321173aadda4e9342972b3e2b7fe9c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recorder: {fileID: 4304123672387469965}
