@@ -89,24 +89,24 @@ public class RoleManager : MonoBehaviourPunCallbacks
     {
         if(nOfCompletedTasks >= totalNumOfTasks)
         {
-            photonView.RPC("WinByTasksRPC", RpcTarget.All);
+            photonView.RPC("EndGame", RpcTarget.All, true);
         }
     }
 
     [PunRPC]
-    public void WinByTasksRPC()
+    public void EndGame(bool whoWins)
     {
-        EndScreen(true);
+        EndScreen(whoWins);
     }
 
     public void KillPlayer(PlayerController playerToDie)
     {
         //set ghost of playerToDie
         //playerToDie.GetComponent<Ghost>().SetGhostModeRPC();
-        PlayerManager myPlayer = GetMyPlayerManager();
+        //PlayerManager myPlayer = GetMyPlayerManager();
 
-        if(myPlayer.isAlive)
-            playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
+        //if(myPlayer.isAlive)
+        playerToDie.playerManager.photonView.RPC("KillPlayer", RpcTarget.All, playerToDie.photonView.ViewID, playerToDie.transform.position, playerToDie.transform.rotation);
     }
 
     public PlayerManager GetMyPlayerManager()
@@ -264,13 +264,13 @@ public class RoleManager : MonoBehaviourPunCallbacks
         {
             //Vitória dos diretores
             Debug.Log("Vencem os diretores!");
-            EndScreen(false);
+            photonView.RPC("EndGame", RpcTarget.All, false);
         }
         else if (directorsRemaining == 0) //Adicionar também a vitória por tasks!
         {
             //Vitória dos atores
             Debug.Log("Vencem os atores!");
-            EndScreen(true);
+            photonView.RPC("EndGame", RpcTarget.All, true);
         }
     }
 

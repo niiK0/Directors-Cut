@@ -60,10 +60,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (playerView == null) return;
 
         playerView.gameObject.GetComponent<PlayerController>().playerManager.isAlive = false;
-        //RoleManager.Instance.TryEndGame();
 
         if (!playerView.IsMine) return;
 
+        VoiceManager.Instance.MutePlayer(true);
+        RoleManager.Instance.TryEndGame();
         PhotonNetwork.Destroy(controller);
         CreateGhost(playerPos, playerRot);
     }
