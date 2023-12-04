@@ -91,6 +91,7 @@ public class Lock : MonoBehaviour, IInteractable
         //Setting task as complete
         task.MarkTaskComplete(taskIndex);
         isComplete = true;
+        Destroy(newWaitingUI);
 
         //UNFREEZE
         playerObject.GetComponent<PlayerController>().freezePlayer = false;
