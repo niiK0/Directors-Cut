@@ -21,6 +21,15 @@ public class Lock : MonoBehaviour, IInteractable
 
     private bool isTaskCancelled = false;
 
+    public void Update()
+    {
+        // Check for "x" key press to cancel the task
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            CancelTask(playerObject);
+        }
+    }
+
     public void Interact(GameObject player)
     {
         //Giving the values to their respective holders
@@ -106,6 +115,21 @@ public class Lock : MonoBehaviour, IInteractable
         else
         {
             Debug.LogWarning("TaskUI not found with name: TaskUI");
+        }
+    }
+
+    public void CancelTask(GameObject player)
+    {
+        isTaskCancelled = true;
+
+        //Verify if the task got Cancelled
+        if (isTaskCancelled)
+        {
+            //UNFREEZE
+            player.GetComponent<PlayerController>().freezePlayer = false;
+            player.GetComponent<PlayerController>().freezeRotation = false;
+            Destroy(newWaitingUI);
+            Debug.Log("Task Cancelled!");
         }
     }
 }
