@@ -15,6 +15,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
+    [SerializeField] GameObject[] playerObjs;
+
     //Create Room
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_InputField roomPwdInputField;
@@ -134,6 +136,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Instantiate(playerTemplate, playerHolder.transform).GetComponent<PlayerTemplate>().AddPlayer(newPlayer);
+        playerObjs[newPlayer.ActorNumber - 1].SetActive(true);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        playerObjs[otherPlayer.ActorNumber - 1].SetActive(false);
     }
 
     public override void OnJoinedRoom()
@@ -151,6 +159,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         for (int i = 0; i < players.Length; i++)
         {
             Instantiate(playerTemplate, playerHolder.transform).GetComponent<PlayerTemplate>().AddPlayer(players[i]);
+            playerObjs[players[i].ActorNumber-1].SetActive(true);
         }
     }
 
@@ -163,6 +172,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+        foreach(GameObject playerObj in playerObjs)
+        {
+            playerObj.SetActive(false);
+        }
         //MenuManager.Instance.OpenMenu("loading");
     }
 

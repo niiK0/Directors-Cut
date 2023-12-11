@@ -26,7 +26,7 @@ QualitySettings:
     softVegetation: 0
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
-    vSyncCount: 0
+    vSyncCount: 1
     lodBias: 0.4
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -57,7 +57,7 @@ QualitySettings:
     shadowmaskMode: 0
     skinWeights: 4
     textureQuality: 0
-    anisotropicTextures: 1
+    anisotropicTextures: 2
     antiAliasing: 0
     softParticles: 0
     softVegetation: 0
@@ -126,7 +126,7 @@ QualitySettings:
     Nintendo Switch: 1
     PS4: 2
     PS5: 2
-    Server: 0
+    Server: 1
     Stadia: 2
     Standalone: 2
     WebGL: 1
