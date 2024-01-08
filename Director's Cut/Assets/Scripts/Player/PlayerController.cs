@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         PhotonView playerView = PhotonView.Find(viewId);
         if (playerView == null) return;
 
-        Item[] items = playerView.transform.GetComponentsInChildren<Item>();
+        Item[] items = playerView.GetComponent<PlayerController>().handler.GetComponentsInChildren<Item>();
 
         Item currItem = null;
 
